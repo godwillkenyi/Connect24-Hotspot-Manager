@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vouchers — Connect24 Hotspot Manager</title>
+<link rel="stylesheet" href="../shared.css">
+<!-- Favicons -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- PWA -->
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Connect24">
+</head>
+<body>
+
+<div class="d">
+    <div class="d-overlay" id="overlay"></div>
+
+    <div class="d-layout">
+
+        <!-- ============================================================
+             SIDEBAR
+             ============================================================ -->
+        <aside class="d-side" id="sidebar">
+            <div class="d-brand">
+                <div class="d-brand-mark">24</div>
+                <div class="d-brand-text">
+                    <span class="d-brand-name">Connect24</span>
+                    <span class="d-brand-sub">Hotspot Manager</span>
+                </div>
+            </div>
+
+            <nav class="d-nav">
+                <span class="d-nav-label">Overview</span>
+                <a class="d-nav-link" href="dashboard.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+                <a class="d-nav-link active" href="vouchers.html" aria-current="page">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                    Vouchers
+                    <span class="d-nav-badge" id="navVouchersBadge">0</span>
+                </a>
+                <a class="d-nav-link" href="sessions.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    Sessions
+                    <span class="d-nav-badge" id="navSessionsBadge">0</span>
+                </a>
+
+                <span class="d-nav-label">Configuration</span>
+                <a class="d-nav-link" href="profiles.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Profiles
+                    <span class="d-nav-badge" id="navProfilesBadge">0</span>
+                </a>
+                <a class="d-nav-link" href="settings.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                    Settings
+                </a>
+            </nav>
+
+            <!-- Tier 1: plan widget -->
+            <div class="d-side-plan">
+                <div class="d-side-plan-head">
+                    <span class="d-side-plan-badge">FREE</span>
+                    <span class="d-side-plan-routers">1 of 1 router</span>
+                </div>
+                <div class="d-side-plan-bar">
+                    <div class="d-side-plan-fill" style="width:100%;"></div>
+                </div>
+                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
+                    Upgrade to Pro →
+                </a>
+            </div>
+
+            <div class="d-side-foot">
+                <div class="d-user">
+                    <div class="d-user-avatar" id="userAvatar">V</div>
+                    <div class="d-user-info">
+                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-role">Administrator</div>
+                    </div>
+                </div>
+                <a class="d-logout" href="logout.html">
+                    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+
+        <!-- ============================================================
+             MAIN
+             ============================================================ -->
+        <main class="d-main">
+            <header class="d-topbar">
+                <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                    <button class="d-menu-btn" id="menuBtn" aria-label="Open menu">
+                        <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+                    </button>
+                    <div class="d-topbar-title">
+                        <div class="d-topbar-eyebrow">
+                            <span class="d-topbar-eyebrow-dot"></span>
+                            Connect24 Hotspot Manager
+                            <span class="d-topbar-version">v1.0.0</span>
+                        </div>
+                        <h1>Vouchers</h1>
+                        <p>Manage and analyze all hotspot vouchers</p>
+                    </div>
+                </div>
+
+                <div class="d-topbar-actions">
+                    <div class="d-live on" id="livePill">
+                        <span class="d-live-dot"></span>
+                        <span id="liveText">Live · 5s</span>
+                    </div>
+
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
+                    </button>
+
+                    <a class="d-refresh" href="generate.html" style="background:var(--blue-4); color:#fff; border-color:var(--blue-4); text-decoration:none;">
+                        <svg viewBox="0 0 24 24" style="fill:currentColor;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        <span>Generate</span>
+                    </a>
+
+                    <button class="d-refresh" id="refreshBtn">
+                        <svg class="d-refresh-icon" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="d-page">
+
+                <!-- ============================================================
+                     SUMMARY STATS
+                     ============================================================ -->
+                <section class="d-stats">
+                    <div class="d-stat d-stat-clickable" data-tab="all">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">All Vouchers</span>
+                            <div class="d-stat-icon blue">
+                                <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statAll">—</div>
+                        <div class="d-stat-trend"><span>Every voucher on the router</span></div>
+                    </div>
+
+                    <div class="d-stat d-stat-clickable" data-tab="active">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Active</span>
+                            <div class="d-stat-icon green">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statActive">—</div>
+                        <div class="d-stat-trend up"><strong id="statActivePct">—</strong><span>of total</span></div>
+                    </div>
+
+                    <div class="d-stat d-stat-clickable" data-tab="expired">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Expired</span>
+                            <div class="d-stat-icon red">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statExpired">—</div>
+                        <div class="d-stat-trend down"><span>Past their limit</span></div>
+                    </div>
+
+                    <div class="d-stat d-stat-clickable" data-tab="almost">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Almost Full</span>
+                            <div class="d-stat-icon amber">
+                                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statAlmost">—</div>
+                        <div class="d-stat-trend"><span>≥ 80% of uptime limit</span></div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     TABS + TOOLBAR
+                     ============================================================ -->
+                <section class="d-panel">
+
+                    <div class="d-tabs" id="tabs">
+                        <button class="d-tab active" data-tab="all">
+                            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                            All
+                            <span class="d-tab-count" id="tabAllCount">0</span>
+                        </button>
+                        <button class="d-tab" data-tab="active">
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            Active
+                            <span class="d-tab-count" id="tabActiveCount">0</span>
+                        </button>
+                        <button class="d-tab" data-tab="unused">
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                            Unused
+                            <span class="d-tab-count" id="tabUnusedCount">0</span>
+                        </button>
+                        <button class="d-tab" data-tab="expired">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            Expired
+                            <span class="d-tab-count" id="tabExpiredCount">0</span>
+                        </button>
+                        <button class="d-tab" data-tab="almost">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                            Almost Full
+                            <span class="d-tab-count" id="tabAlmostCount">0</span>
+                        </button>
+                        <button class="d-tab" data-tab="heavy">
+                            <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+                            Heavy Users
+                            <span class="d-tab-count" id="tabHeavyCount">0</span>
+                        </button>
+                    </div>
+
+                    <div class="d-filters">
+                        <div class="d-search">
+                            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                            <input type="text" id="searchInput" placeholder="Search by code, price or profile…" autocomplete="off">
+                        </div>
+                        <select class="d-select" id="profileFilter">
+                            <option value="">All profiles</option>
+                        </select>
+                        <select class="d-select" id="sortSelect">
+                            <option value="name-asc">Code (A–Z)</option>
+                            <option value="name-desc">Code (Z–A)</option>
+                            <option value="uptime-desc">Uptime (high → low)</option>
+                            <option value="uptime-asc">Uptime (low → high)</option>
+                            <option value="bytes-desc">Data usage (high → low)</option>
+                            <option value="bytes-asc">Data usage (low → high)</option>
+                        </select>
+                        <span class="d-filter-results" id="filterResults">—</span>
+                    </div>
+
+                    <!-- Bulk bar -->
+                    <div class="d-bulk" id="bulkBar">
+                        <span class="d-bulk-count" id="bulkCount">0 selected</span>
+                        <div class="d-bulk-actions">
+                            <button class="d-btn" id="bulkPrintBtn">
+                                <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                                Print
+                            </button>
+                            <button class="d-btn" id="bulkExportBtn">
+                                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                Export CSV
+                            </button>
+                            <button class="d-btn danger" id="bulkDeleteBtn">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                Delete
+                            </button>
+                            <button class="d-btn" id="bulkClearBtn">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="d-table-wrap">
+                        <table class="d-table" id="voucherTable">
+                            <thead>
+                                <tr>
+                                    <th style="width:36px;"><input type="checkbox" class="d-check" id="selectAll"></th>
+                                    <th>Code</th>
+                                    <th>Profile</th>
+                                    <th>Status</th>
+                                    <th>Uptime</th>
+                                    <th>Data used</th>
+                                    <th>Price</th>
+                                    <th style="width:120px; text-align:right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherBody">
+                                <tr class="d-skel-row"><td colspan="8"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="8"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="8"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     USAGE CHART
+                     ============================================================ -->
+                <section class="d-panel" id="chartPanel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            Data Usage Analysis
+                            <span class="d-panel-sub" id="chartSubtitle">Top 20 vouchers by MB used</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <select class="d-select" id="chartMetric" style="height:34px; font-size:12.5px;">
+                                <option value="mb">MB used</option>
+                                <option value="uptime">Uptime %</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div class="d-chart" id="usageChart" style="height:280px;"></div>
+                    </div>
+                </section>
+
+                <!-- Tier 1: footer -->
+                <footer class="d-footer">
+                    <div class="d-footer-left">
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                    </div>
+                    <div class="d-footer-right">
+                        <span class="d-footer-status">
+                            <span class="d-status-dot" id="footerApiStatus"></span>
+                            <span id="footerApiText">API: Connected</span>
+                        </span>
+                        <span class="d-footer-sep">·</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ============================================================
+     COMMAND PALETTE (⌘K / Ctrl+K)
+     ============================================================ -->
+<div class="d-cmdk" id="cmdk" hidden>
+    <div class="d-cmdk-backdrop" data-cmdk-close></div>
+    <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="d-cmdk-input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <kbd>ESC</kbd>
+        </div>
+        <div class="d-cmdk-results" id="cmdkResults"></div>
+        <div class="d-cmdk-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>ESC</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script src="../shared.js"></script>
+<script>
+    const {
+        escapeHtml, classify, formatBytes, shortUptime, bytesOf,
+        copyToClipboard, printVoucherSheet, exportCsv, toast, $, qsa
+    } = window.appApi;
+
+    /* ============================================================
+     *  STATE
+     * ============================================================ */
+    let vouchers = [];
+    let selected = new Set();
+    let searchQuery = "";
+    let profileFilter = "";
+    let sortMode = "name-asc";
+    let activeTab = "all";
+    let chartMetric = "mb";
+    let badgeTimer = null;
+
+    const MB = 1024 * 1024;
+    const HEAVY_MB_THRESHOLD = 500;   // 500 MB
+    const ALMOST_FULL_PCT = 80;       // 80% of uptime limit
+
+    /* ============================================================
+     *  PROFILE FILTER — same rule as the Profiles page.
+     *  Excludes RouterOS system profiles ("default", "none", "").
+     * ============================================================ */
+    const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
+
+    function isUserProfile(p) {
+        const name = String(
+            typeof p === "string" ? p : (p && p.name) || ""
+        ).trim().toLowerCase();
+        return !HIDDEN_PROFILE_NAMES.has(name);
+    }
+
+    function countUserProfiles(list) {
+        const seen = new Set();
+        for (const raw of (list || [])) {
+            if (!isUserProfile(raw)) continue;
+            const name = typeof raw === "string" ? raw : (raw.name || "");
+            const key = String(name).trim().toLowerCase();
+            if (!seen.has(key)) seen.add(key);
+        }
+        return seen.size;
+    }
+
+    /* ============================================================
+     *  HELPERS
+     * ============================================================ */
+
+    function uptimeToSeconds(str) {
+        if (!str) return 0;
+        const s = String(str).trim();
+        if (s === "0s" || s === "") return 0;
+
+        const regex = /(\d+)([wdhms])/g;
+        let total = 0;
+        let match;
+        let matched = false;
+        while ((match = regex.exec(s)) !== null) {
+            matched = true;
+            const val = parseInt(match[1], 10);
+            const unit = match[2];
+            const mult = { s: 1, m: 60, h: 3600, d: 86400, w: 604800 }[unit] || 0;
+            total += val * mult;
+        }
+        return matched ? total : 0;
+    }
+
+    function uptimeLimitToSeconds(str) {
+        if (!str) return 0;
+        const s = String(str).trim();
+        const m = s.match(/^(\d+)\s*([a-zA-Z]+)$/);
+        if (!m) return 0;
+        const val = parseInt(m[1], 10);
+        const rawUnit = m[2];
+        const unit = rawUnit.toLowerCase();
+        let key;
+        if (unit === "mo" || rawUnit === "M") key = "mo";
+        else if (unit === "m") key = "m";
+        else key = unit.charAt(0);
+        const mult = { s: 1, m: 60, h: 3600, d: 86400, w: 604800, mo: 2592000 }[key] || 0;
+        return val * mult;
+    }
+
+    function usageMB(v) {
+        return bytesOf(v) / MB;
+    }
+
+    function extendedStatus(v) {
+        const base = classify(v);
+
+        if (base === "expired") return "expired";
+        if (base === "unused") return "unused";
+
+        const usedSec  = uptimeToSeconds(v.uptime || "0s");
+        const limitSec = uptimeLimitToSeconds(v["limit-uptime"] || "");
+        const mbUsed   = usageMB(v);
+
+        if (mbUsed >= HEAVY_MB_THRESHOLD) return "heavy";
+
+        if (limitSec > 0) {
+            const pct = (usedSec / limitSec) * 100;
+            if (pct >= ALMOST_FULL_PCT) return "almost";
+        }
+
+        return "active";
+    }
+
+    function statusLabel(key) {
+        return {
+            active: "Active",
+            unused: "Unused",
+            expired: "Expired",
+            almost: "Almost Full",
+            heavy: "Heavy User",
+        }[key] || key;
+    }
+
+    function statusClass(key) {
+        if (key === "heavy") return "idle";
+        if (key === "almost") return "idle";
+        if (key === "expired") return "expired";
+        if (key === "unused") return "unused";
+        return "active";
+    }
+
+    /* ============================================================
+     *  BADGES
+     * ============================================================ */
+    function updateVouchersBadge() {
+        const badge = $("navVouchersBadge");
+        if (badge) badge.textContent = vouchers.length;
+    }
+
+    async function updateSessionsBadge() {
+        const badge = $("navSessionsBadge");
+        if (!badge) return;
+
+        try {
+            const res = await fetch("../api.php?action=sessions", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data || !data.success) return;
+            const list = Array.isArray(data.sessions) ? data.sessions : [];
+            badge.textContent = list.length;
+        } catch (_) {}
+    }
+
+    async function updateProfilesBadge() {
+        const badge = $("navProfilesBadge");
+        if (!badge) return;
+
+        try {
+            const res = await fetch("../api.php?action=profile-details", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data || !data.success) return;
+            const list = Array.isArray(data.profiles) ? data.profiles : [];
+            // Use the same filtered count as the Profiles page so
+            // both pages show identical numbers.
+            badge.textContent = countUserProfiles(list);
+        } catch (_) {}
+    }
+
+    /* ============================================================
+     *  TAB COUNTS + STATS
+     * ============================================================ */
+    function computeCounts() {
+        const counts = { all: vouchers.length, active: 0, unused: 0, expired: 0, almost: 0, heavy: 0 };
+        for (const v of vouchers) {
+            const k = extendedStatus(v);
+            counts[k] = (counts[k] || 0) + 1;
+        }
+        return counts;
+    }
+
+    function updateCounts() {
+        const c = computeCounts();
+        $("statAll").textContent     = c.all;
+        $("statActive").textContent  = c.active;
+        $("statExpired").textContent = c.expired;
+        $("statAlmost").textContent  = c.almost;
+        $("statActivePct").textContent = c.all > 0 ? Math.round((c.active / c.all) * 100) + "%" : "0%";
+
+        $("tabAllCount").textContent     = c.all;
+        $("tabActiveCount").textContent  = c.active;
+        $("tabUnusedCount").textContent  = c.unused;
+        $("tabExpiredCount").textContent = c.expired;
+        $("tabAlmostCount").textContent  = c.almost;
+        $("tabHeavyCount").textContent   = c.heavy;
+
+        updateVouchersBadge();
+    }
+
+    /* ============================================================
+     *  FILTER + SORT
+     * ============================================================ */
+    function filteredList() {
+        let list = vouchers.slice();
+
+        if (activeTab !== "all") {
+            list = list.filter((v) => extendedStatus(v) === activeTab);
+        }
+
+        if (profileFilter) {
+            list = list.filter((v) => (v.profile || "default") === profileFilter);
+        }
+
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            list = list.filter((v) => {
+                const code = String(v.name || "").toLowerCase();
+                const price = String(v.comment || "").toLowerCase();
+                const profile = String(v.profile || "").toLowerCase();
+                return code.includes(q) || price.includes(q) || profile.includes(q);
+            });
+        }
+
+        const [key, dir] = sortMode.split("-");
+        list.sort((a, b) => {
+            let av, bv;
+            switch (key) {
+                case "name":
+                    av = String(a.name || "").toLowerCase();
+                    bv = String(b.name || "").toLowerCase();
+                    break;
+                case "uptime":
+                    av = uptimeToSeconds(a.uptime);
+                    bv = uptimeToSeconds(b.uptime);
+                    break;
+                case "bytes":
+                    av = bytesOf(a);
+                    bv = bytesOf(b);
+                    break;
+                default:
+                    av = String(a.name || "");
+                    bv = String(b.name || "");
+            }
+            if (typeof av === "number") return dir === "asc" ? av - bv : bv - av;
+            if (av < bv) return dir === "asc" ? -1 : 1;
+            if (av > bv) return dir === "asc" ? 1 : -1;
+            return 0;
+        });
+
+        return list;
+    }
+
+    /* ============================================================
+     *  RENDER TABLE
+     * ============================================================ */
+    function renderTable() {
+        const body = $("voucherBody");
+        const list = filteredList();
+        const results = $("filterResults");
+        results.textContent = list.length + " of " + vouchers.length + " shown";
+
+        if (list.length === 0) {
+            body.innerHTML = `<tr><td colspan="8"><div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                <h3>No vouchers</h3>
+                <p>${escapeHtml(vouchers.length === 0 ? "No vouchers on the router yet." : "No vouchers match your filters.")}</p>
+            </div></td></tr>`;
+            updateBulkBar();
+            return;
+        }
+
+        body.innerHTML = list.map((v) => {
+            const code = v.name || "—";
+            const profile = v.profile || "default";
+            const status = extendedStatus(v);
+            const label = statusLabel(status);
+            const pillClass = statusClass(status);
+            const uptime = shortUptime(v.uptime);
+            const mb = usageMB(v);
+            const dataLabel = formatBytes(bytesOf(v));
+            const price = v.comment || "—";
+            const isSel = selected.has(code);
+            const dataWarning = mb >= HEAVY_MB_THRESHOLD ? ` <span class="d-usage-warn">heavy</span>` : "";
+
+            return `
+                <tr class="${isSel ? "selected" : ""}">
+                    <td>
+                        <input type="checkbox" class="d-check"
+                            data-code="${escapeHtml(code)}"
+                            ${isSel ? "checked" : ""}>
+                    </td>
+                    <td><span class="d-code">${escapeHtml(code)}</span></td>
+                    <td>${escapeHtml(profile)}</td>
+                    <td><span class="d-pill ${pillClass}">${label}</span></td>
+                    <td>${escapeHtml(uptime)}</td>
+                    <td>${escapeHtml(dataLabel)}${dataWarning}</td>
+                    <td>${escapeHtml(price)}</td>
+                    <td>
+                        <div class="d-actions-cell">
+                            <button class="d-row-btn" data-action="copy" title="Copy code">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            </button>
+                            <button class="d-row-btn" data-action="print" title="Print this voucher">
+                                <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                            </button>
+                            <button class="d-row-btn danger" data-action="delete" title="Delete voucher">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        body.querySelectorAll(".d-check").forEach((cb) => {
+            cb.addEventListener("change", () => {
+                const code = cb.dataset.code;
+                if (cb.checked) selected.add(code);
+                else selected.delete(code);
+                cb.closest("tr").classList.toggle("selected", cb.checked);
+                updateBulkBar();
+                syncSelectAll();
+            });
+        });
+
+        body.querySelectorAll(".d-row-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const tr = btn.closest("tr");
+                const code = tr.querySelector(".d-check")?.dataset.code;
+                const action = btn.dataset.action;
+                if (!code) return;
+                if (action === "copy") copyToClipboard(code);
+                else if (action === "print") {
+                    const v = vouchers.find((x) => x.name === code);
+                    if (v) printVoucherSheet([v]);
+                }
+                else if (action === "delete") deleteVoucher(code);
+            });
+        });
+
+        updateBulkBar();
+        syncSelectAll();
+    }
+
+    function updateBulkBar() {
+        const bar = $("bulkBar");
+        if (selected.size === 0) {
+            bar.classList.remove("on");
+            return;
+        }
+        bar.classList.add("on");
+        $("bulkCount").textContent = selected.size + " selected";
+    }
+
+    function syncSelectAll() {
+        const boxes = [...document.querySelectorAll("#voucherBody .d-check")];
+        const sa = $("selectAll");
+        if (boxes.length === 0) {
+            sa.checked = false;
+            sa.indeterminate = false;
+            return;
+        }
+        const checked = boxes.filter((b) => b.checked).length;
+        sa.checked = checked === boxes.length;
+        sa.indeterminate = checked > 0 && checked < boxes.length;
+    }
+
+    /* ============================================================
+     *  USAGE CHART
+     * ============================================================ */
+    function renderChart() {
+        const el = $("usageChart");
+        const subtitle = $("chartSubtitle");
+
+        const rows = vouchers
+            .map((v) => {
+                const mb = usageMB(v);
+                const usedSec = uptimeToSeconds(v.uptime);
+                const limitSec = uptimeLimitToSeconds(v["limit-uptime"] || "");
+                const pct = limitSec > 0 ? Math.min(100, (usedSec / limitSec) * 100) : 0;
+                return { name: v.name || "—", mb, pct };
+            })
+            .filter((r) => chartMetric === "mb" ? r.mb > 0 : r.pct > 0)
+            .sort((a, b) => (chartMetric === "mb" ? b.mb - a.mb : b.pct - a.pct))
+            .slice(0, 20);
+
+        if (rows.length === 0) {
+            el.innerHTML = `<div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                <h3>No usage data</h3>
+                <p>No vouchers have been used yet.</p>
+            </div>`;
+            subtitle.textContent = "No data";
+            return;
+        }
+
+        subtitle.textContent = chartMetric === "mb"
+            ? `Top ${rows.length} by MB used`
+            : `Top ${rows.length} by uptime %`;
+
+        const W = 1000, H = 280;
+        const padL = 60, padR = 20, padT = 20, padB = 80;
+        const innerW = W - padL - padR;
+        const innerH = H - padT - padB;
+        const values = rows.map((r) => chartMetric === "mb" ? r.mb : r.pct);
+        const maxVal = Math.max(...values, 1);
+        const niceMax = niceCeilLocal(maxVal);
+
+        const barW = innerW / rows.length * 0.7;
+        const gap = innerW / rows.length * 0.3;
+
+        let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+
+        const gridCount = 4;
+        for (let i = 0; i <= gridCount; i++) {
+            const y = padT + (innerH * i / gridCount);
+            svg += `<line class="d-bar-grid" x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}"/>`;
+            const val = niceMax * (1 - i / gridCount);
+            const label = chartMetric === "mb"
+                ? (val >= 1000 ? (val / 1000).toFixed(1) + " GB" : Math.round(val) + " MB")
+                : Math.round(val) + "%";
+            svg += `<text class="d-bar-label" x="${padL - 10}" y="${y + 4}" text-anchor="end">${label}</text>`;
+        }
+
+        rows.forEach((r, i) => {
+            const x = padL + gap / 2 + i * (barW + gap);
+            const val = chartMetric === "mb" ? r.mb : r.pct;
+            const h = (val / niceMax) * innerH;
+            const y = padT + innerH - h;
+
+            const color = chartMetric === "mb"
+                ? (r.mb >= HEAVY_MB_THRESHOLD ? "#a32e2c" : "#1e5c9c")
+                : (r.pct >= ALMOST_FULL_PCT ? "#a0703a" : "#1e5c9c");
+
+            svg += `<rect class="d-usage-bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${color}">
+                        <title>${escapeHtml(r.name)} — ${chartMetric === "mb" ? r.mb.toFixed(1) + " MB" : r.pct.toFixed(0) + "%"}</title>
+                    </rect>`;
+
+            const cx = x + barW / 2;
+            svg += `<text transform="translate(${cx}, ${H - 12}) rotate(-45)"
+                        text-anchor="end"
+                        fill="#6b6b6b"
+                        font-size="10"
+                        font-family="inherit">${escapeHtml(r.name)}</text>`;
+        });
+
+        svg += `</svg>`;
+        el.innerHTML = svg;
+    }
+
+    function niceCeilLocal(n) {
+        if (n <= 5) return 5;
+        if (n <= 10) return 10;
+        if (n <= 25) return 25;
+        if (n <= 50) return 50;
+        if (n <= 100) return 100;
+        if (n <= 250) return 250;
+        if (n <= 500) return 500;
+        if (n <= 1000) return 1000;
+        return Math.ceil(n / 500) * 500;
+    }
+
+    /* ============================================================
+     *  ACTIONS
+     * ============================================================ */
+    async function deleteVoucher(code) {
+        if (!code) return;
+        if (!confirm(`Delete voucher "${code}"?`)) return;
+        try {
+            const res = await fetch("../api.php?action=delete-voucher", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({ name: code })
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (data.success) {
+                toast("ok", "Voucher deleted", code);
+                await window.appApi.loadVouchers({ manual: true });
+            } else {
+                toast("error", "Delete failed", data.message || "Unknown error.");
+            }
+        } catch (err) {
+            toast("error", "Delete failed", err.message || "Network error.");
+        }
+    }
+
+    /* ============================================================
+     *  TABS + FILTERS + SORT
+     * ============================================================ */
+    qsa(".d-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+            qsa(".d-tab").forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            activeTab = tab.dataset.tab;
+            renderTable();
+        });
+    });
+
+    qsa(".d-stat-clickable").forEach((card) => {
+        card.addEventListener("click", () => {
+            const tab = card.dataset.tab;
+            const btn = document.querySelector(`.d-tab[data-tab="${tab}"]`);
+            if (btn) btn.click();
+        });
+    });
+
+    let searchDebounce = null;
+    $("searchInput").addEventListener("input", (e) => {
+        clearTimeout(searchDebounce);
+        const val = e.target.value;
+        searchDebounce = setTimeout(() => {
+            searchQuery = val.trim();
+            renderTable();
+        }, 150);
+    });
+
+    $("profileFilter").addEventListener("change", (e) => {
+        profileFilter = e.target.value;
+        renderTable();
+    });
+
+    $("sortSelect").addEventListener("change", (e) => {
+        sortMode = e.target.value;
+        renderTable();
+    });
+
+    $("chartMetric").addEventListener("change", (e) => {
+        chartMetric = e.target.value;
+        renderChart();
+    });
+
+    /* Select all */
+    $("selectAll").addEventListener("change", () => {
+        const checkAll = $("selectAll").checked;
+        document.querySelectorAll("#voucherBody .d-check").forEach((cb) => {
+            cb.checked = checkAll;
+            const code = cb.dataset.code;
+            if (checkAll) selected.add(code);
+            else selected.delete(code);
+            cb.closest("tr").classList.toggle("selected", checkAll);
+        });
+        updateBulkBar();
+    });
+
+    /* Bulk actions */
+    $("bulkClearBtn").addEventListener("click", () => {
+        selected.clear();
+        document.querySelectorAll("#voucherBody .d-check").forEach((cb) => {
+            cb.checked = false;
+            cb.closest("tr").classList.remove("selected");
+        });
+        $("selectAll").checked = false;
+        $("selectAll").indeterminate = false;
+        updateBulkBar();
+    });
+
+    $("bulkPrintBtn").addEventListener("click", () => {
+        const list = vouchers.filter((v) => selected.has(v.name));
+        printVoucherSheet(list);
+    });
+
+    $("bulkExportBtn").addEventListener("click", () => {
+        const list = vouchers.filter((v) => selected.has(v.name));
+        exportCsv(list);
+    });
+
+    $("bulkDeleteBtn").addEventListener("click", async () => {
+        const list = vouchers.filter((v) => selected.has(v.name));
+        if (list.length === 0) return;
+        if (!confirm(`Delete ${list.length} voucher(s)? This cannot be undone.`)) return;
+
+        let ok = 0, fail = 0;
+        for (const v of list) {
+            try {
+                const res = await fetch("../api.php?action=delete-voucher", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ name: v.name })
+                });
+                const data = await res.json();
+                if (data.success) ok++; else fail++;
+            } catch (_) { fail++; }
+        }
+        toast(
+            fail === 0 ? "ok" : fail === list.length ? "error" : "warn",
+            "Delete complete",
+            `${ok} deleted, ${fail} failed.`
+        );
+        selected.clear();
+        await window.appApi.loadVouchers({ manual: true });
+    });
+
+    /* ============================================================
+     *  PROFILE FILTER OPTIONS
+     * ============================================================ */
+    function updateProfileFilterOptions() {
+        const sel = $("profileFilter");
+        const profiles = [...new Set(vouchers.map((v) => v.profile || "default"))].sort();
+        const current = sel.value;
+
+        sel.innerHTML = '<option value="">All profiles</option>' +
+            profiles.map((p) => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join("");
+
+        if (profiles.includes(current)) sel.value = current;
+    }
+
+    /* ============================================================
+     *  HOOKS
+     * ============================================================ */
+    window.onVouchersLoaded = (list) => {
+        vouchers = list;
+        updateProfileFilterOptions();
+        updateCounts();
+        renderTable();
+        renderChart();
+    };
+
+    window.onVouchersError = () => {
+        $("voucherBody").innerHTML = `<tr><td colspan="8"><div class="d-empty">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <h3>Could not load vouchers</h3>
+            <p>Check the API connection on the Settings page.</p>
+        </div></td></tr>`;
+    };
+
+    window.onAppReady = () => {
+        // Fetch sessions and profiles badges immediately
+        updateSessionsBadge();
+        updateProfilesBadge();
+
+        // Then every 10 seconds
+        if (badgeTimer) clearInterval(badgeTimer);
+        badgeTimer = setInterval(() => {
+            updateSessionsBadge();
+            updateProfilesBadge();
+        }, 10000);
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (badgeTimer) { clearInterval(badgeTimer); badgeTimer = null; }
+            } else {
+                if (!badgeTimer) {
+                    badgeTimer = setInterval(() => {
+                        updateSessionsBadge();
+                        updateProfilesBadge();
+                    }, 10000);
+                }
+                updateSessionsBadge();
+                updateProfilesBadge();
+            }
+        });
+    };
+</script>
+</body>
+</html>

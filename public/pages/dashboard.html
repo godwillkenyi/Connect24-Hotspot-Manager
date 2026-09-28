@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Connect24 Hotspot Manager</title>
+<link rel="stylesheet" href="../shared.css">
+<!-- Favicons -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- PWA -->
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Connect24">
+
+<!--
+  Prevent the dashboard from flashing before the session check
+  finishes. If the user isn't signed in, shared.js will redirect
+  to index.html BEFORE this class is removed.
+-->
+<style>
+    html.d-pending body { visibility: hidden; opacity: 0; background: #f7f7f5; }
+    html.d-ready   body { visibility: visible; opacity: 1; transition: opacity 0.18s ease-out; }
+
+    /* ============================================================
+     *  FIXED ONE-ROW STAT CARDS
+     * ============================================================ */
+    .d-stats-row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .d-stats-row::-webkit-scrollbar { height: 6px; }
+    .d-stats-row::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+    .d-stats-row::-webkit-scrollbar-track { background: transparent; }
+
+    .d-stats-row .d-stat {
+        flex: 1 1 0;
+        min-width: 180px;
+    }
+
+    .d-stat-value--data { font-size: 26px; }
+
+    @media (max-width: 900px) {
+        .d-stats-row .d-stat { min-width: 160px; padding: 16px 18px; }
+        .d-stats-row .d-stat-value { font-size: 24px; }
+        .d-stats-row .d-stat-label { font-size: 11px; letter-spacing: 0.04em; }
+        .d-stats-row .d-stat-icon { width: 32px; height: 32px; }
+        .d-stats-row .d-stat-icon svg { width: 16px; height: 16px; }
+        .d-stats-row .d-stat-trend { font-size: 11px; }
+        .d-stat-value--data { font-size: 20px; }
+    }
+    @media (max-width: 640px) {
+        .d-stats-row .d-stat { min-width: 140px; padding: 14px 16px; }
+        .d-stats-row .d-stat-value { font-size: 20px; }
+        .d-stats-row .d-stat-trend { display: none; }
+        .d-stat-value--data { font-size: 17px; }
+    }
+</style>
+<script>
+    document.documentElement.classList.add("d-pending");
+</script>
+</head>
+<body>
+
+<div class="d">
+    <div class="d-overlay" id="overlay"></div>
+
+    <div class="d-layout">
+
+        <!-- ============================================================
+             SIDEBAR
+             ============================================================ -->
+        <aside class="d-side" id="sidebar">
+            <div class="d-brand">
+                <div class="d-brand-mark">24</div>
+                <div class="d-brand-text">
+                    <span class="d-brand-name">Connect24</span>
+                    <span class="d-brand-sub">Hotspot Manager</span>
+                </div>
+            </div>
+
+            <nav class="d-nav">
+                <span class="d-nav-label">Overview</span>
+
+                <a class="d-nav-link active" href="dashboard.html" aria-current="page">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+
+                <a class="d-nav-link" href="vouchers.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                    Vouchers
+                    <span class="d-nav-badge" id="navVouchersBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="sessions.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    Sessions
+                    <span class="d-nav-badge" id="navSessionsBadge">0</span>
+                </a>
+
+                <span class="d-nav-label">Configuration</span>
+
+                <a class="d-nav-link" href="profiles.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Profiles
+                    <span class="d-nav-badge" id="navProfilesBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="settings.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                    Settings
+                </a>
+            </nav>
+
+            <!-- Tier 1: plan widget -->
+            <div class="d-side-plan">
+                <div class="d-side-plan-head">
+                    <span class="d-side-plan-badge">FREE</span>
+                    <span class="d-side-plan-routers">1 of 1 router</span>
+                </div>
+                <div class="d-side-plan-bar">
+                    <div class="d-side-plan-fill" style="width:100%;"></div>
+                </div>
+                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
+                    Upgrade to Pro →
+                </a>
+            </div>
+
+            <div class="d-side-foot">
+                <div class="d-user">
+                    <div class="d-user-avatar" id="userAvatar">V</div>
+                    <div class="d-user-info">
+                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-role">Administrator</div>
+                    </div>
+                </div>
+                <a class="d-logout" href="logout.html">
+                    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+
+        <!-- ============================================================
+             MAIN
+             ============================================================ -->
+        <main class="d-main">
+            <header class="d-topbar">
+                <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                    <button class="d-menu-btn" id="menuBtn" aria-label="Open menu">
+                        <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+                    </button>
+                    <div class="d-topbar-title">
+                        <!-- Tier 1: eyebrow -->
+                        <div class="d-topbar-eyebrow">
+                            <span class="d-topbar-eyebrow-dot"></span>
+                            Connect24 Hotspot Manager
+                            <span class="d-topbar-version">v1.0.0</span>
+                        </div>
+                        <h1>Dashboard</h1>
+                        <p>Overview of your hotspot</p>
+                    </div>
+                </div>
+
+                <div class="d-topbar-actions">
+                    <div class="d-live on" id="livePill">
+                        <span class="d-live-dot"></span>
+                        <span id="liveText">Live · 5s</span>
+                    </div>
+
+                    <!-- Tier 1: ⌘K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
+                    </button>
+
+                    <button class="d-icon-btn" id="notifyBtn" title="Notifications">
+                        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                        <span class="d-badge"></span>
+                    </button>
+
+                    <button class="d-refresh" id="refreshBtn">
+                        <svg class="d-refresh-icon" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="d-page">
+
+                <!-- ============================================================
+                     STAT CARDS — one row, numbers that add up
+                     ============================================================ -->
+                <section class="d-stats-row">
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Total Vouchers</span>
+                            <div class="d-stat-icon blue">
+                                <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statTotal">—</div>
+                        <div class="d-stat-trend"><span>All vouchers on the router</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Active</span>
+                            <div class="d-stat-icon green">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statActive">—</div>
+                        <div class="d-stat-trend up"><strong id="statActivePct">—</strong><span>of total</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Unused</span>
+                            <div class="d-stat-icon amber">
+                                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statUnused">—</div>
+                        <div class="d-stat-trend"><span>Never used — 0 bytes, 0 uptime</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Expired</span>
+                            <div class="d-stat-icon red">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statExpired">—</div>
+                        <div class="d-stat-trend down"><span>Past their limit</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Live Data</span>
+                            <div class="d-stat-icon blue">
+                                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value d-stat-value--data" id="statData">—</div>
+                        <div class="d-stat-trend"><span>Bytes-in + bytes-out right now</span></div>
+                    </div>
+
+                </section>
+
+                <!-- ============================================================
+                     CHARTS
+                     ============================================================ -->
+                <section class="d-charts">
+                    <div class="d-panel">
+                        <div class="d-panel-head">
+                            <div class="d-panel-title">
+                                <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                                Vouchers by Profile
+                                <span class="d-panel-sub" id="barSubtitle">—</span>
+                            </div>
+                        </div>
+                        <div class="d-panel-body">
+                            <div class="d-chart" id="barChart"></div>
+                        </div>
+                    </div>
+                    <div class="d-panel">
+                        <div class="d-panel-head">
+                            <div class="d-panel-title">
+                                <svg viewBox="0 0 24 24"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
+                                Status Breakdown
+                            </div>
+                        </div>
+                        <div class="d-panel-body">
+                            <div class="d-donut-wrap">
+                                <div class="d-donut-svg" id="donutChart"></div>
+                                <div class="d-donut-legend" id="donutLegend"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     RECENT VOUCHERS
+                     ============================================================ -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+                            Recent Vouchers
+                            <span class="d-panel-sub" id="tableSubtitle">—</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <a class="d-btn" href="vouchers.html">
+                                View all
+                                <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                            </a>
+                            <a class="d-btn primary" href="generate.html">
+                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                Generate
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-table-wrap">
+                        <table class="d-table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Profile</th>
+                                    <th>Status</th>
+                                    <th>Uptime</th>
+                                    <th>Data</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherBodyPreview">
+                                <tr class="d-skel-row"><td colspan="6"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="6"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="6"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tier 1: footer -->
+                <footer class="d-footer">
+                    <div class="d-footer-left">
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                    </div>
+                    <div class="d-footer-right">
+                        <span class="d-footer-status">
+                            <span class="d-status-dot" id="footerApiStatus"></span>
+                            <span id="footerApiText">API: Connected</span>
+                        </span>
+                        <span class="d-footer-sep">·</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ============================================================
+     COMMAND PALETTE (⌘K / Ctrl+K)
+     ============================================================ -->
+<div class="d-cmdk" id="cmdk" hidden>
+    <div class="d-cmdk-backdrop" data-cmdk-close></div>
+    <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="d-cmdk-input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <kbd>ESC</kbd>
+        </div>
+        <div class="d-cmdk-results" id="cmdkResults"></div>
+        <div class="d-cmdk-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>ESC</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script src="../shared.js"></script>
+<script>
+    const {
+        classify, formatBytes, shortUptime, bytesOf, escapeHtml, $,
+        uptimeToSeconds, uptimeLimitToSeconds
+    } = window.appApi;
+
+    /* ============================================================
+     *  STATE
+     * ============================================================ */
+    let lastVouchers = [];
+    let lastSessions = [];
+    let lastProfiles = [];
+    let statsTimer = null;
+    let sessionsTimer = null;
+    let badgeTimer = null;
+
+    /* ============================================================
+     *  PROFILE FILTER — same rule as the Profiles page.
+     *  Excludes RouterOS system profiles ("default", "none", "").
+     * ============================================================ */
+    const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
+
+    function isUserProfile(p) {
+        const name = String(
+            typeof p === "string" ? p : (p && p.name) || ""
+        ).trim().toLowerCase();
+        return !HIDDEN_PROFILE_NAMES.has(name);
+    }
+
+    function countUserProfiles(list) {
+        const seen = new Set();
+        for (const raw of (list || [])) {
+            if (!isUserProfile(raw)) continue;
+            const name = typeof raw === "string" ? raw : (raw.name || "");
+            const key = String(name).trim().toLowerCase();
+            if (!seen.has(key)) seen.add(key);
+        }
+        return seen.size;
+    }
+
+    /* ============================================================
+     *  ANIMATED NUMBER
+     * ============================================================ */
+    function animateNumber(el, target, duration = 400) {
+        if (!el) return;
+        const start = parseInt(el.textContent, 10) || 0;
+        const end   = Math.max(0, Math.floor(target));
+        if (start === end) return;
+
+        const startTime = performance.now();
+        const diff = end - start;
+
+        function step(now) {
+            const t = Math.min(1, (now - startTime) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = Math.round(start + diff * eased);
+            if (t < 1) requestAnimationFrame(step);
+            else el.textContent = end;
+        }
+        requestAnimationFrame(step);
+    }
+
+    /* ============================================================
+     *  STATS — ALL counts come from the SAME voucher list
+     *
+     *  Every voucher falls into exactly one of three buckets:
+     *    - active   (in-use or was used; includes "almost" & "heavy")
+     *    - unused   (never used — 0 bytes AND 0 uptime)
+     *    - expired  (disabled, exhausted, or limit consumed)
+     *
+     *  So: active + unused + expired === total
+     * ============================================================ */
+    function computeVoucherStats(vouchers) {
+        let total = 0, active = 0, unused = 0, expired = 0;
+
+        for (const v of vouchers) {
+            total++;
+            const status = classify(v);
+            if (status === "unused") {
+                unused++;
+            } else if (status === "expired") {
+                expired++;
+            } else {
+                // "active", "almost", "heavy" all count as active
+                active++;
+            }
+        }
+
+        return { total, active, unused, expired };
+    }
+
+    // Live bytes from active sessions (used ONLY for the Live Data card)
+    function computeLiveBytes(sessions) {
+        let bytes = 0;
+        for (const s of sessions) {
+            bytes += (Number(s["bytes-in"])  || 0)
+                   + (Number(s["bytes-out"]) || 0);
+        }
+        return bytes;
+    }
+
+    function renderStats() {
+        const v = computeVoucherStats(lastVouchers);
+
+        // Every card comes from the same voucher list → numbers add up.
+        animateNumber($("statTotal"),   v.total);
+        animateNumber($("statActive"),  v.active);
+        animateNumber($("statUnused"),  v.unused);
+        animateNumber($("statExpired"), v.expired);
+
+        const pct = v.total > 0 ? Math.round((v.active / v.total) * 100) : 0;
+        $("statActivePct").textContent = pct + "%";
+
+        // Live Data — this one IS session-based (only live sources have
+        // byte counters that update in real time)
+        const dataEl = $("statData");
+        if (dataEl) dataEl.textContent = formatBytes(computeLiveBytes(lastSessions));
+    }
+
+    /* ============================================================
+     *  BADGES
+     * ============================================================ */
+    function updateNavBadges() {
+        const vb = $("navVouchersBadge");
+        if (vb) vb.textContent = lastVouchers.length;
+
+        const sb = $("navSessionsBadge");
+        if (sb) sb.textContent = lastSessions.length;
+
+        // Profiles badge uses the filtered count (same rule as the
+        // Profiles page) so both pages show identical numbers.
+        const pb = $("navProfilesBadge");
+        if (pb) pb.textContent = countUserProfiles(lastProfiles);
+    }
+
+    /* ============================================================
+     *  BAR CHART — Vouchers by Profile
+     * ============================================================ */
+    function niceCeil(n) {
+        if (n <= 5) return 5;
+        if (n <= 10) return 10;
+        if (n <= 20) return 20;
+        if (n <= 50) return 50;
+        if (n <= 100) return 100;
+        return Math.ceil(n / 50) * 50;
+    }
+
+    function renderBarChart(vouchers) {
+        const counts = {};
+        for (const v of vouchers) {
+            const p = v.profile || "default";
+            counts[p] = (counts[p] || 0) + 1;
+        }
+        const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        const el = $("barChart");
+        if (entries.length === 0) {
+            el.innerHTML = `<div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                <h3>No data yet</h3>
+                <p>Create vouchers to see this chart populated.</p>
+            </div>`;
+            $("barSubtitle").textContent = "0 profiles";
+            return;
+        }
+        $("barSubtitle").textContent = entries.length + " profile" + (entries.length === 1 ? "" : "s");
+
+        const W = 800, H = 240;
+        const padL = 40, padR = 12, padT = 20, padB = 40;
+        const innerW = W - padL - padR;
+        const innerH = H - padT - padB;
+        const maxVal = Math.max(...entries.map((e) => e[1]));
+        const niceMax = niceCeil(maxVal);
+        const barW = innerW / entries.length * 0.6;
+        const gap  = innerW / entries.length * 0.4;
+
+        let svg = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`;
+        for (let i = 0; i <= 4; i++) {
+            const y = padT + (innerH * i / 4);
+            svg += `<line class="d-bar-grid" x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}"/>`;
+            svg += `<text class="d-bar-label" x="${padL - 8}" y="${y + 4}" text-anchor="end">${Math.round(niceMax * (1 - i / 4))}</text>`;
+        }
+        entries.forEach(([profile, count], i) => {
+            const x = padL + gap / 2 + i * (barW + gap);
+            const h = (count / niceMax) * innerH;
+            const y = padT + innerH - h;
+            svg += `<rect class="d-bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="4"/>`;
+            svg += `<text class="d-bar-value" x="${x + barW / 2}" y="${y - 6}" text-anchor="middle">${count}</text>`;
+            svg += `<text class="d-bar-label" x="${x + barW / 2}" y="${H - 14}" text-anchor="middle">${escapeHtml(profile)}</text>`;
+        });
+        svg += `</svg>`;
+        el.innerHTML = svg;
+    }
+
+    /* ============================================================
+     *  DONUT CHART — Status Breakdown
+     *  Uses the same 3-bucket model as the stat cards.
+     * ============================================================ */
+    function renderDonut(vouchers) {
+        const counts = computeVoucherStats(vouchers);
+        const total = counts.total;
+        const segments = [
+            { label: "Active",  value: counts.active,  color: "#3d6d4f" },
+            { label: "Unused",  value: counts.unused,  color: "#a0703a" },
+            { label: "Expired", value: counts.expired, color: "#a32e2c" }
+        ];
+        const el = $("donutChart");
+        const legend = $("donutLegend");
+        if (total === 0) {
+            el.innerHTML = `<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="60" fill="none" stroke="#ebebe5" stroke-width="20"/></svg>`;
+            legend.innerHTML = `<div class="d-empty" style="padding:0; text-align:left;"><p style="font-size:13px;">No vouchers yet.</p></div>`;
+            return;
+        }
+        const R = 60;
+        const C = 2 * Math.PI * R;
+        let offset = 0;
+        let svg = `<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="${R}" fill="none" stroke="#f1f1ee" stroke-width="20"/>`;
+        segments.forEach((seg) => {
+            if (seg.value === 0) return;
+            const dash = C * (seg.value / total);
+            const gap = C - dash;
+            svg += `<circle cx="80" cy="80" r="${R}" fill="none" stroke="${seg.color}" stroke-width="20" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offset}" transform="rotate(-90 80 80)"/>`;
+            offset += dash;
+        });
+        svg += `<text x="80" y="76" text-anchor="middle" fill="#111111" style="font-size:22px; font-weight:700; font-family:inherit;">${total}</text>
+                <text x="80" y="94" text-anchor="middle" fill="#6b6b6b" style="font-size:11px; font-weight:500; letter-spacing:0.05em; font-family:inherit;">TOTAL</text></svg>`;
+        el.innerHTML = svg;
+        legend.innerHTML = segments.map((s) => `
+            <div class="d-donut-legend-row">
+                <span class="d-donut-swatch" style="background:${s.color};"></span>
+                <span class="d-donut-legend-label">${s.label}</span>
+                <span class="d-donut-legend-value">${s.value}</span>
+            </div>`).join("");
+    }
+
+    /* ============================================================
+     *  RECENT VOUCHERS TABLE
+     * ============================================================ */
+    function renderTablePreview(vouchers) {
+        const body = $("voucherBodyPreview");
+        const subtitle = $("tableSubtitle");
+        if (vouchers.length === 0) {
+            body.innerHTML = `<tr><td colspan="6"><div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                <h3>No vouchers</h3><p>No vouchers on the router yet.</p></div></td></tr>`;
+            subtitle.textContent = "0 vouchers";
+            return;
+        }
+        subtitle.textContent = vouchers.length + " voucher" + (vouchers.length === 1 ? "" : "s");
+        const recent = vouchers.slice(-5).reverse();
+        body.innerHTML = recent.map((v) => {
+            const status = classify(v);
+            const label = {
+                active: "Active",
+                unused: "Unused",
+                expired: "Expired",
+                almost: "Almost Full",
+                heavy: "Heavy User",
+            }[status];
+            const pillClass = (status === "heavy" || status === "almost") ? "idle" : status;
+            return `<tr>
+                <td><span class="d-code">${escapeHtml(v.name || "—")}</span></td>
+                <td>${escapeHtml(v.profile || "default")}</td>
+                <td><span class="d-pill ${pillClass}">${label}</span></td>
+                <td>${escapeHtml(shortUptime(v.uptime))}</td>
+                <td>${escapeHtml(formatBytes(bytesOf(v)))}</td>
+                <td>${escapeHtml(v.comment || "—")}</td>
+            </tr>`;
+        }).join("");
+    }
+
+    /* ============================================================
+     *  LIVE SESSIONS FETCH — every 3 seconds
+     * ============================================================ */
+    async function fetchLiveSessions() {
+        try {
+            const res = await fetch("../api.php?action=sessions", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) return;
+            if (!res.ok) return;
+
+            let data;
+            try { data = await res.json(); }
+            catch (_) { return; }
+
+            if (!data || !data.success) return;
+
+            lastSessions = Array.isArray(data.sessions) ? data.sessions : [];
+
+            const dataEl = $("statData");
+            if (dataEl) dataEl.textContent = formatBytes(computeLiveBytes(lastSessions));
+
+            updateNavBadges();
+        } catch (_) {
+            // silent
+        }
+    }
+
+    /* ============================================================
+     *  BADGE FETCH — vouchers + profiles
+     * ============================================================ */
+    async function fetchBadgeCounts() {
+        // Vouchers
+        try {
+            const res = await fetch("../api.php?action=vouchers", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success) {
+                    lastVouchers = Array.isArray(data.vouchers) ? data.vouchers : [];
+                    updateNavBadges();
+                }
+            }
+        } catch (_) {}
+
+        // Profiles
+        try {
+            const res = await fetch("../api.php?action=profile-details", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success) {
+                    lastProfiles = Array.isArray(data.profiles) ? data.profiles : [];
+                    updateNavBadges();
+                }
+            }
+        } catch (_) {}
+
+        // Sessions (already handled, but refresh badge)
+        updateNavBadges();
+    }
+
+    /* ============================================================
+     *  LOCAL TICK — every 2 seconds, re-render from memory
+     * ============================================================ */
+    function localTick() {
+        if (lastVouchers.length === 0 && lastSessions.length === 0) return;
+        renderStats();
+        renderTablePreview(lastVouchers);
+    }
+
+    /* ============================================================
+     *  HOOKS — called by shared.js whenever voucher data loads
+     * ============================================================ */
+    window.onVouchersLoaded = (vouchers) => {
+        lastVouchers = vouchers;
+        renderStats();
+        renderBarChart(vouchers);
+        renderDonut(vouchers);
+        renderTablePreview(vouchers);
+        updateNavBadges();
+    };
+
+    /* ============================================================
+     *  BOOT
+     * ============================================================ */
+    window.onAppReady = () => {
+        document.documentElement.classList.remove("d-pending");
+        document.documentElement.classList.add("d-ready");
+
+        // First session fetch — updates Live Data
+        fetchLiveSessions();
+
+        // Fetch badge counts immediately
+        fetchBadgeCounts();
+
+        // Refresh Live Data every 3 seconds
+        if (sessionsTimer) clearInterval(sessionsTimer);
+        sessionsTimer = setInterval(fetchLiveSessions, 3000);
+
+        // Refresh badges every 10 seconds (vouchers, sessions, profiles)
+        if (badgeTimer) clearInterval(badgeTimer);
+        badgeTimer = setInterval(fetchBadgeCounts, 10000);
+
+        // Local tick every 2 seconds
+        if (statsTimer) clearInterval(statsTimer);
+        statsTimer = setInterval(localTick, 2000);
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (statsTimer) { clearInterval(statsTimer); statsTimer = null; }
+                if (sessionsTimer) { clearInterval(sessionsTimer); sessionsTimer = null; }
+                if (badgeTimer) { clearInterval(badgeTimer); badgeTimer = null; }
+            } else {
+                if (!statsTimer) statsTimer = setInterval(localTick, 2000);
+                if (!sessionsTimer) sessionsTimer = setInterval(fetchLiveSessions, 3000);
+                if (!badgeTimer) badgeTimer = setInterval(fetchBadgeCounts, 10000);
+                fetchLiveSessions();
+                fetchBadgeCounts();
+                localTick();
+            }
+        });
+    };
+</script>
+</body>
+</html>

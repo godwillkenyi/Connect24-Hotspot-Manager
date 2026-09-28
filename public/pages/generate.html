@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate — Connect24 Hotspot Manager</title>
+<link rel="stylesheet" href="../shared.css">
+<!-- Favicons -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- PWA -->
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Connect24">
+</head>
+<body>
+
+<div class="d">
+    <div class="d-overlay" id="overlay"></div>
+
+    <div class="d-layout">
+
+        <!-- ============================================================
+             SIDEBAR
+             ============================================================ -->
+        <aside class="d-side" id="sidebar">
+            <div class="d-brand">
+                <div class="d-brand-mark">24</div>
+                <div class="d-brand-text">
+                    <span class="d-brand-name">Connect24</span>
+                    <span class="d-brand-sub">Hotspot Manager</span>
+                </div>
+            </div>
+
+            <nav class="d-nav">
+                <span class="d-nav-label">Overview</span>
+
+                <a class="d-nav-link" href="dashboard.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+
+                <a class="d-nav-link" href="vouchers.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                    Vouchers
+                    <span class="d-nav-badge" id="navVouchersBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="sessions.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    Sessions
+                    <span class="d-nav-badge" id="navSessionsBadge">0</span>
+                </a>
+
+                <span class="d-nav-label">Configuration</span>
+
+                <a class="d-nav-link" href="profiles.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Profiles
+                    <span class="d-nav-badge" id="navProfilesBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="settings.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                    Settings
+                </a>
+            </nav>
+
+            <!-- Tier 1: plan widget -->
+            <div class="d-side-plan">
+                <div class="d-side-plan-head">
+                    <span class="d-side-plan-badge">FREE</span>
+                    <span class="d-side-plan-routers">1 of 1 router</span>
+                </div>
+                <div class="d-side-plan-bar">
+                    <div class="d-side-plan-fill" style="width:100%;"></div>
+                </div>
+                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
+                    Upgrade to Pro →
+                </a>
+            </div>
+
+            <div class="d-side-foot">
+                <div class="d-user">
+                    <div class="d-user-avatar" id="userAvatar">V</div>
+                    <div class="d-user-info">
+                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-role">Administrator</div>
+                    </div>
+                </div>
+                <a class="d-logout" href="logout.html">
+                    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+
+        <!-- ============================================================
+             MAIN
+             ============================================================ -->
+        <main class="d-main">
+            <header class="d-topbar">
+                <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                    <button class="d-menu-btn" id="menuBtn" aria-label="Open menu">
+                        <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+                    </button>
+                    <div class="d-topbar-title">
+                        <!-- Tier 1: eyebrow -->
+                        <div class="d-topbar-eyebrow">
+                            <span class="d-topbar-eyebrow-dot"></span>
+                            Connect24 Hotspot Manager
+                            <span class="d-topbar-version">v1.0.0</span>
+                        </div>
+                        <h1>Generate Vouchers</h1>
+                        <p>Create new hotspot vouchers</p>
+                    </div>
+                </div>
+
+                <div class="d-topbar-actions">
+                    <div class="d-live on" id="livePill">
+                        <span class="d-live-dot"></span>
+                        <span id="liveText">Live · 5s</span>
+                    </div>
+
+                    <!-- Tier 1: ⌘K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
+                    </button>
+
+                    <a class="d-refresh" href="vouchers.html" style="background:var(--cream-2); color:var(--ink); border:1.5px solid var(--line); text-decoration:none;">
+                        <svg viewBox="0 0 24 24" style="fill:currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                        <span>Back to Vouchers</span>
+                    </a>
+                </div>
+            </header>
+
+            <div class="d-page">
+
+                <!-- ============================================================
+                     QUICK OPTIONS
+                     ============================================================ -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0 1 19 12a7 7 0 1 1-14 0 6.92 6.92 0 0 1 2.59-5.41L6.17 5.17A8.932 8.932 0 0 0 3 12a9 9 0 0 0 18 0 8.932 8.932 0 0 0-3.17-6.83z"/></svg>
+                            Quick Options
+                            <span class="d-panel-sub">Click a card to auto-fill the form</span>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div class="d-presets" id="presets">
+
+                            <button type="button" class="d-preset" data-count="10" data-uptime="1h" data-prefix="C24-1H-" data-price="1 SSP">
+                                <div class="d-preset-clock">1h</div>
+                                <div class="d-preset-body">
+                                    <div class="d-preset-title">10 One-Hour</div>
+                                    <div class="d-preset-sub">10 vouchers · 1 hour each</div>
+                                </div>
+                                <svg class="d-preset-arrow" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                            </button>
+
+                            <button type="button" class="d-preset" data-count="10" data-uptime="2h" data-prefix="C24-2H-" data-price="2 SSP">
+                                <div class="d-preset-clock">2h</div>
+                                <div class="d-preset-body">
+                                    <div class="d-preset-title">10 Two-Hours</div>
+                                    <div class="d-preset-sub">10 vouchers · 2 hours each</div>
+                                </div>
+                                <svg class="d-preset-arrow" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                            </button>
+
+                            <button type="button" class="d-preset" data-count="10" data-uptime="3h" data-prefix="C24-3H-" data-price="3 SSP">
+                                <div class="d-preset-clock">3h</div>
+                                <div class="d-preset-body">
+                                    <div class="d-preset-title">10 Three-Hours</div>
+                                    <div class="d-preset-sub">10 vouchers · 3 hours each</div>
+                                </div>
+                                <svg class="d-preset-arrow" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                            </button>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     GENERATOR FORM
+                     ============================================================ -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            Batch Details
+                            <span class="d-panel-sub">Configure your vouchers</span>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <form class="d-form d-form-compact" id="genForm">
+
+                            <div class="d-form-grid">
+                                <div class="d-field">
+                                    <label class="d-label" for="genCount">Quantity</label>
+                                    <input class="d-input" type="number" id="genCount"
+                                        min="1" max="100" value="10" required>
+                                </div>
+
+                                <div class="d-field">
+                                    <label class="d-label" for="genProfile">Profile</label>
+                                    <select class="d-input" id="genProfile" required>
+                                        <option value="default">default</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-field">
+                                    <label class="d-label" for="genPrefix">Prefix</label>
+                                    <input class="d-input" type="text" id="genPrefix"
+                                        value="C24-" placeholder="C24-" maxlength="12">
+                                </div>
+
+                                <div class="d-field">
+                                    <label class="d-label" for="genUptime">Uptime</label>
+                                    <input class="d-input" type="text" id="genUptime"
+                                        value="1h" placeholder="1h">
+                                </div>
+
+                                <div class="d-field">
+                                    <label class="d-label" for="genServer">Server</label>
+                                    <select class="d-input" id="genServer">
+                                        <option value="">All servers</option>
+                                    </select>
+                                </div>
+
+                                <div class="d-field d-field-wide">
+                                    <label class="d-label" for="genPrice">Price tag</label>
+                                    <input class="d-input" type="text" id="genPrice"
+                                        value="" placeholder="e.g. 5 SSP" maxlength="40">
+                                </div>
+                            </div>
+
+                            <div class="d-form-actions">
+                                <button type="submit" class="d-btn big primary" id="genSubmit">
+                                    <span class="d-btn-spinner"></span>
+                                    <span class="d-btn-label">
+                                        <svg viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;margin-right:6px;fill:currentColor;">
+                                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                        </svg>
+                                        Generate
+                                    </span>
+                                </button>
+                                <button type="button" class="d-btn big" id="resetBtn">
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     RESULT — VOUCHER CARDS
+                     ============================================================ -->
+                <section class="d-panel" id="resultPanel" style="display:none;">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+                            <span id="resultTitle">Generated Vouchers</span>
+                            <span class="d-panel-sub" id="resultCount">—</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <button class="d-btn" id="printResultBtn">
+                                <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                                Print
+                            </button>
+                            <button class="d-btn" id="exportResultBtn">
+                                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                                Export CSV
+                            </button>
+                            <button class="d-btn" id="copyAllBtn">
+                                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                Copy all
+                            </button>
+                            <a class="d-btn primary" href="vouchers.html">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                View in Vouchers
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div class="d-voucher-grid" id="resultBody"></div>
+                    </div>
+                </section>
+
+                <!-- Tier 1: footer -->
+                <footer class="d-footer">
+                    <div class="d-footer-left">
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                    </div>
+                    <div class="d-footer-right">
+                        <span class="d-footer-status">
+                            <span class="d-status-dot" id="footerApiStatus"></span>
+                            <span id="footerApiText">API: Connected</span>
+                        </span>
+                        <span class="d-footer-sep">·</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ============================================================
+     COMMAND PALETTE (⌘K / Ctrl+K)
+     ============================================================ -->
+<div class="d-cmdk" id="cmdk" hidden>
+    <div class="d-cmdk-backdrop" data-cmdk-close></div>
+    <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="d-cmdk-input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <kbd>ESC</kbd>
+        </div>
+        <div class="d-cmdk-results" id="cmdkResults"></div>
+        <div class="d-cmdk-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>ESC</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script src="../shared.js"></script>
+<script>
+    const {
+        escapeHtml, printVoucherSheet, exportCsv, toast, copyToClipboard,
+        formatUptime, $, qsa
+    } = window.appApi;
+
+    /* ============================================================
+     *  STATE
+     * ============================================================ */
+    let generated = [];
+    let profilesLoaded = false;
+    let serversLoaded = false;
+    let badgeTimer = null;
+
+    /* ============================================================
+     *  PROFILE FILTER — same rule as the Profiles page.
+     *  Excludes RouterOS system profiles ("default", "none", "").
+     * ============================================================ */
+    const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
+
+    function isUserProfile(p) {
+        const name = String(
+            typeof p === "string" ? p : (p && p.name) || ""
+        ).trim().toLowerCase();
+        return !HIDDEN_PROFILE_NAMES.has(name);
+    }
+
+    function countUserProfiles(list) {
+        const seen = new Set();
+        for (const raw of (list || [])) {
+            if (!isUserProfile(raw)) continue;
+            const name = typeof raw === "string" ? raw : (raw.name || "");
+            const key = String(name).trim().toLowerCase();
+            if (!seen.has(key)) seen.add(key);
+        }
+        return seen.size;
+    }
+
+    /* ============================================================
+     *  PRESETS
+     * ============================================================ */
+    qsa(".d-preset").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            $("genCount").value  = btn.dataset.count;
+            $("genUptime").value = btn.dataset.uptime;
+            $("genPrefix").value = btn.dataset.prefix;
+            $("genPrice").value  = btn.dataset.price || "";
+            toast("info", "Preset applied",
+                `${btn.dataset.count} × ${btn.dataset.uptime} vouchers`);
+        });
+    });
+
+    /* ============================================================
+     *  RESET FORM
+     * ============================================================ */
+    $("resetBtn").addEventListener("click", () => {
+        $("genCount").value  = 10;
+        $("genUptime").value = "1h";
+        $("genPrefix").value = "C24-";
+        $("genPrice").value  = "";
+        if ($("genProfile").options.length > 0) {
+            $("genProfile").selectedIndex = 0;
+        }
+        if ($("genServer").options.length > 0) {
+            $("genServer").selectedIndex = 0;
+        }
+        toast("info", "Form reset", "Back to defaults.");
+    });
+
+    /* ============================================================
+     *  BADGE FETCH — vouchers, sessions, profiles
+     * ============================================================ */
+    async function fetchBadgeCounts() {
+        // Vouchers
+        try {
+            const res = await fetch("../api.php?action=vouchers", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success) {
+                    const list = Array.isArray(data.vouchers) ? data.vouchers : [];
+                    const badge = $("navVouchersBadge");
+                    if (badge) badge.textContent = list.length;
+                }
+            }
+        } catch (_) {}
+
+        // Sessions
+        try {
+            const res = await fetch("../api.php?action=sessions", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success) {
+                    const list = Array.isArray(data.sessions) ? data.sessions : [];
+                    const badge = $("navSessionsBadge");
+                    if (badge) badge.textContent = list.length;
+                }
+            }
+        } catch (_) {}
+
+        // Profiles — use filtered count so it matches the Profiles page
+        try {
+            const res = await fetch("../api.php?action=profile-details", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success) {
+                    const list = Array.isArray(data.profiles) ? data.profiles : [];
+                    const badge = $("navProfilesBadge");
+                    if (badge) badge.textContent = countUserProfiles(list);
+                }
+            }
+        } catch (_) {}
+    }
+
+    /* ============================================================
+     *  PROFILE DROPDOWN
+     * ============================================================ */
+    async function loadProfiles() {
+        if (profilesLoaded) return;
+        try {
+            const res = await fetch("../api.php?action=profiles", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || "Failed to load profiles");
+            }
+
+            const select = $("genProfile");
+            const profiles = Array.isArray(data.profiles) ? data.profiles : [];
+            const names = profiles
+                .map((p) => (typeof p === "string" ? p : (p.name || "")))
+                .filter(Boolean)
+                .sort();
+
+            if (names.length === 0) {
+                select.innerHTML = `<option value="default">default</option>`;
+                profilesLoaded = true;
+                return;
+            }
+
+            select.innerHTML = names
+                .map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`)
+                .join("");
+
+            if (names.includes("default")) {
+                select.value = "default";
+            }
+
+            profilesLoaded = true;
+        } catch (err) {
+            console.warn("Could not load profiles:", err.message);
+            profilesLoaded = true;
+        }
+    }
+
+    /* ============================================================
+     *  SERVER DROPDOWN — names only
+     * ============================================================ */
+    async function loadServers() {
+        if (serversLoaded) return;
+        try {
+            const res = await fetch("../api.php?action=servers", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || "Failed to load servers");
+            }
+
+            const select = $("genServer");
+            const servers = Array.isArray(data.servers) ? data.servers : [];
+
+            const names = servers
+                .map((s) => (typeof s === "string" ? s : (s.name || "")))
+                .filter(Boolean)
+                .sort();
+
+            if (names.length === 0) {
+                select.innerHTML = `<option value="">All servers</option>`;
+                serversLoaded = true;
+                return;
+            }
+
+            select.innerHTML =
+                `<option value="">All servers</option>` +
+                names.map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+
+            serversLoaded = true;
+        } catch (err) {
+            console.warn("Could not load servers:", err.message);
+            serversLoaded = true;
+        }
+    }
+
+    /* ============================================================
+     *  SUBMIT
+     *
+     *  - comment = price tag (only)
+     *  - server  = server name, sent as its own field
+     *  api.php maps `server` to `.equal('server', ...)` on the
+     *  /ip/hotspot/user/add command — this is the real RouterOS
+     *  field that ties a voucher to a specific hotspot server.
+     * ============================================================ */
+    $("genForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const btn = $("genSubmit");
+        const count = parseInt($("genCount").value, 10) || 0;
+
+        if (count < 1 || count > 100) {
+            toast("warn", "Invalid quantity", "Quantity must be between 1 and 100.");
+            return;
+        }
+
+        const priceTag = $("genPrice").value.trim();
+        const serverName = $("genServer").value.trim();
+
+        const payload = {
+            count: count,
+            profile: $("genProfile").value || "default",
+            prefix: $("genPrefix").value.trim() || "C24-",
+            "limit-uptime": $("genUptime").value.trim() || "",
+            comment: priceTag,          // price tag only — no server string
+            server: serverName          // sent as its own field
+        };
+
+        btn.disabled = true;
+        btn.classList.add("loading");
+
+        try {
+            const res = await fetch("../api.php?action=create-voucher", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                cache: "no-store",
+                body: JSON.stringify(payload)
+            });
+
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            const created = Array.isArray(data.created) ? data.created : [];
+
+            generated = created.map((code) => ({
+                name: code,
+                profile: payload.profile,
+                "limit-uptime": payload["limit-uptime"],
+                comment: priceTag,
+                server: serverName
+            }));
+
+            renderResult();
+
+            const requested = data.requested || count;
+            if (created.length === requested) {
+                toast("ok", "Vouchers created", `${created.length} voucher(s) generated.`);
+            } else if (created.length > 0) {
+                toast("warn", "Partial success", `${created.length} of ${requested} created.`);
+            } else {
+                toast("error", "Nothing created", "The router did not accept any vouchers.");
+            }
+
+            // Refresh badges after creation
+            fetchBadgeCounts();
+        } catch (err) {
+            toast("error", "Generation failed", err.message || "Unknown error.");
+        } finally {
+            btn.disabled = false;
+            btn.classList.remove("loading");
+        }
+    });
+
+    /* ============================================================
+     *  RENDER RESULT — voucher cards
+     *
+     *    C24-2H-22A564
+     *    Duration: 2 Hours
+     *    Price: 2 SSP
+     *    C O N N E C T 2 4 · W I F I H O T S P O T
+     * ============================================================ */
+    function renderResult() {
+        const panel = $("resultPanel");
+        const body = $("resultBody");
+
+        if (generated.length === 0) {
+            panel.style.display = "none";
+            return;
+        }
+
+        panel.style.display = "block";
+        $("resultCount").textContent = generated.length + " created";
+        $("resultTitle").textContent = generated.length === 1
+            ? "Generated Voucher"
+            : "Generated Vouchers";
+
+        body.innerHTML = generated.map((v) => {
+            const uptimeLabel = formatUptime(v["limit-uptime"]);
+            const priceRaw = (v.comment || "").trim();
+            const priceLabel = priceRaw || "—";
+
+            return `
+                <div class="d-voucher-card" data-code="${escapeHtml(v.name)}">
+                    <div class="d-voucher-code">${escapeHtml(v.name)}</div>
+                    <div class="d-voucher-meta">
+                        <div class="d-voucher-line">
+                            <span class="d-voucher-line-label">Duration:</span>
+                            <span class="d-voucher-line-value">${escapeHtml(uptimeLabel)}</span>
+                        </div>
+                        <div class="d-voucher-line">
+                            <span class="d-voucher-line-label">Price:</span>
+                            <span class="d-voucher-line-value">${escapeHtml(priceLabel)}</span>
+                        </div>
+                    </div>
+                    <div class="d-voucher-footer">
+                        <span class="d-voucher-brand">C O N N E C T 2 4 · W I F I H O T S P O T</span>
+                        <button class="d-row-btn" data-copy="${escapeHtml(v.name)}" title="Copy code">
+                            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        body.querySelectorAll(".d-row-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                copyToClipboard(btn.dataset.copy);
+            });
+        });
+
+        body.querySelectorAll(".d-voucher-card").forEach((card) => {
+            card.addEventListener("click", (e) => {
+                if (e.target.closest(".d-row-btn")) return;
+                copyToClipboard(card.dataset.code);
+            });
+        });
+
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    /* ============================================================
+     *  RESULT ACTIONS
+     * ============================================================ */
+    $("printResultBtn").addEventListener("click", () => {
+        printVoucherSheet(generated);
+    });
+
+    $("exportResultBtn").addEventListener("click", () => {
+        exportCsv(generated);
+    });
+
+    $("copyAllBtn").addEventListener("click", () => {
+        if (generated.length === 0) {
+            toast("warn", "Nothing to copy", "Generate vouchers first.");
+            return;
+        }
+        const text = generated.map((v) => v.name).join("\n");
+        copyToClipboard(text);
+    });
+
+    /* ============================================================
+     *  HOOKS
+     * ============================================================ */
+    window.onAppReady = () => {
+        loadProfiles();
+        loadServers();
+
+        // Fetch badge counts immediately
+        fetchBadgeCounts();
+
+        // Then every 10 seconds
+        if (badgeTimer) clearInterval(badgeTimer);
+        badgeTimer = setInterval(fetchBadgeCounts, 10000);
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (badgeTimer) { clearInterval(badgeTimer); badgeTimer = null; }
+            } else {
+                if (!badgeTimer) badgeTimer = setInterval(fetchBadgeCounts, 10000);
+                fetchBadgeCounts();
+            }
+        });
+    };
+    window.onVouchersLoaded = () => { /* keep sidebar badge updated */ };
+</script>
+</body>
+</html>

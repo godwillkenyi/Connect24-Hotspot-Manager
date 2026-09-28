@@ -1,0 +1,46 @@
+{
+  "name": "Connect24 Hotspot Manager",
+  "short_name": "Connect24",
+  "description": "MikroTik Hotspot Billing & Voucher Platform",
+  "start_url": "./pages/dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f7f7f5",
+  "theme_color": "#1e5c9c",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "./favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "./pages/dashboard.html"
+    },
+    {
+      "name": "Generate vouchers",
+      "url": "./pages/generate.html"
+    },
+    {
+      "name": "Sessions",
+      "url": "./pages/sessions.html"
+    }
+  ]
+}

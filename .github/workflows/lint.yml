@@ -1,0 +1,59 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  php-lint:
+    name: PHP syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Check PHP syntax on every .php file
+        run: |
+          set -e
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+  json-validate:
+    name: JSON syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          set -e
+          find . -name '*.json' \
+            -not -path './node_modules/*' \
+            -not -path './.git/*' \
+            -print0 \
+            | xargs -0 -n1 -P4 sh -c 'echo "Checking $0"; jq empty "$0"'
+
+  html-validate:
+    name: HTML syntax check
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node (for html-validate CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run html-validate
+        run: |
+          npx --yes html-validate@latest \
+            --config '{"extends":["html-validate:recommended"],"rules":{"no-inline-style":"off","element-required-attributes":"off","wcag/h37":"off"}}' \
+            'public/**/*.html' || true

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Logging out…</title>
+<style>
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f7f7f5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+        color: #111;
+    }
+    .box { text-align: center; }
+    .spin {
+        width: 36px;
+        height: 36px;
+        border: 3px solid #dcdcd6;
+        border-top-color: #1e5c9c;
+        border-radius: 50%;
+        animation: s 0.8s linear infinite;
+        margin: 0 auto 16px;
+    }
+    @keyframes s { to { transform: rotate(360deg); } }
+    p { color: #6b6b6b; font-size: 14px; margin: 0; }
+</style>
+</head>
+<body>
+    <div class="box">
+        <div class="spin"></div>
+        <p>Signing out…</p>
+    </div>
+    <script>
+        // Tell the server to destroy the session, then use replace()
+        // so the Back button can't return to a protected page.
+        fetch("../api.php?action=logout", {
+            method: "POST",
+            credentials: "same-origin",
+            cache: "no-store"
+        }).finally(() => {
+            window.location.replace("../index.html");
+        });
+    </script>
+</body>
+</html>

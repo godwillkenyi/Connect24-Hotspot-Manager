@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Connect 24</title>
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+        --navy:       #0a1522;
+        --navy-2:     #0f1e2e;
+        --navy-3:     #16293f;
+        --navy-4:     #1e3a56;
+        --blue-mute:  #5b7fa3;
+        --blue-dim:   #7a9bbd;
+        --blue-glow:  #a8c5e0;
+
+        --bg:         #060d16;
+        --surface:    #0f1e2e;
+        --surface-2:  #142639;
+        --surface-3:  #1c3450;
+
+        --ink:        #e8eef4;
+        --ink-soft:   #b5c3d1;
+        --ink-mute:   #7a8b9e;
+        --ink-faint:  #4d5c6e;
+
+        --line:       #1e3a56;
+        --line-soft:  #16293f;
+        --line-strong:#2a4a6b;
+
+        --danger:     #e07a78;
+        --danger-soft:rgba(163, 46, 44, 0.15);
+        --danger-line:#8a4543;
+
+        --warn:       #e0b070;
+        --warn-soft:  rgba(160, 112, 58, 0.15);
+        --warn-line:  #8a7040;
+
+        --ok:         #7fc9a0;
+        --ok-soft:    rgba(61, 109, 79, 0.15);
+        --ok-line:    #3d6d4f;
+    }
+
+    html, body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        position: fixed;
+        overscroll-behavior: none;
+        touch-action: none;
+    }
+
+    body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* ============================================================
+     *  CINEMATIC BACKGROUND (right side only)
+     * ============================================================ */
+    .c-bg-stack {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        background: var(--navy);
+        clip-path: inset(0 50% 0 0);
+    }
+    @media (max-width: 900px) { .c-bg-stack { clip-path: none; } }
+
+    .c-bg-image {
+        position: absolute;
+        top: -10%; left: -10%;
+        width: 130%; height: 130%;
+        background-image: url("background-img.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: brightness(0.45) contrast(1.15) saturate(0.85) hue-rotate(190deg);
+        opacity: 0.85;
+        will-change: transform;
+    }
+    .c-bg-image.kb-1 { animation: ckb1 24s ease-in-out infinite; }
+    .c-bg-image.kb-2 { animation: ckb2 32s ease-in-out infinite; }
+    @keyframes ckb1 {
+        0%   { transform: scale(1.05) translate(0, 0); }
+        25%  { transform: scale(1.18) translate(-3%, 2%); }
+        50%  { transform: scale(1.06) translate(4%, -2%); }
+        75%  { transform: scale(1.22) translate(-2%, -3%); }
+        100% { transform: scale(1.05) translate(0, 0); }
+    }
+    @keyframes ckb2 {
+        0%   { transform: scale(1.12) translate(2%, -1%); }
+        33%  { transform: scale(1.04) translate(-4%, 3%); }
+        66%  { transform: scale(1.20) translate(3%, 2%); }
+        100% { transform: scale(1.12) translate(2%, -1%); }
+    }
+
+    .c-bg-tint {
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 20%, rgba(22, 71, 122, 0.65), transparent 60%),
+            radial-gradient(circle at 80% 80%, rgba(6, 26, 51, 0.9), transparent 60%),
+            linear-gradient(180deg, rgba(10, 37, 71, 0.55) 0%, rgba(6, 26, 51, 0.85) 100%);
+        pointer-events: none;
+    }
+
+    .c-rain {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        opacity: 0.55;
+    }
+    .c-rain span {
+        position: absolute;
+        top: -20%;
+        width: 1px;
+        height: 80px;
+        background: linear-gradient(180deg, transparent 0%, rgba(200, 220, 255, 0.45) 50%, transparent 100%);
+        animation: cRainFall linear infinite;
+    }
+    @keyframes cRainFall {
+        0%   { transform: translate3d(0, -20vh, 0); }
+        100% { transform: translate3d(-10vw, 120vh, 0); }
+    }
+
+    .c-chars {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .c-walker {
+        position: absolute;
+        bottom: 10%;
+        width: 46px; height: 90px;
+        opacity: 0.85;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.9))
+                drop-shadow(0 0 18px rgba(200, 220, 255, 0.35));
+        will-change: transform, opacity;
+    }
+    .c-walker svg { width: 100%; height: 100%; fill: rgba(255, 255, 255, 0.9); }
+    @keyframes cWalkRight {
+        0%   { transform: translateX(-15vw) scaleX(1); }
+        100% { transform: translateX(115vw) scaleX(1); }
+    }
+    @keyframes cWalkLeft {
+        0%   { transform: translateX(115vw) scaleX(-1); }
+        100% { transform: translateX(-15vw) scaleX(-1); }
+    }
+    @keyframes cWalkerGlow {
+        0%, 100% { opacity: 0.85; }
+        50%      { opacity: 0.55; }
+    }
+
+    .c-tree {
+        position: absolute;
+        bottom: 6%;
+        opacity: 0.7;
+        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.9))
+                drop-shadow(0 0 20px rgba(200, 220, 255, 0.25));
+        will-change: transform;
+    }
+    .c-tree svg { width: 100%; height: 100%; fill: rgba(255, 255, 255, 0.75); }
+    @keyframes cTreeSway {
+        0%, 100% { transform: translateX(0) rotate(0deg); }
+        50%      { transform: translateX(-4px) rotate(-1.5deg); }
+    }
+
+    .c-bird {
+        position: absolute;
+        width: 30px; height: 18px;
+        opacity: 0.8;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8));
+        will-change: transform;
+    }
+    .c-bird svg {
+        width: 100%; height: 100%;
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.85);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+    }
+    @keyframes cBirdFly {
+        0%   { transform: translateX(-10vw) translateY(0); }
+        50%  { transform: translateX(50vw) translateY(-6vh); }
+        100% { transform: translateX(110vw) translateY(2vh); }
+    }
+
+    .c-lightning {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+    .c-flash {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at var(--lx, 50%) var(--ly, 30%),
+            rgba(200, 225, 255, 0.7) 0%,
+            rgba(143, 188, 230, 0.25) 25%,
+            transparent 60%);
+        opacity: 0;
+        mix-blend-mode: screen;
+    }
+    .c-flash.on { animation: cFlash 0.55s ease-out; }
+    .c-flash.on.double { animation: cFlashDouble 0.9s ease-out; }
+    @keyframes cFlash {
+        0% { opacity: 0; } 8% { opacity: 1; } 20% { opacity: 0.2; }
+        35% { opacity: 0.85; } 100% { opacity: 0; }
+    }
+    @keyframes cFlashDouble {
+        0% { opacity: 0; } 5% { opacity: 0.9; } 12% { opacity: 0.05; }
+        22% { opacity: 1; } 32% { opacity: 0.15; } 45% { opacity: 0.75; }
+        100% { opacity: 0; }
+    }
+    .c-bolt {
+        position: absolute;
+        top: var(--bx, 20%);
+        left: var(--by, 30%);
+        width: 140px; height: 260px;
+        opacity: 0;
+        filter: drop-shadow(0 0 24px rgba(143, 188, 230, 0.95));
+        pointer-events: none;
+    }
+    .c-bolt path {
+        fill: none;
+        stroke: #e8f4ff;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+    .c-bolt path.glow {
+        stroke: rgba(143, 188, 230, 0.75);
+        stroke-width: 8;
+        filter: blur(4px);
+    }
+    .c-bolt.on { animation: cBolt 0.6s ease-out; }
+    @keyframes cBolt {
+        0% { opacity: 0; } 10% { opacity: 1; } 25% { opacity: 0.2; }
+        35% { opacity: 1; } 70% { opacity: 0.7; } 100% { opacity: 0; }
+    }
+
+    /* ============================================================
+     *  CONTENT
+     * ============================================================ */
+    .c-content {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .c-split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+    }
+
+    /* LEFT — STORM */
+    .c-left {
+        padding: 56px 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        color: #eaf3fb;
+        background: transparent;
+        border-right: 1px solid rgba(30, 92, 156, 0.25);
+        overflow: hidden;
+    }
+    .c-left-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        color: #eaf3fb;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    }
+    .c-left-mark {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(145deg, #1e5c9c, #0f3358);
+        color: #eaf3fb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 12px;
+        box-shadow: 0 8px 24px -8px rgba(30, 92, 156, 0.8);
+    }
+    .c-left-quote { max-width: 460px; }
+    .c-left-quote .c-label {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--blue-glow);
+        margin-bottom: 20px;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    }
+    .c-left-quote blockquote {
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        color: #f2f8fd;
+        margin-bottom: 24px;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9);
+    }
+    .c-left-quote cite {
+        font-style: normal;
+        color: var(--blue-soft);
+        font-size: 14px;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    }
+    .c-left-footer {
+        font-size: 13px;
+        color: var(--blue-soft);
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
+    }
+
+    /* RIGHT — CREAM */
+    .c-right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 56px;
+        position: relative;
+        background: #f7f7f5;
+        color: #111;
+    }
+    .c-gear {
+        position: absolute;
+        top: 24px; right: 24px;
+        width: 42px; height: 42px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #dcdcd6;
+        color: #4a4a4a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        box-shadow: 0 1px 2px rgba(17, 17, 17, 0.04);
+        z-index: 5;
+    }
+    .c-gear:hover {
+        background: #eaf3fb;
+        border-color: #1e5c9c;
+        color: #1e5c9c;
+    }
+    .c-gear:focus-visible {
+        outline: 2px solid #1e5c9c;
+        outline-offset: 2px;
+    }
+    .c-gear svg { width: 19px; height: 19px; fill: currentColor; }
+
+    .c-form-wrap { width: 100%; max-width: 380px; }
+    .c-form-wrap h1 {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        margin-bottom: 10px;
+        color: #111;
+    }
+    .c-form-wrap p.c-sub {
+        color: #6b6b6b;
+        font-size: 14.5px;
+        margin-bottom: 36px;
+    }
+
+    .c-alert {
+        display: none;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        font-size: 13.5px;
+        line-height: 1.5;
+        margin-bottom: 22px;
+        border: 1.5px solid;
+        animation: cAlertIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .c-alert svg {
+        width: 18px; height: 18px;
+        flex-shrink: 0;
+        margin-top: 1px;
+        fill: currentColor;
+    }
+    .c-alert-body { flex: 1; min-width: 0; }
+    .c-alert-title { font-weight: 700; margin-bottom: 2px; font-size: 13.5px; }
+    .c-alert-msg { font-weight: 400; }
+    .c-alert.error {
+        display: flex;
+        background: #f8e6e5;
+        border-color: #a32e2c;
+        color: #a32e2c;
+    }
+    .c-alert.warn {
+        display: flex;
+        background: #f9f0e0;
+        border-color: #a0703a;
+        color: #a0703a;
+    }
+    .c-alert.ok {
+        display: flex;
+        background: #e6f0e9;
+        border-color: #3d6d4f;
+        color: #3d6d4f;
+    }
+    @keyframes cAlertIn {
+        from { transform: translateY(-4px); }
+        to   { transform: translateY(0); }
+    }
+
+    .c-field { margin-bottom: 20px; }
+    .c-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111;
+        margin-bottom: 8px;
+    }
+    .c-input-wrap { position: relative; }
+    .c-input {
+        display: block;
+        width: 100%;
+        height: 48px;
+        padding: 0 16px;
+        border: 1.5px solid #dcdcd6;
+        border-radius: 10px;
+        background: #fff;
+        font-size: 14.5px;
+        color: #111;
+        outline: none;
+        transition: border-color 0.12s, box-shadow 0.12s;
+        box-shadow: 0 1px 2px rgba(17, 17, 17, 0.02);
+    }
+    .c-input::placeholder { color: #a3a3a3; }
+    .c-input:hover:not(:focus):not(.has-error) { border-color: #c4c4bd; }
+    .c-input:focus {
+        border-color: #1e5c9c;
+        box-shadow: 0 0 0 4px rgba(30, 92, 156, 0.12);
+    }
+    .c-input.has-error {
+        border-color: #a32e2c;
+        background: #f8e6e5;
+    }
+    .c-input.has-toggle { padding-right: 48px; }
+
+    .c-pw-toggle {
+        position: absolute;
+        right: 8px; top: 50%;
+        transform: translateY(-50%);
+        width: 34px; height: 34px;
+        border-radius: 8px;
+        background: transparent;
+        border: none;
+        color: #6b6b6b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+    }
+    .c-pw-toggle:hover {
+        color: #1e5c9c;
+        background: #eaf3fb;
+    }
+    .c-pw-toggle:focus-visible {
+        outline: 2px solid #1e5c9c;
+        outline-offset: 1px;
+    }
+    .c-pw-toggle svg { width: 18px; height: 18px; fill: currentColor; }
+
+    .c-field-error {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 12.5px;
+        color: #a32e2c;
+        margin-top: 7px;
+        font-weight: 500;
+    }
+    .c-field-error.show { display: flex; }
+    .c-field-error svg { width: 12px; height: 12px; fill: currentColor; flex-shrink: 0; }
+
+    .c-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+        font-size: 13.5px;
+    }
+    .c-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 400;
+        color: #6b6b6b;
+        cursor: pointer;
+        user-select: none;
+    }
+    .c-check input {
+        width: 16px; height: 16px;
+        margin: 0;
+        accent-color: #1e5c9c;
+        cursor: pointer;
+    }
+    .c-check input:focus-visible {
+        outline: 2px solid #1e5c9c;
+        outline-offset: 2px;
+    }
+
+    .c a {
+        color: #1e5c9c;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1.5px solid transparent;
+        transition: border-color 0.15s;
+    }
+    .c a:hover { border-bottom-color: #1e5c9c; }
+
+    .c-btn {
+        width: 100%;
+        height: 48px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #1e5c9c 0%, #0f3358 100%);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        box-shadow:
+            0 4px 16px -6px rgba(30, 92, 156, 0.5),
+            0 1px 0 rgba(255, 255, 255, 0.15) inset;
+        letter-spacing: 0.01em;
+    }
+    .c-btn:hover:not(:disabled) {
+        background: linear-gradient(180deg, #246fb5 0%, #16477a 100%);
+        box-shadow:
+            0 6px 20px -6px rgba(30, 92, 156, 0.7),
+            0 0 24px rgba(30, 92, 156, 0.35),
+            0 1px 0 rgba(255, 255, 255, 0.15) inset;
+        transform: translateY(-1px);
+    }
+    .c-btn:active:not(:disabled) { transform: translateY(0); }
+    .c-btn:focus-visible {
+        outline: 2px solid #1e5c9c;
+        outline-offset: 2px;
+    }
+    .c-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .c-btn .c-spinner {
+        display: none;
+        width: 15px; height: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: cSpin 0.7s linear infinite;
+    }
+    .c-btn.loading .c-spinner { display: inline-block; }
+    .c-btn.loading .c-btn-label { display: none; }
+    @keyframes cSpin { to { transform: rotate(360deg); } }
+
+    .c-signup {
+        margin-top: 36px;
+        text-align: center;
+        font-size: 13px;
+        color: #a3a3a3;
+    }
+
+    /* PROGRESS BAR */
+    .c-progress {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        z-index: 300;
+        pointer-events: none;
+    }
+    .c-progress-bar {
+        height: 100%; width: 0%;
+        background: linear-gradient(90deg, #1e5c9c, #8fbce6);
+        box-shadow: 0 0 12px rgba(143, 188, 230, 0.8);
+        opacity: 0;
+        transition: width 0.3s ease, opacity 0.3s ease;
+    }
+    .c-progress.active .c-progress-bar { opacity: 1; }
+    .c-progress.done .c-progress-bar {
+        width: 100% !important; opacity: 0;
+        transition: width 0.2s ease, opacity 0.3s ease 0.2s;
+    }
+
+    /* TOASTS */
+    .c-toasts {
+        position: fixed;
+        bottom: 22px; right: 22px;
+        z-index: 400;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: calc(100% - 44px);
+        max-width: 380px;
+        pointer-events: none;
+    }
+    .c-toast {
+        border-radius: 10px;
+        padding: 13px 15px;
+        font-size: 13.5px;
+        box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        pointer-events: auto;
+        animation: cToastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1.5px solid;
+    }
+    .c-toast.leaving { animation: cToastOut 0.22s ease-in forwards; }
+    .c-toast svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; fill: currentColor; }
+    .c-toast-body { flex: 1; min-width: 0; }
+    .c-toast-title { font-weight: 600; margin-bottom: 1px; font-size: 13.5px; }
+    .c-toast-msg { font-weight: 400; font-size: 13px; line-height: 1.45; word-break: break-word; }
+    .c-toast.ok    { background: #e6f0e9; border-color: #3d6d4f; color: #3d6d4f; }
+    .c-toast.error { background: #f8e6e5; border-color: #a32e2c; color: #a32e2c; }
+    .c-toast.warn  { background: #f9f0e0; border-color: #a0703a; color: #a0703a; }
+    .c-toast.info  { background: #eaf3fb; border-color: #1e5c9c; color: #16477a; }
+    @keyframes cToastIn {
+        from { transform: translateX(20px); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes cToastOut {
+        to { transform: translateX(20px); opacity: 0; }
+    }
+
+    /* SETTINGS MODAL */
+    .c-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(6, 26, 51, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        visibility: hidden;
+        transition: visibility 0.25s;
+    }
+    .c-backdrop.open { visibility: visible; }
+
+    .c-modal {
+        width: 100%;
+        max-width: 560px;
+        max-height: calc(100vh - 48px);
+        background: #f7f7f5;
+        border: 1px solid #dcdcd6;
+        border-radius: 14px;
+        box-shadow: 0 32px 80px -20px rgba(6, 26, 51, 0.55);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform: scale(0.96);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        color: #111;
+    }
+    .c-backdrop.open .c-modal { transform: scale(1); }
+
+    .c-modal-head {
+        padding: 26px 28px 22px;
+        background: #fff;
+        border-bottom: 1px solid #dcdcd6;
+        flex-shrink: 0;
+    }
+    .c-modal-head-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+    }
+    .c-modal-head-title h3 {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        margin-bottom: 3px;
+    }
+    .c-modal-head-title p { font-size: 13px; color: #6b6b6b; line-height: 1.4; }
+    .c-modal-close {
+        width: 34px; height: 34px;
+        border-radius: 8px;
+        background: #f1f1ee;
+        border: 1px solid #dcdcd6;
+        color: #4a4a4a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        flex-shrink: 0;
+    }
+    .c-modal-close:hover {
+        background: #f8e6e5;
+        border-color: #a32e2c;
+        color: #a32e2c;
+    }
+    .c-modal-close svg { width: 15px; height: 15px; fill: currentColor; }
+
+    .c-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 18px;
+        padding: 7px 13px 7px 11px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        background: #f1f1ee;
+        color: #6b6b6b;
+        border: 1.5px solid #dcdcd6;
+        transition: all 0.25s;
+    }
+    .c-status-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: #a3a3a3;
+        flex-shrink: 0;
+        transition: all 0.25s;
+    }
+    .c-status-pill.ok {
+        background: #e6f0e9;
+        border-color: #3d6d4f;
+        color: #3d6d4f;
+    }
+    .c-status-pill.ok .c-status-dot {
+        background: #3d6d4f;
+        animation: cPulseOk 2s ease-out infinite;
+    }
+    .c-status-pill.error {
+        background: #f8e6e5;
+        border-color: #a32e2c;
+        color: #a32e2c;
+    }
+    .c-status-pill.error .c-status-dot { background: #a32e2c; }
+    .c-status-pill.checking {
+        background: #eaf3fb;
+        border-color: #1e5c9c;
+        color: #16477a;
+    }
+    .c-status-pill.checking .c-status-dot {
+        background: #1e5c9c;
+        animation: cPulseAccent 1.1s ease-in-out infinite;
+    }
+    @keyframes cPulseOk {
+        0%   { box-shadow: 0 0 0 0 rgba(61, 109, 79, 0.5); }
+        70%  { box-shadow: 0 0 0 7px rgba(61, 109, 79, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(61, 109, 79, 0); }
+    }
+    @keyframes cPulseAccent {
+        0%, 100% { opacity: 1; }
+        50%      { opacity: 0.35; }
+    }
+
+    .c-modal-progress {
+        height: 2px;
+        background: #ebebe5;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .c-modal-progress-bar {
+        position: absolute;
+        inset: 0; width: 0%;
+        background: linear-gradient(90deg, #1e5c9c, #8fbce6);
+        transition: width 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+    }
+    .c-modal-progress.active .c-modal-progress-bar { opacity: 1; }
+
+    .c-modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px 28px 26px;
+        background: #f7f7f5;
+    }
+    .c-modal-body::-webkit-scrollbar { width: 8px; }
+    .c-modal-body::-webkit-scrollbar-thumb { background: #c4c4bd; border-radius: 4px; }
+
+    .c-section {
+        padding-bottom: 22px;
+        margin-bottom: 22px;
+        border-bottom: 1px solid #ebebe5;
+    }
+    .c-section:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+    .c-section-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    .c-section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e5c9c;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .c-section-sub { font-size: 12.5px; color: #a3a3a3; }
+
+    .c-fg { margin-bottom: 18px; }
+    .c-fg:last-child { margin-bottom: 0; }
+    .c-flabel {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #111;
+        margin-bottom: 8px;
+    }
+    .c-flabel-opt { font-size: 12px; font-weight: 400; color: #a3a3a3; }
+    .c-finput {
+        width: 100%;
+        height: 44px;
+        padding: 0 14px;
+        background: #fff;
+        border: 1.5px solid #dcdcd6;
+        border-radius: 10px;
+        color: #111;
+        font-size: 14px;
+        font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+        font-weight: 500;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        outline: none;
+    }
+    .c-finput::placeholder { color: #a3a3a3; font-family: inherit; font-weight: 400; }
+    .c-finput:hover:not(:focus):not(.has-error) { border-color: #c4c4bd; }
+    .c-finput:focus {
+        border-color: #1e5c9c;
+        box-shadow: 0 0 0 4px rgba(30, 92, 156, 0.12);
+    }
+    .c-finput.has-error {
+        border-color: #a32e2c;
+        background: #f8e6e5;
+    }
+    .c-frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .c-fhint { font-size: 12.5px; color: #a3a3a3; margin-top: 7px; line-height: 1.5; }
+    .c-ferror {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 12.5px;
+        color: #a32e2c;
+        margin-top: 7px;
+        font-weight: 500;
+    }
+    .c-ferror.show { display: flex; }
+    .c-ferror svg { width: 12px; height: 12px; fill: currentColor; flex-shrink: 0; }
+
+    .c-info {
+        padding: 16px 18px;
+        background: #f1f1ee;
+        border: 1px solid #dcdcd6;
+        border-radius: 10px;
+    }
+    .c-info-empty {
+        font-size: 13.5px;
+        color: #6b6b6b;
+        line-height: 1.55;
+        text-align: center;
+    }
+    .c-info-grid { display: grid; gap: 12px; }
+    .c-info-row {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 14px;
+        align-items: baseline;
+    }
+    .c-info-key {
+        font-size: 12px;
+        color: #a3a3a3;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .c-info-value {
+        color: #111;
+        font-weight: 600;
+        font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+        font-size: 13.5px;
+        word-break: break-all;
+    }
+
+    .c-modal-foot {
+        padding: 18px 28px 22px;
+        background: #fff;
+        border-top: 1px solid #dcdcd6;
+        flex-shrink: 0;
+        display: flex;
+        gap: 10px;
+    }
+    .c-fbtn {
+        flex: 1;
+        height: 46px;
+        padding: 0 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+    }
+    .c-fbtn.primary {
+        background: linear-gradient(180deg, #1e5c9c 0%, #0f3358 100%);
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 16px -6px rgba(30, 92, 156, 0.5);
+    }
+    .c-fbtn.primary:hover:not(:disabled) {
+        background: linear-gradient(180deg, #246fb5 0%, #16477a 100%);
+        box-shadow: 0 6px 20px -6px rgba(30, 92, 156, 0.7), 0 0 24px rgba(30, 92, 156, 0.3);
+    }
+    .c-fbtn.secondary {
+        background: #fff;
+        color: #111;
+        border: 1.5px solid #dcdcd6;
+    }
+    .c-fbtn.secondary:hover:not(:disabled) {
+        background: #f1f1ee;
+        border-color: #c4c4bd;
+    }
+    .c-fbtn:disabled { opacity: 0.65; cursor: not-allowed; }
+    .c-fbtn .c-spinner {
+        display: none;
+        width: 14px; height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: cSpin 0.7s linear infinite;
+    }
+    .c-fbtn.secondary .c-spinner {
+        border-color: rgba(17, 17, 17, 0.18);
+        border-top-color: #111;
+    }
+    .c-fbtn.loading .c-spinner { display: inline-block; }
+    .c-fbtn.loading .c-btn-label { display: none; }
+
+    @media (max-width: 900px) {
+        html, body { position: static; overflow: auto; touch-action: auto; }
+        .c-split { grid-template-columns: 1fr; }
+        .c-left { padding: 40px 32px; min-height: auto; }
+        .c-left-quote blockquote { font-size: 22px; }
+        .c-right { padding: 40px 24px 56px; }
+    }
+    @media (max-width: 600px) {
+        .c-backdrop { padding: 0; align-items: flex-end; }
+        .c-modal {
+            max-width: none;
+            max-height: 94vh;
+            border-radius: 14px 14px 0 0;
+            transform: translateY(20px);
+        }
+        .c-backdrop.open .c-modal { transform: translateY(0); }
+    }
+    @media (max-width: 480px) {
+        .c-modal-head, .c-modal-body, .c-modal-foot { padding-left: 20px; padding-right: 20px; }
+        .c-frow { grid-template-columns: 1fr; gap: 0; }
+        .c-frow .c-fg { margin-bottom: 18px; }
+        .c-gear { top: 16px; right: 16px; }
+        .c-form-wrap h1 { font-size: 26px; }
+        .c-info-row { grid-template-columns: 1fr; gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .c-bg-image, .c-rain span, .c-walker, .c-tree, .c-bird,
+        .c-flash, .c-bolt { animation: none !important; }
+    }
+</style>
+</head>
+<body>
+
+<!-- CINEMATIC BACKGROUND -->
+<div class="c-bg-stack" aria-hidden="true">
+    <div class="c-bg-image kb-1" id="bgImage"></div>
+    <div class="c-bg-tint"></div>
+    <div class="c-rain" id="rainLayer"></div>
+    <div class="c-chars" id="charsLayer"></div>
+
+    <div class="c-lightning">
+        <div class="c-flash" id="flash"></div>
+        <svg class="c-bolt" id="bolt1" style="--bx: 55%; --by: 8%;" viewBox="0 0 140 260">
+            <path class="glow" d="M 75 0 L 60 60 L 90 70 L 55 130 L 85 145 L 45 210 L 70 220 L 30 260"/>
+            <path d="M 75 0 L 60 60 L 90 70 L 55 130 L 85 145 L 45 210 L 70 220 L 30 260"/>
+        </svg>
+        <svg class="c-bolt" id="bolt2" style="--bx: 22%; --by: 15%;" viewBox="0 0 140 260">
+            <path class="glow" d="M 70 0 L 55 55 L 85 65 L 50 125 L 80 140 L 40 205 L 65 215 L 25 260"/>
+            <path d="M 70 0 L 55 55 L 85 65 L 50 125 L 80 140 L 40 205 L 65 215 L 25 260"/>
+        </svg>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="c-content">
+
+    <div class="c-progress" id="topProgress">
+        <div class="c-progress-bar" id="topProgressBar"></div>
+    </div>
+
+    <div class="c-toasts" id="toasts"></div>
+
+    <div class="c-split">
+
+        <!-- LEFT: STORM -->
+        <aside class="c-left">
+            <div class="c-left-top">
+                <span class="c-left-mark">24</span>
+                <span>Connect 24</span>
+            </div>
+            <div class="c-left-quote">
+                <span class="c-label">Hotspot Management</span>
+                <blockquote>
+                    “Set up in minutes. Manage vouchers without thinking about it.”
+                </blockquote>
+                <cite>— Every admin who's tried it</cite>
+            </div>
+            <div class="c-left-footer">
+                © 2025 Connect 24 · Built for MikroTik
+            </div>
+        </aside>
+
+        <!-- RIGHT: CREAM -->
+        <main class="c-right">
+
+            <button type="button" class="c-gear" id="settingsBtn" aria-label="Router settings" title="Router settings">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/>
+                </svg>
+            </button>
+
+            <div class="c-form-wrap">
+                <h1>Sign in</h1>
+                <p class="c-sub">Use your API credentials to continue.</p>
+
+                <div class="c-alert" id="alertBox" role="alert" aria-live="polite">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <div class="c-alert-body">
+                        <div class="c-alert-title" id="alertTitle">Error</div>
+                        <div class="c-alert-msg" id="alertMsg"></div>
+                    </div>
+                </div>
+
+                <form id="loginForm" autocomplete="off" novalidate>
+
+                    <div class="c-field">
+                        <label class="c-label" for="adminUser">Username</label>
+                        <div class="c-input-wrap">
+                            <input class="c-input" type="text" id="adminUser" name="username"
+                                autocomplete="username" placeholder="voucher-api"
+                                autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                        </div>
+                        <div class="c-field-error" id="userError">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class="c-field">
+                        <label class="c-label" for="adminPass">Password</label>
+                        <div class="c-input-wrap">
+                            <input class="c-input has-toggle" type="password" id="adminPass" name="password"
+                                autocomplete="current-password" placeholder="Enter your password" required>
+                            <button type="button" class="c-pw-toggle" id="pwToggle" aria-label="Show password">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zm0 12.5a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="c-field-error" id="passError">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class="c-row">
+                        <label class="c-check">
+                            <input type="checkbox" name="remember" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="tel:+211926116537">Need help?</a>
+                    </div>
+
+                    <button class="c-btn" type="submit" id="submitBtn">
+                        <span class="c-spinner"></span>
+                        <span class="c-btn-label" id="btnText">Sign in</span>
+                    </button>
+                </form>
+
+                <p class="c-signup">Admin only · <a href="#">Read the setup guide</a></p>
+            </div>
+        </main>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="c-backdrop" id="modalBackdrop">
+        <div class="c-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="c-modal-head">
+                <div class="c-modal-head-row">
+                    <div class="c-modal-head-title">
+                        <h3 id="modalTitle">Router Settings</h3>
+                        <p>MikroTik API connection</p>
+                    </div>
+                    <button type="button" class="c-modal-close" id="modalClose" aria-label="Close settings">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>
+                    </button>
+                </div>
+                <div class="c-status-pill" id="statusPill">
+                    <span class="c-status-dot"></span>
+                    <span id="statusPillText">Not tested</span>
+                </div>
+            </div>
+
+            <div class="c-modal-progress" id="modalProgress">
+                <div class="c-modal-progress-bar" id="modalProgressBar"></div>
+            </div>
+
+            <div class="c-modal-body">
+                <section class="c-section">
+                    <div class="c-section-head">
+                        <span class="c-section-title">Connection</span>
+                        <span class="c-section-sub">Where is your router?</span>
+                    </div>
+                    <div class="c-fg">
+                        <label class="c-flabel" for="cfgHost">Router IP / Host</label>
+                        <input type="text" id="cfgHost" class="c-finput" placeholder="192.168.1.10"
+                            autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                        <div class="c-ferror" id="cfgHostError">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span></span>
+                        </div>
+                        <div class="c-fhint">The IP address or hostname of your MikroTik router.</div>
+                    </div>
+                    <div class="c-frow">
+                        <div class="c-fg">
+                            <label class="c-flabel" for="cfgPort">API Port</label>
+                            <input type="number" id="cfgPort" class="c-finput" placeholder="8728" min="1" max="65535" required>
+                            <div class="c-ferror" id="cfgPortError">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="c-fg">
+                            <label class="c-flabel" for="cfgTimeout">Timeout (s)</label>
+                            <input type="number" id="cfgTimeout" class="c-finput" placeholder="5" min="1" max="60" required>
+                            <div class="c-ferror" id="cfgTimeoutError">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="c-section">
+                    <div class="c-section-head">
+                        <span class="c-section-title">Credentials</span>
+                        <span class="c-section-sub">Dedicated API user</span>
+                    </div>
+                    <div class="c-fg">
+                        <label class="c-flabel" for="cfgUser">Username</label>
+                        <input type="text" id="cfgUser" class="c-finput" placeholder="voucher-api"
+                            autocapitalize="off" autocorrect="off" spellcheck="false" required>
+                        <div class="c-ferror" id="cfgUserError">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            <span></span>
+                        </div>
+                        <div class="c-fhint">Not your admin account — use a dedicated API user.</div>
+                    </div>
+                    <div class="c-fg">
+                        <label class="c-flabel" for="cfgPass">
+                            Password
+                            <span class="c-flabel-opt">— leave blank to keep</span>
+                        </label>
+                        <input type="password" id="cfgPass" class="c-finput" placeholder="••••••••" autocomplete="new-password">
+                        <div class="c-fhint" id="passHint">The password for the API user.</div>
+                    </div>
+                </section>
+
+                <section class="c-section">
+                    <div class="c-section-head">
+                        <span class="c-section-title">Router Info</span>
+                        <span class="c-section-sub">After a successful test</span>
+                    </div>
+                    <div class="c-info">
+                        <div id="routerInfoEmpty" class="c-info-empty">
+                            Test the connection to see the router's identity, RouterOS version, and existing user count.
+                        </div>
+                        <div id="routerInfoGrid" class="c-info-grid" style="display:none;">
+                            <div class="c-info-row">
+                                <span class="c-info-key">Identity</span>
+                                <span class="c-info-value" id="infoIdentity">—</span>
+                            </div>
+                            <div class="c-info-row">
+                                <span class="c-info-key">RouterOS</span>
+                                <span class="c-info-value" id="infoVersion">—</span>
+                            </div>
+                            <div class="c-info-row">
+                                <span class="c-info-key">Users</span>
+                                <span class="c-info-value" id="infoUsers">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="c-modal-foot">
+                <button type="button" class="c-fbtn secondary" id="testBtn">
+                    <span class="c-spinner"></span>
+                    <span class="c-btn-label">Test connection</span>
+                </button>
+                <button type="button" class="c-fbtn primary" id="saveBtn">
+                    <span class="c-spinner"></span>
+                    <span class="c-btn-label">Save changes</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+
+    /* ============================================================
+     *  DOM
+     * ============================================================ */
+    const loginForm  = $("loginForm");
+    const userInput  = $("adminUser");
+    const passInput  = $("adminPass");
+    const submitBtn  = $("submitBtn");
+    const btnText    = $("btnText");
+    const pwToggle   = $("pwToggle");
+    const rememberMe = $("rememberMe");
+
+    const alertBox   = $("alertBox");
+    const alertTitle = $("alertTitle");
+    const alertMsg   = $("alertMsg");
+    const userError  = $("userError");
+    const passError  = $("passError");
+
+    const topProgress    = $("topProgress");
+    const topProgressBar = $("topProgressBar");
+    const toasts         = $("toasts");
+
+    const settingsBtn      = $("settingsBtn");
+    const modalBackdrop    = $("modalBackdrop");
+    const modalClose       = $("modalClose");
+    const modalProgress    = $("modalProgress");
+    const modalProgressBar = $("modalProgressBar");
+    const statusPill       = $("statusPill");
+    const statusPillText   = $("statusPillText");
+
+    const routerInfoEmpty = $("routerInfoEmpty");
+    const routerInfoGrid  = $("routerInfoGrid");
+    const infoIdentity    = $("infoIdentity");
+    const infoVersion     = $("infoVersion");
+    const infoUsers       = $("infoUsers");
+
+    const cfgHost    = $("cfgHost");
+    const cfgPort    = $("cfgPort");
+    const cfgTimeout = $("cfgTimeout");
+    const cfgUser    = $("cfgUser");
+    const cfgPass    = $("cfgPass");
+    const passHint   = $("passHint");
+
+    const cfgHostError    = $("cfgHostError");
+    const cfgPortError    = $("cfgPortError");
+    const cfgTimeoutError = $("cfgTimeoutError");
+    const cfgUserError    = $("cfgUserError");
+
+    const testBtn = $("testBtn");
+    const saveBtn = $("saveBtn");
+
+    /* ============================================================
+     *  PROGRESS
+     * ============================================================ */
+    let progressTimer = null;
+    function progressStart(bar, wrap) {
+        wrap.classList.remove("done");
+        wrap.classList.add("active");
+        bar.style.width = "0%";
+        let pct = 0;
+        clearInterval(progressTimer);
+        progressTimer = setInterval(() => {
+            pct += Math.max(0.5, (85 - pct) * 0.08);
+            if (pct > 85) pct = 85;
+            bar.style.width = pct + "%";
+        }, 120);
+    }
+    function progressDone(bar, wrap) {
+        clearInterval(progressTimer);
+        bar.style.width = "100%";
+        wrap.classList.add("done");
+        setTimeout(() => {
+            wrap.classList.remove("active", "done");
+            bar.style.width = "0%";
+        }, 400);
+    }
+
+    /* ============================================================
+     *  TOASTS
+     * ============================================================ */
+    const ICONS = {
+        ok:    '<svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>',
+        error: '<svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>',
+        warn:  '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+        info:  '<svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>'
+    };
+
+    function toast(type, title, msg, timeout = 4000) {
+        const el = document.createElement("div");
+        el.className = "c-toast " + type;
+        el.innerHTML = `
+            ${ICONS[type] || ICONS.info}
+            <div class="c-toast-body">
+                <div class="c-toast-title">${escapeHtml(title)}</div>
+                ${msg ? `<div class="c-toast-msg">${escapeHtml(msg)}</div>` : ""}
+            </div>
+        `;
+        toasts.appendChild(el);
+        const remove = () => {
+            el.classList.add("leaving");
+            setTimeout(() => el.remove(), 220);
+        };
+        const t = setTimeout(remove, timeout);
+        el.addEventListener("click", () => { clearTimeout(t); remove(); });
+    }
+
+    function escapeHtml(s) {
+        return String(s ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    /* ============================================================
+     *  ALERTS
+     * ============================================================ */
+    function showAlert(type, title, msg) {
+        alertBox.className = "c-alert " + type;
+        alertTitle.textContent = title;
+        alertMsg.textContent = msg || "";
+    }
+    function hideAlert() { alertBox.className = "c-alert"; }
+
+    function setFieldError(inputEl, errorEl, msg) {
+        if (msg) {
+            inputEl.classList.add("has-error");
+            errorEl.querySelector("span").textContent = msg;
+            errorEl.classList.add("show");
+        } else {
+            inputEl.classList.remove("has-error");
+            errorEl.classList.remove("show");
+        }
+    }
+    function clearFieldErrors() {
+        setFieldError(userInput, userError, "");
+        setFieldError(passInput, passError, "");
+    }
+
+    /* ============================================================
+     *  BACKGROUND
+     * ============================================================ */
+    (function spawnRain() {
+        const layer = $("rainLayer");
+        for (let i = 0; i < 60; i++) {
+            const s = document.createElement("span");
+            s.style.left = (Math.random() * 110 - 5) + "%";
+            s.style.height = (40 + Math.random() * 90) + "px";
+            s.style.opacity = (0.15 + Math.random() * 0.55).toFixed(2);
+            const dur = 0.6 + Math.random() * 1.2;
+            s.style.animationDuration = dur + "s";
+            s.style.animationDelay = (-Math.random() * dur) + "s";
+            layer.appendChild(s);
+        }
+    })();
+
+    const WALKER_SVG = `
+        <svg viewBox="0 0 40 80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="8" r="6"/>
+            <rect x="17" y="15" width="6" height="22" rx="2.5"/>
+            <rect x="11" y="17" width="3.5" height="16" rx="1.5" transform="rotate(-12 12 17)"/>
+            <rect x="25.5" y="17" width="3.5" height="16" rx="1.5" transform="rotate(12 27 17)"/>
+            <rect x="14" y="36" width="4.5" height="22" rx="2"/>
+            <rect x="21.5" y="36" width="4.5" height="22" rx="2"/>
+            <rect x="14" y="57" width="6" height="11" rx="1.5"/>
+            <rect x="20" y="57" width="6" height="11" rx="1.5"/>
+        </svg>`;
+
+    const TREE_SVG = `
+        <svg viewBox="0 0 80 140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="36" y="80" width="8" height="55" rx="2"/>
+            <path d="M 40 10 C 20 30, 15 55, 30 70 L 50 70 C 65 55, 60 30, 40 10 Z"/>
+            <path d="M 40 40 C 25 55, 20 70, 32 82 L 48 82 C 60 70, 55 55, 40 40 Z" opacity="0.85"/>
+            <path d="M 40 70 C 30 80, 28 92, 38 100 L 42 100 C 52 92, 50 80, 40 70 Z" opacity="0.7"/>
+        </svg>`;
+
+    const BIRD_SVG = `
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 2 12 Q 8 4, 15 10 Q 22 4, 28 12" fill="none"/>
+        </svg>`;
+
+    (function spawnCharacters() {
+        const layer = $("charsLayer");
+
+        for (let i = 0; i < 4; i++) {
+            const w = document.createElement("div");
+            w.className = "c-walker";
+            w.innerHTML = WALKER_SVG;
+            const scale = 0.7 + Math.random() * 0.9;
+            w.style.width = (46 * scale) + "px";
+            w.style.height = (90 * scale) + "px";
+            w.style.bottom = (4 + Math.random() * 14) + "%";
+            const dur = 26 + Math.random() * 22;
+            const dir = Math.random() < 0.5 ? "cWalkRight" : "cWalkLeft";
+            const glowDur = 6 + Math.random() * 4;
+            w.style.animation =
+                `${dir} ${dur}s linear ${-Math.random() * dur}s infinite, ` +
+                `cWalkerGlow ${glowDur}s ease-in-out ${-Math.random() * glowDur}s infinite`;
+            layer.appendChild(w);
+        }
+
+        for (let i = 0; i < 5; i++) {
+            const t = document.createElement("div");
+            t.className = "c-tree";
+            t.innerHTML = TREE_SVG;
+            const scale = 0.7 + Math.random() * 1.2;
+            t.style.width = (80 * scale) + "px";
+            t.style.height = (140 * scale) + "px";
+            t.style.left = (Math.random() * 90) + "%";
+            t.style.bottom = "2%";
+            const dur = 5 + Math.random() * 6;
+            t.style.animation = `cTreeSway ${dur}s ease-in-out ${-Math.random() * dur}s infinite`;
+            layer.appendChild(t);
+        }
+
+        for (let i = 0; i < 3; i++) {
+            const b = document.createElement("div");
+            b.className = "c-bird";
+            b.innerHTML = BIRD_SVG;
+            const scale = 0.6 + Math.random() * 0.9;
+            b.style.width = (30 * scale) + "px";
+            b.style.height = (18 * scale) + "px";
+            b.style.top = (10 + Math.random() * 40) + "%";
+            const dur = 22 + Math.random() * 20;
+            b.style.animation = `cBirdFly ${dur}s linear ${-Math.random() * dur}s infinite`;
+            layer.appendChild(b);
+        }
+    })();
+
+    (function cycleBgMotion() {
+        const bg = $("bgImage");
+        let current = 1;
+        setInterval(() => {
+            current = current === 1 ? 2 : 1;
+            bg.classList.remove("kb-1", "kb-2");
+            void bg.offsetWidth;
+            bg.classList.add("kb-" + current);
+        }, 16000);
+    })();
+
+    const flash = $("flash");
+    const bolt1 = $("bolt1");
+    const bolt2 = $("bolt2");
+
+    function strike() {
+        flash.style.setProperty("--lx", (10 + Math.random() * 80) + "%");
+        flash.style.setProperty("--ly", (5 + Math.random() * 60) + "%");
+        flash.classList.remove("on", "double");
+        void flash.offsetWidth;
+        const double = Math.random() < 0.4;
+        flash.classList.add("on");
+        if (double) flash.classList.add("double");
+
+        if (Math.random() < 0.6) {
+            const bolt = Math.random() < 0.5 ? bolt1 : bolt2;
+            bolt.style.setProperty("--bx", (10 + Math.random() * 70) + "%");
+            bolt.style.setProperty("--by", (2 + Math.random() * 25) + "%");
+            bolt.classList.remove("on");
+            void bolt.offsetWidth;
+            bolt.classList.add("on");
+        }
+        setTimeout(strike, 2200 + Math.random() * 6500);
+    }
+    setTimeout(strike, 1200);
+
+    /* ============================================================
+     *  PASSWORD TOGGLE
+     * ============================================================ */
+    pwToggle.addEventListener("click", () => {
+        const isPw = passInput.type === "password";
+        passInput.type = isPw ? "text" : "password";
+        pwToggle.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+        passInput.focus();
+    });
+
+    /* ============================================================
+     *  REMEMBER ME
+     * ============================================================ */
+    const LS_KEY = "connect24_login";
+    function loadRemembered() {
+        try {
+            const saved = localStorage.getItem(LS_KEY);
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.user) {
+                    userInput.value = data.user;
+                    rememberMe.checked = true;
+                }
+            }
+        } catch (_) {}
+    }
+    function saveRemembered(user) {
+        try {
+            if (rememberMe.checked && user) {
+                localStorage.setItem(LS_KEY, JSON.stringify({ user }));
+            } else {
+                localStorage.removeItem(LS_KEY);
+            }
+        } catch (_) {}
+    }
+    loadRemembered();
+
+    /* ============================================================
+     *  LOGIN
+     * ============================================================ */
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        hideAlert();
+        clearFieldErrors();
+
+        const username = userInput.value.trim();
+        const password = passInput.value;
+
+        let valid = true;
+        if (!username) {
+            setFieldError(userInput, userError, "Username is required.");
+            valid = false;
+        } else if (username.length < 2) {
+            setFieldError(userInput, userError, "Username is too short.");
+            valid = false;
+        }
+        if (!password) {
+            setFieldError(passInput, passError, "Password is required.");
+            valid = false;
+        } else if (password.length < 3) {
+            setFieldError(passInput, passError, "Password is too short.");
+            valid = false;
+        }
+        if (!valid) return;
+
+        submitBtn.classList.add("loading");
+        submitBtn.disabled = true;
+        btnText.textContent = "Signing in…";
+        progressStart(topProgressBar, topProgress);
+        strike();
+
+        try {
+            const res = await fetch("api.php?action=login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                cache: "no-store",
+                body: JSON.stringify({ username, password })
+            });
+
+            let data;
+            try { data = await res.json(); }
+            catch (_) { throw new Error(`Server returned invalid response (HTTP ${res.status}).`); }
+
+            if (res.ok && data.success) {
+                saveRemembered(username);
+                progressDone(topProgressBar, topProgress);
+                showAlert("ok", "Signed in", "Redirecting to your dashboard…");
+                toast("ok", "Welcome back", "Redirecting…", 1500);
+                setTimeout(() => { window.location.replace("pages/dashboard.html"); }, 800);
+                return;
+            }
+
+            progressDone(topProgressBar, topProgress);
+
+            if (res.status === 401) {
+                showAlert("error", "Invalid credentials", data.message || "The username or password is incorrect.");
+                setFieldError(passInput, passError, "Check your password and try again.");
+                passInput.select();
+                toast("error", "Login failed", "Invalid username or password.");
+            } else if (res.status === 400) {
+                showAlert("warn", "Missing information", data.message || "Please fill in all fields.");
+                toast("warn", "Check your input", data.message || "Some fields are missing.");
+            } else if (res.status >= 500) {
+                showAlert("error", "Server error", data.message || "The server could not complete the request.");
+                toast("error", "Server error", `HTTP ${res.status}. Try again in a moment.`);
+            } else {
+                showAlert("error", "Login failed", data.message || "Something went wrong. Try again.");
+                toast("error", "Login failed", data.message || "Unknown error.");
+            }
+        } catch (err) {
+            progressDone(topProgressBar, topProgress);
+            const msg = err.message || "Network error";
+
+            if (/Failed to fetch|NetworkError|load failed/i.test(msg)) {
+                showAlert("error", "Cannot reach the server", "Check that your web server is running and try again.");
+                toast("error", "Network error", "Server unreachable.");
+            } else if (/invalid response/i.test(msg)) {
+                showAlert("error", "Bad response", msg);
+                toast("error", "Unexpected response", "The server did not return JSON.");
+            } else if (/timeout|timed out/i.test(msg)) {
+                showAlert("warn", "Request timed out", "The server took too long to respond. Try again.");
+                toast("warn", "Timeout", "Request took too long.");
+            } else {
+                showAlert("error", "Unexpected error", msg);
+                toast("error", "Error", msg);
+            }
+        } finally {
+            submitBtn.classList.remove("loading");
+            submitBtn.disabled = false;
+            btnText.textContent = "Sign in";
+        }
+    });
+
+    /* ============================================================
+     *  MODAL
+     * ============================================================ */
+    function openModal() {
+        modalBackdrop.classList.add("open");
+        document.body.style.overflow = "hidden";
+        loadConfig();
+        setTimeout(() => cfgHost.focus(), 350);
+    }
+    function closeModal() {
+        modalBackdrop.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+    settingsBtn.addEventListener("click", openModal);
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal();
+    });
+
+    function setStatusPill(state, text) {
+        statusPill.className = "c-status-pill " + state;
+        statusPillText.textContent = text;
+    }
+
+    function setDrawerError(inputEl, errorEl, msg) {
+        if (msg) {
+            inputEl.classList.add("has-error");
+            errorEl.querySelector("span").textContent = msg;
+            errorEl.classList.add("show");
+        } else {
+            inputEl.classList.remove("has-error");
+            errorEl.classList.remove("show");
+        }
+    }
+    function clearDrawerErrors() {
+        setDrawerError(cfgHost, cfgHostError, "");
+        setDrawerError(cfgPort, cfgPortError, "");
+        setDrawerError(cfgTimeout, cfgTimeoutError, "");
+        setDrawerError(cfgUser, cfgUserError, "");
+    }
+    function validateDrawer() {
+        clearDrawerErrors();
+        let ok = true;
+
+        const host = cfgHost.value.trim();
+        if (!host) {
+            setDrawerError(cfgHost, cfgHostError, "Host is required.");
+            ok = false;
+        } else if (!/^[a-zA-Z0-9.\-:]+$/.test(host)) {
+            setDrawerError(cfgHost, cfgHostError, "Use only letters, digits, dots, dashes, or colons.");
+            ok = false;
+        }
+
+        const port = parseInt(cfgPort.value, 10);
+        if (isNaN(port) || port < 1 || port > 65535) {
+            setDrawerError(cfgPort, cfgPortError, "Port must be 1–65535.");
+            ok = false;
+        }
+
+        const timeout = parseInt(cfgTimeout.value, 10);
+        if (isNaN(timeout) || timeout < 1 || timeout > 60) {
+            setDrawerError(cfgTimeout, cfgTimeoutError, "Timeout must be 1–60 seconds.");
+            ok = false;
+        }
+
+        const user = cfgUser.value.trim();
+        if (!user) {
+            setDrawerError(cfgUser, cfgUserError, "Username is required.");
+            ok = false;
+        }
+
+        return ok;
+    }
+
+    async function loadConfig() {
+        clearDrawerErrors();
+        routerInfoEmpty.style.display = "block";
+        routerInfoGrid.style.display = "none";
+        setStatusPill("checking", "Loading settings");
+        progressStart(modalProgressBar, modalProgress);
+
+        try {
+            const res = await fetch("api.php?action=get-config", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            let data;
+            try { data = await res.json(); }
+            catch (_) { throw new Error(`Invalid response (HTTP ${res.status}).`); }
+            progressDone(modalProgressBar, modalProgress);
+
+            if (res.status === 401) {
+                setStatusPill("error", "Not authenticated");
+                routerInfoEmpty.textContent = "Sign in first to load saved settings.";
+                cfgHost.value    = "192.168.1.10";
+                cfgPort.value    = "8728";
+                cfgTimeout.value = "5";
+                toast("warn", "Not signed in", "Log in first to load your saved settings.");
+                return;
+            }
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            cfgHost.value    = data.config.host    || "";
+            cfgPort.value    = data.config.port    || 8728;
+            cfgTimeout.value = data.config.timeout || 5;
+            cfgUser.value    = data.config.user    || "";
+            passHint.textContent = data.config.hasPassword
+                ? "A password is saved. Leave blank to keep it."
+                : "No password saved yet.";
+
+            setStatusPill("", "Not tested");
+            routerInfoEmpty.textContent = "Test the connection to see the router's identity, RouterOS version, and existing user count.";
+        } catch (err) {
+            progressDone(modalProgressBar, modalProgress);
+            setStatusPill("error", "Load failed");
+            routerInfoEmpty.textContent = "Could not load settings.";
+            toast("error", "Load failed", err.message || "Unknown error.");
+        }
+    }
+
+    function collectDrawer() {
+        return {
+            host:    cfgHost.value.trim(),
+            port:    parseInt(cfgPort.value, 10)    || 8728,
+            timeout: parseInt(cfgTimeout.value, 10) || 5,
+            user:    cfgUser.value.trim(),
+            pass:    cfgPass.value
+        };
+    }
+
+    testBtn.addEventListener("click", async () => {
+        if (!validateDrawer()) {
+            toast("warn", "Check the form", "Fix the highlighted fields first.");
+            return;
+        }
+        const cfg = collectDrawer();
+        testBtn.classList.add("loading");
+        testBtn.disabled = true;
+        saveBtn.disabled = true;
+        setStatusPill("checking", "Testing connection…");
+        routerInfoEmpty.style.display = "block";
+        routerInfoEmpty.textContent = "Opening API connection…";
+        routerInfoGrid.style.display = "none";
+        progressStart(modalProgressBar, modalProgress);
+
+        try {
+            const res = await fetch("api.php?action=test-connection", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                cache: "no-store",
+                body: JSON.stringify(cfg)
+            });
+            let data;
+            try { data = await res.json(); }
+            catch (_) { throw new Error(`Invalid response (HTTP ${res.status}).`); }
+            progressDone(modalProgressBar, modalProgress);
+
+            if (res.ok && data.success) {
+                const info = data.info || {};
+                setStatusPill("ok", "Connected");
+                routerInfoEmpty.style.display = "none";
+                routerInfoGrid.style.display = "grid";
+                infoIdentity.textContent = info.identity || "—";
+                infoVersion.textContent  = info.version  || "—";
+                infoUsers.textContent    = (info.users || 0) + (info.users === 1 ? " user" : " users");
+                toast("ok", "Connected", `${info.identity || "Router"} responded successfully.`);
+            } else {
+                setStatusPill("error", "Connection failed");
+                routerInfoEmpty.style.display = "block";
+                routerInfoEmpty.textContent = data.message || "The router did not respond.";
+                routerInfoGrid.style.display = "none";
+                toast("error", "Connection failed", data.message || "The router did not respond.");
+            }
+        } catch (err) {
+            progressDone(modalProgressBar, modalProgress);
+            setStatusPill("error", "Connection failed");
+            const msg = err.message || "Network error";
+            routerInfoEmpty.style.display = "block";
+            routerInfoEmpty.textContent = /Failed to fetch|NetworkError|load failed/i.test(msg)
+                ? "Web server unreachable." : msg;
+            routerInfoGrid.style.display = "none";
+            toast("error", "Test failed", msg);
+        } finally {
+            testBtn.classList.remove("loading");
+            testBtn.disabled = false;
+            saveBtn.disabled = false;
+        }
+    });
+
+    saveBtn.addEventListener("click", async () => {
+        if (!validateDrawer()) {
+            toast("warn", "Check the form", "Fix the highlighted fields first.");
+            return;
+        }
+        const cfg = collectDrawer();
+        saveBtn.classList.add("loading");
+        saveBtn.disabled = true;
+        testBtn.disabled = true;
+        setStatusPill("checking", "Saving…");
+        progressStart(modalProgressBar, modalProgress);
+
+        try {
+            const res = await fetch("api.php?action=save-config", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                cache: "no-store",
+                body: JSON.stringify(cfg)
+            });
+            let data;
+            try { data = await res.json(); }
+            catch (_) { throw new Error(`Invalid response (HTTP ${res.status}).`); }
+            progressDone(modalProgressBar, modalProgress);
+
+            if (res.ok && data.success) {
+                setStatusPill("ok", "Saved");
+                cfgPass.value = "";
+                passHint.textContent = "Password saved. Leave blank to keep it.";
+                toast("ok", "Settings saved", "Router configuration updated.");
+                setTimeout(closeModal, 900);
+            } else {
+                setStatusPill("error", "Save failed");
+                toast("error", "Save failed", data.message || "Could not save settings.");
+            }
+        } catch (err) {
+            progressDone(modalProgressBar, modalProgress);
+            setStatusPill("error", "Save failed");
+            toast("error", "Save failed", err.message || "Network error.");
+        } finally {
+            saveBtn.classList.remove("loading");
+            saveBtn.disabled = false;
+            testBtn.disabled = false;
+        }
+    });
+
+    [userInput, passInput].forEach((el) => {
+        el.addEventListener("input", () => {
+            el.classList.remove("has-error");
+            (el === userInput ? userError : passError).classList.remove("show");
+            if (alertBox.classList.contains("error")) hideAlert();
+        });
+    });
+
+    [cfgHost, cfgPort, cfgTimeout, cfgUser].forEach((el) => {
+        el.addEventListener("input", () => {
+            el.classList.remove("has-error");
+            const err = el === cfgHost    ? cfgHostError
+                      : el === cfgPort    ? cfgPortError
+                      : el === cfgTimeout ? cfgTimeoutError
+                      : cfgUserError;
+            if (err) err.classList.remove("show");
+        });
+    });
+</script>
+</body>
+</html>

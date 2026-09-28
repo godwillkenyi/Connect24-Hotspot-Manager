@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Server error — Connect24</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+    .e-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--cream);
+    }
+    .e-box { max-width: 460px; text-align: center; }
+    .e-code {
+        font-size: 84px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #a32e2c 0%, #d4403e 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+    }
+    .e-title {
+        margin: 0 0 10px;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+    }
+    .e-text {
+        margin: 0 0 24px;
+        font-size: 14px;
+        color: var(--ink-3);
+        line-height: 1.6;
+    }
+    .e-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .e-brand {
+        margin-top: 36px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-4);
+    }
+    .e-brand .d-brand-mark {
+        display: inline-flex;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        font-size: 10px;
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+</style>
+</head>
+<body>
+
+<div class="e-wrap">
+    <div class="e-box">
+        <div class="e-code">500</div>
+        <h1 class="e-title">Server error</h1>
+        <p class="e-text">
+            Something went wrong on the server. This is not your fault.
+            Your data on the router is safe.
+        </p>
+        <div class="e-actions">
+            <button class="d-btn big primary" onclick="location.reload()">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Try again
+            </button>
+            <a class="d-btn big" href="pages/dashboard.html">
+                Go to Dashboard
+            </a>
+        </div>
+        <div class="e-brand">
+            <span class="d-brand-mark">24</span>
+            Connect24 Hotspot Manager
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sessions — Connect24 Hotspot Manager</title>
+<link rel="stylesheet" href="../shared.css">
+<!-- Favicons -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<!-- PWA -->
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Connect24">
+</head>
+<body>
+
+<div class="d">
+    <div class="d-overlay" id="overlay"></div>
+
+    <div class="d-layout">
+
+        <!-- ============================================================
+             SIDEBAR
+             ============================================================ -->
+        <aside class="d-side" id="sidebar">
+            <div class="d-brand">
+                <div class="d-brand-mark">24</div>
+                <div class="d-brand-text">
+                    <span class="d-brand-name">Connect24</span>
+                    <span class="d-brand-sub">Hotspot Manager</span>
+                </div>
+            </div>
+
+            <nav class="d-nav">
+                <span class="d-nav-label">Overview</span>
+
+                <a class="d-nav-link" href="dashboard.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+
+                <a class="d-nav-link" href="vouchers.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                    Vouchers
+                    <span class="d-nav-badge" id="navVouchersBadge">0</span>
+                </a>
+
+                <a class="d-nav-link active" href="sessions.html" aria-current="page">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    Sessions
+                    <span class="d-nav-badge" id="navSessionsBadge">0</span>
+                </a>
+
+                <span class="d-nav-label">Configuration</span>
+
+                <a class="d-nav-link" href="profiles.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Profiles
+                    <span class="d-nav-badge" id="navProfilesBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="settings.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                    Settings
+                </a>
+            </nav>
+
+            <!-- Tier 1: plan widget -->
+            <div class="d-side-plan">
+                <div class="d-side-plan-head">
+                    <span class="d-side-plan-badge">FREE</span>
+                    <span class="d-side-plan-routers">1 of 1 router</span>
+                </div>
+                <div class="d-side-plan-bar">
+                    <div class="d-side-plan-fill" style="width:100%;"></div>
+                </div>
+                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
+                    Upgrade to Pro →
+                </a>
+            </div>
+
+            <div class="d-side-foot">
+                <div class="d-user">
+                    <div class="d-user-avatar" id="userAvatar">V</div>
+                    <div class="d-user-info">
+                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-role">Administrator</div>
+                    </div>
+                </div>
+                <a class="d-logout" href="logout.html">
+                    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+
+        <!-- ============================================================
+             MAIN
+             ============================================================ -->
+        <main class="d-main">
+            <header class="d-topbar">
+                <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                    <button class="d-menu-btn" id="menuBtn" aria-label="Open menu">
+                        <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+                    </button>
+                    <div class="d-topbar-title">
+                        <!-- Tier 1: eyebrow -->
+                        <div class="d-topbar-eyebrow">
+                            <span class="d-topbar-eyebrow-dot"></span>
+                            Connect24 Hotspot Manager
+                            <span class="d-topbar-version">v1.0.0</span>
+                        </div>
+                        <h1>Sessions</h1>
+                        <p>Active connections on your hotspot</p>
+                    </div>
+                </div>
+
+                <div class="d-topbar-actions">
+                    <div class="d-live on" id="livePill">
+                        <span class="d-live-dot"></span>
+                        <span id="liveText">Live · 5s</span>
+                    </div>
+
+                    <!-- Tier 1: ⌘K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
+                    </button>
+
+                    <button class="d-refresh" id="refreshBtn">
+                        <svg class="d-refresh-icon" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="d-page">
+
+                <!-- ============================================================
+                     STAT CARDS
+                     ============================================================ -->
+                <section class="d-stats">
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Active Now</span>
+                            <div class="d-stat-icon green">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statActive">—</div>
+                        <div class="d-stat-trend"><span>Sessions right now</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Total Data</span>
+                            <div class="d-stat-icon blue">
+                                <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statData">—</div>
+                        <div class="d-stat-trend"><span>Across all sessions</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Longest</span>
+                            <div class="d-stat-icon amber">
+                                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statLongest">—</div>
+                        <div class="d-stat-trend"><span>Most uptime so far</span></div>
+                    </div>
+
+                    <div class="d-stat">
+                        <div class="d-stat-head">
+                            <span class="d-stat-label">Top User</span>
+                            <div class="d-stat-icon red">
+                                <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/></svg>
+                            </div>
+                        </div>
+                        <div class="d-stat-value" id="statTop" style="font-size:18px; word-break:break-all; line-height:1.2;">—</div>
+                        <div class="d-stat-trend"><span>Highest data usage</span></div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     SESSIONS TABLE
+                     ============================================================ -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                            Active Sessions
+                            <span class="d-panel-sub" id="tableSubtitle">—</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <button class="d-btn danger" id="disconnectAllBtn" style="display:none;">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                Disconnect all
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-filters">
+                        <div class="d-search">
+                            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                            <input type="text" id="searchInput" placeholder="Search by user, IP, or MAC…" autocomplete="off">
+                        </div>
+                        <select class="d-select" id="sortSelect">
+                            <option value="uptime-desc">Uptime (longest first)</option>
+                            <option value="uptime-asc">Uptime (shortest first)</option>
+                            <option value="bytes-desc">Data usage (high → low)</option>
+                            <option value="bytes-asc">Data usage (low → high)</option>
+                            <option value="user-asc">User name (A–Z)</option>
+                            <option value="user-desc">User name (Z–A)</option>
+                        </select>
+                        <span class="d-filter-results" id="filterResults">—</span>
+                    </div>
+
+                    <div class="d-table-wrap">
+                        <table class="d-table" id="sessionTable">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>IP address</th>
+                                    <th>MAC</th>
+                                    <th>Uptime</th>
+                                    <th>Data used</th>
+                                    <th>Login method</th>
+                                    <th style="width:80px; text-align:right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessionBody">
+                                <tr class="d-skel-row"><td colspan="7"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="7"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                                <tr class="d-skel-row"><td colspan="7"><div class="d-skeleton d-skel-bar"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tier 1: footer -->
+                <footer class="d-footer">
+                    <div class="d-footer-left">
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                    </div>
+                    <div class="d-footer-right">
+                        <span class="d-footer-status">
+                            <span class="d-status-dot" id="footerApiStatus"></span>
+                            <span id="footerApiText">API: Connected</span>
+                        </span>
+                        <span class="d-footer-sep">·</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ============================================================
+     COMMAND PALETTE (⌘K / Ctrl+K)
+     ============================================================ -->
+<div class="d-cmdk" id="cmdk" hidden>
+    <div class="d-cmdk-backdrop" data-cmdk-close></div>
+    <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="d-cmdk-input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <kbd>ESC</kbd>
+        </div>
+        <div class="d-cmdk-results" id="cmdkResults"></div>
+        <div class="d-cmdk-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>ESC</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script src="../shared.js"></script>
+<script>
+    const {
+        escapeHtml, formatBytes, toast, $, qsa, copyToClipboard,
+        uptimeToSeconds, uptimeLimitToSeconds
+    } = window.appApi;
+
+    /* ============================================================
+     *  Tell shared.js to poll sessions instead of vouchers
+     * ============================================================ */
+    window.__autoRefreshUsesCustom = true;
+
+    /* ============================================================
+     *  STATE
+     * ============================================================ */
+    let sessions = [];
+    let searchQuery = "";
+    let sortMode = "uptime-desc";
+    let badgeTimer = null;
+
+    /* ============================================================
+     *  PROFILE FILTER — same rule as the Profiles page.
+     *  Excludes RouterOS system profiles ("default", "none", "").
+     * ============================================================ */
+    const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
+
+    function isUserProfile(p) {
+        const name = String(
+            typeof p === "string" ? p : (p && p.name) || ""
+        ).trim().toLowerCase();
+        return !HIDDEN_PROFILE_NAMES.has(name);
+    }
+
+    function countUserProfiles(list) {
+        const seen = new Set();
+        for (const raw of (list || [])) {
+            if (!isUserProfile(raw)) continue;
+            const name = typeof raw === "string" ? raw : (raw.name || "");
+            const key = String(name).trim().toLowerCase();
+            if (!seen.has(key)) seen.add(key);
+        }
+        return seen.size;
+    }
+
+    /* ============================================================
+     *  HELPERS
+     * ============================================================ */
+
+    // Parse RouterOS uptime string → seconds
+    function uptimeToSecondsLocal(str) {
+        if (!str) return 0;
+        const s = String(str).trim();
+        if (s === "0s" || s === "") return 0;
+        const regex = /(\d+)([wdhms])/g;
+        let total = 0, match;
+        while ((match = regex.exec(s)) !== null) {
+            const val = parseInt(match[1], 10);
+            const unit = match[2];
+            const mult = { s: 1, m: 60, h: 3600, d: 86400, w: 604800 }[unit] || 0;
+            total += val * mult;
+        }
+        return total;
+    }
+
+    function bytesOf(s) {
+        return (Number(s["bytes-in"])  || 0) + (Number(s["bytes-out"]) || 0);
+    }
+
+    /* ============================================================
+     *  BADGES
+     * ============================================================ */
+    function updateSessionsBadge() {
+        const badge = $("navSessionsBadge");
+        if (badge) badge.textContent = sessions.length;
+    }
+
+    async function updateVoucherBadge() {
+        const badge = $("navVouchersBadge");
+        if (!badge) return;
+
+        try {
+            const res = await fetch("../api.php?action=vouchers", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data || !data.success) return;
+            const list = Array.isArray(data.vouchers) ? data.vouchers : [];
+            badge.textContent = list.length;
+        } catch (_) {}
+    }
+
+    async function updateProfilesBadge() {
+        const badge = $("navProfilesBadge");
+        if (!badge) return;
+
+        try {
+            const res = await fetch("../api.php?action=profile-details", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data || !data.success) return;
+            const list = Array.isArray(data.profiles) ? data.profiles : [];
+            // Use the same filtered count as the Profiles page so
+            // all pages show identical numbers.
+            badge.textContent = countUserProfiles(list);
+        } catch (_) {}
+    }
+
+    /* ============================================================
+     *  LOAD SESSIONS
+     * ============================================================ */
+    async function loadSessions(opts = {}) {
+        const { silent = false, manual = false } = opts;
+
+        const btn = $("refreshBtn");
+        if (manual && btn) {
+            btn.classList.add("loading");
+            btn.disabled = true;
+        }
+
+        try {
+            const res = await fetch("../api.php?action=sessions", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            if (!res.ok) {
+                throw new Error("HTTP " + res.status);
+            }
+            const data = await res.json();
+            if (!data.success) {
+                throw new Error(data.message || "Failed to load sessions");
+            }
+
+            sessions = Array.isArray(data.sessions) ? data.sessions : [];
+            updateStats();
+            renderTable();
+            updateSessionsBadge();
+
+            // Keep the sidebar voucher and profile badges in sync
+            updateVoucherBadge();
+            updateProfilesBadge();
+
+            if (manual) {
+                toast("ok", "Sessions refreshed",
+                    sessions.length + " active session" + (sessions.length === 1 ? "" : "s") + ".",
+                    2500);
+            }
+        } catch (err) {
+            if (manual || !silent) {
+                toast("error", "Failed to load sessions", err.message || "Unknown error.");
+            }
+            $("sessionBody").innerHTML = `<tr><td colspan="7"><div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <h3>Could not load sessions</h3>
+                <p>Check the router connection on the Settings page.</p>
+            </div></td></tr>`;
+        } finally {
+            if (manual && btn) {
+                btn.classList.remove("loading");
+                btn.disabled = false;
+            }
+        }
+    }
+
+    /* ============================================================
+     *  STATS
+     * ============================================================ */
+    function updateStats() {
+        const count = sessions.length;
+        $("statActive").textContent = count;
+
+        let totalBytes = 0;
+        let longest = 0;
+        let topUser = "—";
+        let topBytes = 0;
+
+        sessions.forEach((s) => {
+            const b = bytesOf(s);
+            totalBytes += b;
+            if (b > topBytes) { topBytes = b; topUser = s.user || "—"; }
+            const up = uptimeToSecondsLocal(s.uptime);
+            if (up > longest) longest = up;
+        });
+
+        $("statData").textContent = formatBytes(totalBytes);
+
+        if (longest === 0) {
+            $("statLongest").textContent = "—";
+        } else {
+            const h = Math.floor(longest / 3600);
+            const m = Math.floor((longest % 3600) / 60);
+            $("statLongest").textContent =
+                h > 0 ? `${h}h ${m}m` :
+                m > 0 ? `${m}m` :
+                `${longest}s`;
+        }
+
+        $("statTop").textContent = count > 0 ? topUser : "—";
+    }
+
+    /* ============================================================
+     *  FILTER + SORT
+     * ============================================================ */
+    function filteredList() {
+        let list = sessions.slice();
+
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            list = list.filter((s) => {
+                return String(s.user    || "").toLowerCase().includes(q) ||
+                       String(s.address || "").toLowerCase().includes(q) ||
+                       String(s.mac     || "").toLowerCase().includes(q);
+            });
+        }
+
+        const [key, dir] = sortMode.split("-");
+        list.sort((a, b) => {
+            let av, bv;
+            switch (key) {
+                case "uptime":
+                    av = uptimeToSecondsLocal(a.uptime);
+                    bv = uptimeToSecondsLocal(b.uptime);
+                    break;
+                case "bytes":
+                    av = bytesOf(a);
+                    bv = bytesOf(b);
+                    break;
+                case "user":
+                    av = String(a.user || "").toLowerCase();
+                    bv = String(b.user || "").toLowerCase();
+                    break;
+                default:
+                    av = 0; bv = 0;
+            }
+            if (typeof av === "number") return dir === "asc" ? av - bv : bv - av;
+            if (av < bv) return dir === "asc" ? -1 : 1;
+            if (av > bv) return dir === "asc" ? 1 : -1;
+            return 0;
+        });
+
+        return list;
+    }
+
+    /* ============================================================
+     *  RENDER
+     * ============================================================ */
+    function renderTable() {
+        const body = $("sessionBody");
+        const list = filteredList();
+        const subtitle = $("tableSubtitle");
+        const results = $("filterResults");
+
+        if (sessions.length === 0) {
+            subtitle.textContent = "0 sessions";
+            results.textContent = "—";
+            body.innerHTML = `<tr><td colspan="7"><div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                <h3>No active sessions</h3>
+                <p>Nobody is connected to the hotspot right now.</p>
+            </div></td></tr>`;
+            $("disconnectAllBtn").style.display = "none";
+            return;
+        }
+
+        subtitle.textContent = sessions.length + " session" + (sessions.length === 1 ? "" : "s");
+        results.textContent = list.length + " of " + sessions.length + " shown";
+        $("disconnectAllBtn").style.display = "inline-flex";
+
+        if (list.length === 0) {
+            body.innerHTML = `<tr><td colspan="7"><div class="d-empty">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+                <h3>No matches</h3>
+                <p>No session matches your search.</p>
+            </div></td></tr>`;
+            return;
+        }
+
+        body.innerHTML = list.map((s) => {
+            const user = s.user || "—";
+            const addr = s.address || "—";
+            const mac = s.mac || "—";
+            const uptime = s.uptime || "0s";
+            const data = formatBytes(bytesOf(s));
+            const loginBy = s["login-by"] || "—";
+
+            return `
+                <tr>
+                    <td><span class="d-code">${escapeHtml(user)}</span></td>
+                    <td>${escapeHtml(addr)}</td>
+                    <td style="font-family: 'SF Mono', monospace; font-size:12.5px;">${escapeHtml(mac)}</td>
+                    <td>${escapeHtml(uptime)}</td>
+                    <td>${escapeHtml(data)}</td>
+                    <td>${escapeHtml(loginBy)}</td>
+                    <td>
+                        <div class="d-actions-cell">
+                            <button class="d-row-btn danger"
+                                    data-disconnect="${escapeHtml(user)}"
+                                    data-id="${escapeHtml(s.id || '')}"
+                                    title="Disconnect this session">
+                                <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        body.querySelectorAll("[data-disconnect]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                disconnectSession(btn.dataset.disconnect, btn.dataset.id);
+            });
+        });
+    }
+
+    /* ============================================================
+     *  DISCONNECT ONE SESSION
+     * ============================================================ */
+    async function disconnectSession(user, id) {
+        if (!id) {
+            toast("error", "Cannot disconnect", "Missing session id.");
+            return;
+        }
+        if (!confirm(`Disconnect session for "${user}"?`)) return;
+
+        try {
+            const res = await fetch("../api.php?action=disconnect-session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                cache: "no-store",
+                body: JSON.stringify({ id })
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (data.success) {
+                toast("ok", "Session disconnected", user);
+                await loadSessions({ silent: true });
+            } else {
+                toast("error", "Disconnect failed", data.message || "Unknown error.");
+            }
+        } catch (err) {
+            toast("error", "Disconnect failed", err.message || "Network error.");
+        }
+    }
+
+    /* ============================================================
+     *  DISCONNECT ALL
+     * ============================================================ */
+    $("disconnectAllBtn").addEventListener("click", async () => {
+        if (sessions.length === 0) return;
+        if (!confirm(`Disconnect ALL ${sessions.length} active session(s)? Users will be kicked off.`)) return;
+
+        const btn = $("disconnectAllBtn");
+        btn.disabled = true;
+
+        let ok = 0, fail = 0;
+        for (const s of sessions) {
+            if (!s.id) { fail++; continue; }
+            try {
+                const res = await fetch("../api.php?action=disconnect-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ id: s.id })
+                });
+                const data = await res.json();
+                if (data.success) ok++; else fail++;
+            } catch (_) { fail++; }
+        }
+
+        toast(
+            fail === 0 ? "ok" : fail === sessions.length ? "error" : "warn",
+            "Disconnect complete",
+            `${ok} disconnected, ${fail} failed.`
+        );
+
+        btn.disabled = false;
+        await loadSessions({ silent: true });
+    });
+
+    /* ============================================================
+     *  SEARCH + SORT
+     * ============================================================ */
+    let searchDebounce = null;
+    $("searchInput").addEventListener("input", (e) => {
+        clearTimeout(searchDebounce);
+        const val = e.target.value;
+        searchDebounce = setTimeout(() => {
+            searchQuery = val.trim();
+            renderTable();
+        }, 150);
+    });
+
+    $("sortSelect").addEventListener("change", (e) => {
+        sortMode = e.target.value;
+        renderTable();
+    });
+
+    /* ============================================================
+     *  HOOKS
+     * ============================================================ */
+    window.onAppReady = () => {
+        // Update the voucher and profiles badges immediately on page load
+        updateVoucherBadge();
+        updateProfilesBadge();
+
+        // Then every 10 seconds — counts change slowly,
+        // so 10s is plenty and reduces load on the router.
+        if (badgeTimer) clearInterval(badgeTimer);
+        badgeTimer = setInterval(() => {
+            updateVoucherBadge();
+            updateProfilesBadge();
+        }, 10000);
+
+        // Pause the badge timer when the tab is hidden
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                if (badgeTimer) { clearInterval(badgeTimer); badgeTimer = null; }
+            } else {
+                if (!badgeTimer) {
+                    badgeTimer = setInterval(() => {
+                        updateVoucherBadge();
+                        updateProfilesBadge();
+                    }, 10000);
+                }
+                updateVoucherBadge();
+                updateProfilesBadge();
+            }
+        });
+    };
+
+    window.onRefreshRequested = async (opts = {}) => {
+        await loadSessions({
+            silent: opts.silent === true,
+            manual: opts.manual === true
+        });
+    };
+</script>
+</body>
+</html>

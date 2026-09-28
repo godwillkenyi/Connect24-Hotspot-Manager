@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — Connect24</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+    .e-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--cream);
+    }
+    .e-box {
+        max-width: 460px;
+        text-align: center;
+    }
+    .e-code {
+        font-size: 84px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #1e5c9c 0%, #2d76c4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+    }
+    .e-title {
+        margin: 0 0 10px;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+    }
+    .e-text {
+        margin: 0 0 24px;
+        font-size: 14px;
+        color: var(--ink-3);
+        line-height: 1.6;
+    }
+    .e-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .e-brand {
+        margin-top: 36px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-4);
+    }
+    .e-brand .d-brand-mark {
+        display: inline-flex;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        font-size: 10px;
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+</style>
+</head>
+<body>
+
+<div class="e-wrap">
+    <div class="e-box">
+        <div class="e-code">404</div>
+        <h1 class="e-title">Page not found</h1>
+        <p class="e-text">
+            The page you're looking for doesn't exist, was moved, or
+            you mistyped the URL.
+        </p>
+        <div class="e-actions">
+            <a class="d-btn big primary" href="pages/dashboard.html">
+                <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                Go to Dashboard
+            </a>
+            <a class="d-btn big" href="javascript:history.back()">
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                Go back
+            </a>
+        </div>
+        <div class="e-brand">
+            <span class="d-brand-mark">24</span>
+            Connect24 Hotspot Manager
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
