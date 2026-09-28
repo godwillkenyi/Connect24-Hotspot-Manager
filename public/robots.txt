@@ -1,4 +1,4 @@
-# Connect24 Hotspot Manager
+﻿# Connect24 Hotspot Manager
 # Prevent search engines from indexing the admin app.
 
 User-agent: *
@@ -6,9 +6,3 @@ Disallow: /
 Disallow: /pages/
 Disallow: /api.php
 Disallow: /logout.html
-
-# Allow the marketing site if it lives here
-Allow: /landing/
-Allow: /landing/*
-
-Sitemap: https://connect24.app/sitemap.xml

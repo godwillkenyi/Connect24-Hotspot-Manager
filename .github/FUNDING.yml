@@ -1,14 +1,2 @@
-# Enable the "Sponsor" button on the repo.
-# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
-
-github: [your-username]
-# patreon: your-patreon
-# open_collective: your-collective
-# ko_fi: your-kofi
-# tidelift: npm/connect24
-# community_bridge: connect24
-# liberapay: your-liberapay
-# issuehunt: your-issuehunt
-# otechie: your-otechie
-# lfx_crowdfunding: connect24
-custom: ['https://connect24.app/pricing']
+﻿github: [Goken-byte]
+custom: ['mailto:testapps065@gmail.com?subject=Connect24%20Sponsorship']
