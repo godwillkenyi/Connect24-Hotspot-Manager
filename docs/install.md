@@ -1,6 +1,6 @@
 # Installation Guide
 
-Step-by-step instructions for installing Connect24 Hotspot Manager on
+Step-by-step instructions for installing **Connect24 Hotspot Manager** on
 your own server.
 
 ---
@@ -15,8 +15,13 @@ your own server.
 | MikroTik RouterOS | 6.48 | 7.x |
 | Browser | Chrome 100+, Firefox 100+, Safari 15+ | Latest |
 
-Connect24 has **zero runtime dependencies**. No npm, no Composer, no
-build step. If your server can run PHP, it can run Connect24.
+Connect24 has **zero runtime dependencies**. No npm, no Composer
+required for the frontend, no build step. If your server can run PHP,
+it can run Connect24.
+
+The only Composer dependency is the RouterOS API client
+(`evilfreelancer/routeros-api-php`), which is installed automatically
+with `composer install`.
 
 ---
 
@@ -25,19 +30,51 @@ build step. If your server can run PHP, it can run Connect24.
 ### Option A — Git clone
 
 ```bash
-git clone https://github.com/your-username/connect24.git
+git clone https://github.com/Goken-byte/connect24.git
 cd connect24
 ```
 
 ### Option B — Download the ZIP
 
-Download the latest release from
-<https://github.com/your-username/connect24/releases>, unzip it, and
-`cd` into the folder.
+Download the latest release from:
+
+<https://github.com/Goken-byte/connect24/releases>
+
+Unzip it, then `cd` into the folder.
 
 ---
 
-## 2. Configure the environment
+## 2. Install the Composer dependency
+
+Connect24 needs the RouterOS API client. From the project root:
+
+```bash
+composer install
+```
+
+This creates a `vendor/` folder with the required library. You only
+need to run this once.
+
+If you don't have Composer installed:
+
+```bash
+# Linux/macOS
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+
+# Windows
+# Download and run: https://getcomposer.org/Composer-Setup.exe
+```
+
+Verify:
+
+```bash
+composer --version
+```
+
+---
+
+## 3. Configure the environment
 
 Copy the example environment file:
 
@@ -81,7 +118,7 @@ chown www-data:www-data .env   # adjust to your web server user
 
 ---
 
-## 3. Point your web server at `public/`
+## 4. Point your web server at `public/`
 
 ### Apache
 
@@ -175,7 +212,7 @@ to self-hosting, start with Caddy.
 
 ---
 
-## 4. Quick local test (no web server needed)
+## 5. Quick local test (no web server needed)
 
 ```bash
 php -S localhost:8080 -t public
@@ -186,12 +223,15 @@ Then open <http://localhost:8080>.
 This is the fastest way to see the app running before you commit to a
 full web server setup.
 
+**Note:** The built-in PHP server doesn't enforce URL rewriting the
+same way Apache/Nginx does. For testing purposes it works fine.
+
 ---
 
-## 5. Enable the RouterOS REST API
+## 6. Enable the RouterOS REST API
 
 See [router-setup.md](router-setup.md) for the full walkthrough. In
-short, on your router:
+short, on your router (via Winbox or SSH):
 
 ```
 /user group add name=connect24 policy=read,write,api,rest-api
@@ -202,19 +242,21 @@ short, on your router:
 
 ---
 
-## 6. First login
+## 7. First login
 
 1. Open your Connect24 URL in a browser.
-2. Sign in with the `ADMIN_USER` / `ADMIN_PASS` from `.env`.
-3. **Immediately change the admin password.** The Settings page
-   prompts you on first login.
+2. Sign in with the credentials you entered in the login form —
+   Connect24 authenticates directly against your MikroTik router.
+3. The credentials you use must be valid on the router. The
+   `ADMIN_USER` / `ADMIN_PASS` in `.env` are **optional fallbacks** for
+   offline testing; the primary auth path uses the router.
 4. Create your first profile on the **Profiles** page.
 5. Generate a test batch on the **Generate** page.
 6. Print or export the batch to verify the router connection works.
 
 ---
 
-## 7. Optional — try demo mode first
+## 8. Optional — try demo mode first
 
 Before connecting a real router, you can preview the whole app with
 sample data. Add `?demo=1` to any page:
@@ -235,7 +277,7 @@ This is the fastest way to:
 
 ---
 
-## 8. Optional — install as a PWA
+## 9. Optional — install as a PWA
 
 Connect24 ships with a web app manifest. In Chrome or Edge:
 
@@ -255,10 +297,12 @@ or Start menu.
 | Blank white page | Missing `.env` or `SESSION_SECRET` | Check the browser console for a 401 |
 | "Failed to load vouchers" | Router unreachable | `curl -k -u connect24:pass https://ROUTER_HOST/rest/ip/hotspot/user` |
 | "Connection refused" | `www-ssl` service disabled | On the router: `/ip service enable www-ssl` |
+| "Invalid credentials or router unreachable" | Wrong router user/password, or API disabled | Verify `/user print` and `/ip service print` on the router |
 | SSL certificate warning | Self-signed cert | Set `ROUTER_TLS=false` in `.env` **only on a private LAN** |
 | Vouchers appear but won't print | Pop-ups blocked | Allow pop-ups for your domain |
-| Login redirects in a loop | Cookies blocked | Ensure `APP_URL` matches the actual URL |
-| 500 error on load | PHP version too old | Run `php -v` — needs 8.0+ |
+| Login redirects in a loop | Cookies blocked or `config.json` unwritable | Ensure `config.json` has write permissions |
+| 500 error on load | PHP version too old, or missing `vendor/` | Run `php -v` (needs 8.0+), run `composer install` |
+| `Class 'RouterOS\Client' not found` | Composer dependency not installed | `cd` to project root, run `composer install` |
 
 ---
 
@@ -267,12 +311,13 @@ or Start menu.
 ```bash
 cd /var/www/connect24
 git pull
+composer install
 ```
 
 No migrations. No rebuilds. Just hard-refresh the browser.
 
-If you upgraded across a major version, check `CHANGELOG.md` for any
-`.env` changes you need to make.
+If you upgraded across a major version, check
+[CHANGELOG.md](../CHANGELOG.md) for any `.env` changes you need to make.
 
 ---
 
@@ -301,13 +346,14 @@ Before going live, verify:
 
 - [ ] HTTPS enabled with a valid certificate
 - [ ] `SESSION_SECRET` is 64 random characters
-- [ ] `ADMIN_PASS` is 32+ random characters
+- [ ] `ADMIN_PASS` is 32+ random characters (or an offline-only fallback)
 - [ ] `.env` has permissions `600`
 - [ ] `.env` is excluded from any backups you make publicly
+- [ ] `config.json` is gitignored and has permissions `600`
 - [ ] Router API locked to the Connect24 server's IP
 - [ ] Router API user has only `read,write,api,rest-api`
 - [ ] `robots.txt` blocks indexing of `/pages/`
-- [ ] Automatic backups of `.env` are stored securely
+- [ ] Automatic backups of `.env` and `config.json` are stored securely
 
 ---
 
@@ -316,4 +362,12 @@ Before going live, verify:
 - 📖 [Router setup guide](router-setup.md)
 - ❓ [FAQ](faq.md)
 - 🔒 [Security model](security.md)
-- 🐛 [GitHub Issues](https://github.com/your-username/connect24/issues)
+- 🐛 [GitHub Issues](https://github.com/Goken-byte/connect24/issues)
+- 💬 [GitHub Discussions](https://github.com/Goken-byte/connect24/discussions)
+- 📧 **Email:** testapps065@gmail.com
+
+---
+
+<div align="center">
+  <sub>Connect24 Hotspot Manager — installation guide</sub>
+</div>

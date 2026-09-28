@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+﻿# Frequently Asked Questions
 
 Common questions about Connect24 Hotspot Manager.
 
@@ -8,7 +8,7 @@ Common questions about Connect24 Hotspot Manager.
 
 ### Is Connect24 free?
 
-Yes — free for personal use on a single MikroTik router. Commercial
+Yes â€” free for personal use on a single MikroTik router. Commercial
 use across multiple routers or as a hosted service requires a Pro
 license. See [LICENSE](../LICENSE) for the full terms.
 
@@ -22,7 +22,7 @@ This means:
 
 - No migrations to run
 - No backup of a database
-- Nothing to lose if the server dies — just redeploy and reconnect
+- Nothing to lose if the server dies â€” just redeploy and reconnect
 
 ### Can I run it on shared hosting?
 
@@ -36,7 +36,7 @@ cPanel, Plesk, DirectAdmin, and most shared hosts work fine.
 
 ### Does it work with RouterOS 6?
 
-Yes — RouterOS 6.48 and newer. Some features may behave slightly
+Yes â€” RouterOS 6.48 and newer. Some features may behave slightly
 differently than on 7.x. See [router-setup.md](router-setup.md) for
 the compatibility table.
 
@@ -47,7 +47,7 @@ hosting tier is on the roadmap.
 
 ### Where does the name come from?
 
-The "24" in Connect24 is a nod to "24/7" — always-on connectivity.
+The "24" in Connect24 is a nod to "24/7" â€” always-on connectivity.
 The full name is "Connect24 Hotspot Manager."
 
 ---
@@ -66,11 +66,11 @@ Only if the Connect24 server can reach that IP. Three options:
    [router-setup.md](router-setup.md).
 
 3. **Port-forward `www-ssl` (port 443) from the router's WAN to its
-   LAN IP** — **not recommended** unless locked down by source IP.
+   LAN IP** â€” **not recommended** unless locked down by source IP.
 
 ### Can I manage multiple routers from one Connect24 install?
 
-Not from the UI yet — you change routers by editing `ROUTER_HOST` in
+Not from the UI yet â€” you change routers by editing `ROUTER_HOST` in
 `.env`. **Per-batch server selection** within a single router is
 already supported (see the Server dropdown on the Generate page).
 
@@ -79,7 +79,7 @@ Multi-router management is planned for v1.2.
 ### Does Connect24 work behind Cloudflare?
 
 You can put Cloudflare in front of the **Connect24 web UI** (the
-pages users see), but not in front of the **RouterOS API** —
+pages users see), but not in front of the **RouterOS API** â€”
 Cloudflare doesn't proxy raw JSON REST calls to arbitrary ports.
 
 If the router is on your LAN, the server reaches it directly. If the
@@ -116,14 +116,14 @@ listed on the Generate page for printing or exporting.
 
 ### Can I generate more than 100 at once?
 
-No — the UI caps each batch at 100. This prevents RouterOS from
+No â€” the UI caps each batch at 100. This prevents RouterOS from
 timing out under a large burst of API calls. For more, run the
 generator multiple times.
 
 ### Where are vouchers stored?
 
 On the router, in `/ip/hotspot/user`. Connect24 does not keep its own
-copy — it always reads live from the router.
+copy â€” it always reads live from the router.
 
 ### Can I edit a voucher after creating it?
 
@@ -135,10 +135,10 @@ change profile, extend uptime) is planned for v1.1.
 
 | Status | Meaning |
 |---|---|
-| **Unused** | 0 bytes used AND 0 uptime — never connected |
+| **Unused** | 0 bytes used AND 0 uptime â€” never connected |
 | **Active** | Has been used, still within limits |
-| **Almost Full** | ≥80% of uptime limit consumed |
-| **Heavy User** | ≥500 MB of data consumed |
+| **Almost Full** | â‰¥80% of uptime limit consumed |
+| **Heavy User** | â‰¥500 MB of data consumed |
 | **Expired** | Disabled, or uptime limit reached |
 
 The four statuses **Active**, **Unused**, **Almost Full**, and
@@ -149,11 +149,11 @@ as a tab filter.
 
 The price tag is a free-form label stored in the voucher's `comment`
 field on RouterOS. It shows up on printed cards and CSV exports. It
-has no effect on billing — Connect24 doesn't process payments.
+has no effect on billing â€” Connect24 doesn't process payments.
 
 ### Can I customize the voucher card that prints?
 
-Yes — edit the CSS inside the `printVoucherSheet()` function in
+Yes â€” edit the CSS inside the `printVoucherSheet()` function in
 `shared.js`. The template is self-contained.
 
 ### Can I import vouchers from a CSV?
@@ -165,9 +165,9 @@ roadmap.
 
 Two ways:
 
-1. Go to **Vouchers** → click the **Unused** tab → select all →
+1. Go to **Vouchers** â†’ click the **Unused** tab â†’ select all â†’
    click **Delete**.
-2. Go to **Settings** → **Danger Zone** → **Purge unused**.
+2. Go to **Settings** â†’ **Danger Zone** â†’ **Purge unused**.
 
 Both do the same thing.
 
@@ -177,20 +177,20 @@ Both do the same thing.
 
 ### Why doesn't the session list match Winbox?
 
-Connect24 reads `/ip/hotspot/active` — the same list Winbox shows on
-the **Hotspot → Active** tab. If they differ, click **Refresh**.
+Connect24 reads `/ip/hotspot/active` â€” the same list Winbox shows on
+the **Hotspot â†’ Active** tab. If they differ, click **Refresh**.
 
 The list is polled every 5 seconds automatically.
 
 ### Can I disconnect a user without deleting their voucher?
 
-Yes — use the disconnect button in the Sessions table. The voucher
+Yes â€” use the disconnect button in the Sessions table. The voucher
 stays intact; the session is dropped. The user can reconnect if they
 have time or bytes remaining.
 
 ### What happens if I click "Disconnect all"?
 
-Every active session is dropped. Vouchers are not deleted — users can
+Every active session is dropped. Vouchers are not deleted â€” users can
 reconnect if they still have time or bytes remaining. This is useful
 before rebooting the router or changing firewall rules.
 
@@ -207,7 +207,7 @@ hardware. It's a possible v2.0 feature.
 ### How often does the session list update?
 
 Every 5 seconds. You can change the polling interval in **Settings**
-→ **Hotspot Defaults** → **Live refresh interval**.
+â†’ **Hotspot Defaults** â†’ **Live refresh interval**.
 
 ---
 
@@ -229,14 +229,14 @@ Any voucher assigned to that profile inherits those limits.
 
 ### Why do I only see some profiles?
 
-Connect24 hides RouterOS **system profiles** — `default`, `none`, and
-empty names — because they're not meant for user-created vouchers.
+Connect24 hides RouterOS **system profiles** â€” `default`, `none`, and
+empty names â€” because they're not meant for user-created vouchers.
 Only profiles you create yourself appear on the Profiles page and in
 the Generate dropdown.
 
 ### Can I edit an existing profile?
 
-Yes — but you have to do it on the router directly via Winbox or
+Yes â€” but you have to do it on the router directly via Winbox or
 SSH. Connect24 currently supports create and delete only. Edit support
 is planned for v1.1.
 
@@ -248,7 +248,7 @@ If it's 3, up to three devices can share it.
 
 ### What happens if I delete a profile that has vouchers?
 
-The vouchers remain but become **orphaned** — they'll still exist on
+The vouchers remain but become **orphaned** â€” they'll still exist on
 the router, but they won't inherit any profile limits. In practice,
 RouterOS usually falls back to `default` behaviour.
 
@@ -259,10 +259,10 @@ vouchers to another profile first (currently manual, on the router).
 
 Yes. That's standard RouterOS syntax: `<upload>/<download>`. Examples:
 
-- `2M/2M` — 2 Mbps up and down
-- `1M/4M` — 1 Mbps up, 4 Mbps down
-- `512k/2M` — asymmetric
-- `10M` — 10 Mbps both ways (shorthand)
+- `2M/2M` â€” 2 Mbps up and down
+- `1M/4M` â€” 1 Mbps up, 4 Mbps down
+- `512k/2M` â€” asymmetric
+- `10M` â€” 10 Mbps both ways (shorthand)
 
 ---
 
@@ -284,12 +284,12 @@ A future version will store them server-side.
 How often the Dashboard's **Live Data** card updates. Minimum 2
 seconds, maximum 60.
 
-Note: the Sessions page polls every 5s regardless — that's fixed for
+Note: the Sessions page polls every 5s regardless â€” that's fixed for
 now.
 
 ### Can I change the polling intervals?
 
-Yes — edit the constants in `shared.js`:
+Yes â€” edit the constants in `shared.js`:
 
 ```js
 const POLL_INTERVAL = 5000;  // vouchers poll
@@ -370,7 +370,7 @@ functionality.
 ### What happens if someone steals my router's API password?
 
 They can create and delete vouchers and profiles, and disconnect
-sessions — the same things Connect24 can do. They **cannot**:
+sessions â€” the same things Connect24 can do. They **cannot**:
 
 - Reboot the router
 - Change firewall rules
@@ -386,7 +386,7 @@ your main admin account. See the policy breakdown in
 
 ## Troubleshooting
 
-### "Session expired" — I get logged out every few minutes
+### "Session expired" â€” I get logged out every few minutes
 
 Your `SESSION_SECRET` may be missing or changing on every request.
 Check that:
@@ -407,7 +407,7 @@ The router's CPU may be maxed. Try:
 ### Charts don't render
 
 Charts use inline SVG, which every modern browser supports. If you see
-blank areas, open the browser console — usually it's a JavaScript
+blank areas, open the browser console â€” usually it's a JavaScript
 error from a modified file. Hard-refresh (Ctrl+Shift+R) to clear
 stale assets.
 
@@ -418,10 +418,10 @@ domain in your browser's site settings.
 
 ### "Failed to load" after clicking Refresh
 
-Open the browser console — you'll see the real error. Common causes:
+Open the browser console â€” you'll see the real error. Common causes:
 
 - Router unreachable (network issue)
-- Session expired (401) — reload the page
+- Session expired (401) â€” reload the page
 - Firewall blocking the Connect24 server
 - Wrong `ROUTER_HOST` in `.env`
 
@@ -454,10 +454,10 @@ theme setting if storage is unavailable.
 
 ## Still stuck?
 
-- 🐛 **Bug reports:** [GitHub Issues](https://github.com/your-username/connect24/issues)
-- 💬 **Questions:** [GitHub Discussions](https://github.com/your-username/connect24/discussions)
-- 📧 **Email:** hello@connect24.app
-- 🔒 **Security issues:** security@connect24.app (do **not** use the
+- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/Goken-byte/connect24/issues)
+- ðŸ’¬ **Questions:** [GitHub Discussions](https://github.com/Goken-byte/connect24/discussions)
+- ðŸ“§ **Email:** testapps065@gmail.com
+- ðŸ”’ **Security issues:** testapps065@gmail.com (do **not** use the
   issue tracker for security disclosures)
 
 When reporting a bug, please include:
@@ -466,7 +466,7 @@ When reporting a bug, please include:
 - RouterOS version (`/system/resource print`)
 - Browser and operating system
 - Steps to reproduce
-- Console errors (DevTools → Console)
+- Console errors (DevTools â†’ Console)
 - What you expected vs what happened
 
 Do **not** include your `.env`, router IP, or credentials in any

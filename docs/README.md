@@ -86,11 +86,11 @@ zone.
 
 | Channel | Use for |
 |---|---|
-| [GitHub Issues](https://github.com/your-username/connect24/issues) | Bug reports and feature requests |
-| [GitHub Discussions](https://github.com/your-username/connect24/discussions) | Questions and ideas |
-| **hello@connect24.app** | General enquiries |
-| **security@connect24.app** | Security disclosures (do **not** use the issue tracker) |
-| **sales@connect24.app** | Pro and White-Label licensing |
+| [GitHub Issues](https://github.com/Goken-byte/connect24/issues) | Bug reports and feature requests |
+| [GitHub Discussions](https://github.com/Goken-byte/connect24/discussions) | Questions and ideas |
+| **testapps065@gmail.com** | General enquiries |
+| **testapps065@gmail.com** | Security disclosures (do **not** use the issue tracker) |
+| **testapps065@gmail.com** | Pro and White-Label licensing |
 
 ---
 
@@ -104,6 +104,8 @@ Throughout these guides:
 - **`CONNECT24_SERVER_IP`** — the IP of the machine running Connect24
 - **`.env`** — the environment file at the root of the repo (never
   committed)
+- **`config.json`** — local router config (gitignored, contains
+  credentials)
 - **Winbox** — MikroTik's GUI management tool
 - **RouterOS** — MikroTik's operating system
 - **REST API** — the HTTP+JSON interface Connect24 uses to talk to
