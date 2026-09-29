@@ -1,4 +1,4 @@
-# Installation Guide
+﻿# Installation Guide
 
 Step-by-step instructions for installing **Connect24 Hotspot Manager** on
 your own server.
@@ -27,18 +27,18 @@ with `composer install`.
 
 ## 1. Get the code
 
-### Option A — Git clone
+### Option A â€” Git clone
 
 ```bash
-git clone https://github.com/Goken-byte/connect24.git
+git clone https://github.com/Goken-byte/connect24-hotspot-manager.git
 cd connect24
 ```
 
-### Option B — Download the ZIP
+### Option B â€” Download the ZIP
 
 Download the latest release from:
 
-<https://github.com/Goken-byte/connect24/releases>
+<https://github.com/Goken-byte/connect24-hotspot-manager/releases>
 
 Unzip it, then `cd` into the folder.
 
@@ -179,7 +179,7 @@ server {
 }
 ```
 
-### Caddy (simplest — automatic HTTPS)
+### Caddy (simplest â€” automatic HTTPS)
 
 ```
 connect24.example.com {
@@ -245,7 +245,7 @@ short, on your router (via Winbox or SSH):
 ## 7. First login
 
 1. Open your Connect24 URL in a browser.
-2. Sign in with the credentials you entered in the login form —
+2. Sign in with the credentials you entered in the login form â€”
    Connect24 authenticates directly against your MikroTik router.
 3. The credentials you use must be valid on the router. The
    `ADMIN_USER` / `ADMIN_PASS` in `.env` are **optional fallbacks** for
@@ -256,7 +256,7 @@ short, on your router (via Winbox or SSH):
 
 ---
 
-## 8. Optional — try demo mode first
+## 8. Optional â€” try demo mode first
 
 Before connecting a real router, you can preview the whole app with
 sample data. Add `?demo=1` to any page:
@@ -265,8 +265,8 @@ sample data. Add `?demo=1` to any page:
 http://localhost:8080/pages/dashboard.html?demo=1
 ```
 
-Everything works — stats, charts, voucher generation, session list,
-profiles — but nothing touches a real router. A blue banner appears at
+Everything works â€” stats, charts, voucher generation, session list,
+profiles â€” but nothing touches a real router. A blue banner appears at
 the top to remind you that you're in demo mode.
 
 This is the fastest way to:
@@ -277,7 +277,7 @@ This is the fastest way to:
 
 ---
 
-## 9. Optional — install as a PWA
+## 9. Optional â€” install as a PWA
 
 Connect24 ships with a web app manifest. In Chrome or Edge:
 
@@ -359,15 +359,15 @@ Before going live, verify:
 
 ## Getting help
 
-- 📖 [Router setup guide](router-setup.md)
-- ❓ [FAQ](faq.md)
-- 🔒 [Security model](security.md)
-- 🐛 [GitHub Issues](https://github.com/Goken-byte/connect24/issues)
-- 💬 [GitHub Discussions](https://github.com/Goken-byte/connect24/discussions)
-- 📧 **Email:** testapps065@gmail.com
+- ðŸ“– [Router setup guide](router-setup.md)
+- â“ [FAQ](faq.md)
+- ðŸ”’ [Security model](security.md)
+- ðŸ› [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues)
+- ðŸ’¬ [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions)
+- ðŸ“§ **Email:** testapps065@gmail.com
 
 ---
 
 <div align="center">
-  <sub>Connect24 Hotspot Manager — installation guide</sub>
+  <sub>Connect24 Hotspot Manager â€” installation guide</sub>
 </div>
