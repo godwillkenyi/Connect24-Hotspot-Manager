@@ -30,7 +30,7 @@ with `composer install`.
 ### Option A â€” Git clone
 
 ```bash
-git clone https://github.com/Goken-byte/connect24-hotspot-manager.git
+git clone https://github.com/godwillkenyi/Connect24-Hotspot-Manager.git
 cd connect24
 ```
 

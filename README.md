@@ -128,7 +128,7 @@ sacrificing the reliability of RouterOS underneath.
 ### 1. Get the code
 
 ```bash
-git clone https://github.com/Goken-byte/connect24-hotspot-manager.git
+git clone https://github.com/godwillkenyi/Connect24-Hotspot-Manager.git
 cd connect24
 ```
 
