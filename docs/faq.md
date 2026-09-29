@@ -1,4 +1,4 @@
-﻿# Frequently Asked Questions
+﻿﻿# Frequently Asked Questions
 
 Common questions about Connect24 Hotspot Manager.
 
@@ -454,8 +454,8 @@ theme setting if storage is unavailable.
 
 ## Still stuck?
 
-- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues)
-- ðŸ’¬ **Questions:** [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions)
+- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues)
+- ðŸ’¬ **Questions:** [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions)
 - ðŸ“§ **Email:** testapps065@gmail.com
 - ðŸ”’ **Security issues:** testapps065@gmail.com (do **not** use the
   issue tracker for security disclosures)

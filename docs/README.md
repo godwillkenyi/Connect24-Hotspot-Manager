@@ -1,4 +1,4 @@
-﻿# Connect24 Documentation
+﻿﻿# Connect24 Documentation
 
 Everything you need to install, configure, and use Connect24 Hotspot
 Manager.
@@ -86,8 +86,8 @@ zone.
 
 | Channel | Use for |
 |---|---|
-| [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues) | Bug reports and feature requests |
-| [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions) | Questions and ideas |
+| [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues) | Bug reports and feature requests |
+| [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions) | Questions and ideas |
 | **testapps065@gmail.com** | General enquiries |
 | **testapps065@gmail.com** | Security disclosures (do **not** use the issue tracker) |
 | **testapps065@gmail.com** | Pro and White-Label licensing |

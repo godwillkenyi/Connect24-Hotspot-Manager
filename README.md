@@ -1,4 +1,4 @@
-﻿<div align="center">
+﻿﻿<div align="center">
 
 <img src="public/favicon-192.png" alt="Connect24" width="96" height="96">
 
@@ -15,7 +15,7 @@ vouchers â€” all from one clean, keyboard-first dashboard.
 [![PHP](https://img.shields.io/badge/php-%3E%3D8.0-777BB4.svg)](https://www.php.net/)
 [![RouterOS](https://img.shields.io/badge/RouterOS-%3E%3D6.48-2E7D32.svg)](https://mikrotik.com/)
 [![Status](https://img.shields.io/badge/status-stable-success.svg)]()
-[![Lint](https://github.com/Goken-byte/connect24-hotspot-manager/actions/workflows/lint.yml/badge.svg)](https://github.com/Goken-byte/connect24-hotspot-manager/actions/workflows/lint.yml)
+[![Lint](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/actions/workflows/lint.yml/badge.svg)](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/actions/workflows/lint.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 [Features](#features) Â· [Screenshots](#screenshots) Â· [Quick start](#quick-start) Â· [Docs](docs/) Â· [Demo](#demo-mode) Â· [License](#license)
@@ -387,15 +387,15 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 
 **Godwill Kenyi** â€” creator and maintainer
 
-- ðŸ™ GitHub: [@Goken-byte](https://github.com/Goken-byte)
+- ðŸ™ GitHub: [@godwillkenyi](https://github.com/godwillkenyi)
 - ðŸ“§ Email: testapps065@gmail.com
 - ðŸ“ Location: South Sudan
 
 ## Support
 
 - ðŸ“– **Documentation:** [docs/](docs/)
-- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues)
-- ðŸ’¬ **Questions & ideas:** [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions)
+- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues)
+- ðŸ’¬ **Questions & ideas:** [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions)
 - ðŸ“§ **Direct email:** testapps065@gmail.com
 - ðŸ”’ **Security disclosure:** testapps065@gmail.com (do **not** use the issue tracker for security issues)
 - ðŸ’¼ **Commercial licensing:** testapps065@gmail.com
@@ -411,7 +411,7 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 ---
 
 <div align="center">
-  <sub>Built with â¤ï¸ by <a href="https://github.com/Goken-byte">Godwill Kenyi</a> for the MikroTik community</sub>
+  <sub>Built with â¤ï¸ by <a href="https://github.com/godwillkenyi">Godwill Kenyi</a> for the MikroTik community</sub>
 
   <br><br>
 

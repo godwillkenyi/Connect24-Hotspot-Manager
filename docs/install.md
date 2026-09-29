@@ -1,4 +1,4 @@
-﻿# Installation Guide
+﻿﻿# Installation Guide
 
 Step-by-step instructions for installing **Connect24 Hotspot Manager** on
 your own server.
@@ -38,7 +38,7 @@ cd connect24
 
 Download the latest release from:
 
-<https://github.com/Goken-byte/connect24-hotspot-manager/releases>
+<https://github.com/godwillkenyi/Connect24-Hotspot-Manager/releases>
 
 Unzip it, then `cd` into the folder.
 
@@ -362,8 +362,8 @@ Before going live, verify:
 - ðŸ“– [Router setup guide](router-setup.md)
 - â“ [FAQ](faq.md)
 - ðŸ”’ [Security model](security.md)
-- ðŸ› [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues)
-- ðŸ’¬ [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions)
+- ðŸ› [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues)
+- ðŸ’¬ [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions)
 - ðŸ“§ **Email:** testapps065@gmail.com
 
 ---
