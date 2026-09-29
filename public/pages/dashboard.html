@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Connect24 Hotspot Manager</title>
+<title>Dashboard â€” Connect24 Hotspot Manager</title>
 <link rel="stylesheet" href="../shared.css">
 <!-- Favicons -->
 <link rel="icon" href="../favicon.ico" sizes="any">
@@ -132,8 +132,8 @@
                 <div class="d-side-plan-bar">
                     <div class="d-side-plan-fill" style="width:100%;"></div>
                 </div>
-                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
-                    Upgrade to Pro →
+                <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
+                    Upgrade to Pro â†’
                 </a>
             </div>
 
@@ -141,7 +141,7 @@
                 <div class="d-user">
                     <div class="d-user-avatar" id="userAvatar">V</div>
                     <div class="d-user-info">
-                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-name" id="userName">Loadingâ€¦</div>
                         <div class="d-user-role">Administrator</div>
                     </div>
                 </div>
@@ -176,13 +176,13 @@
                 <div class="d-topbar-actions">
                     <div class="d-live on" id="livePill">
                         <span class="d-live-dot"></span>
-                        <span id="liveText">Live · 5s</span>
+                        <span id="liveText">Live Â· 5s</span>
                     </div>
 
-                    <!-- Tier 1: ⌘K trigger -->
-                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                    <!-- Tier 1: âŒ˜K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (âŒ˜K)">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                        <kbd class="d-icon-kbd">⌘K</kbd>
+                        <kbd class="d-icon-kbd">âŒ˜K</kbd>
                     </button>
 
                     <button class="d-icon-btn" id="notifyBtn" title="Notifications">
@@ -200,7 +200,7 @@
             <div class="d-page">
 
                 <!-- ============================================================
-                     STAT CARDS — one row, numbers that add up
+                     STAT CARDS â€” one row, numbers that add up
                      ============================================================ -->
                 <section class="d-stats-row">
 
@@ -211,7 +211,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statTotal">—</div>
+                        <div class="d-stat-value" id="statTotal">â€”</div>
                         <div class="d-stat-trend"><span>All vouchers on the router</span></div>
                     </div>
 
@@ -222,8 +222,8 @@
                                 <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statActive">—</div>
-                        <div class="d-stat-trend up"><strong id="statActivePct">—</strong><span>of total</span></div>
+                        <div class="d-stat-value" id="statActive">â€”</div>
+                        <div class="d-stat-trend up"><strong id="statActivePct">â€”</strong><span>of total</span></div>
                     </div>
 
                     <div class="d-stat">
@@ -233,8 +233,8 @@
                                 <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statUnused">—</div>
-                        <div class="d-stat-trend"><span>Never used — 0 bytes, 0 uptime</span></div>
+                        <div class="d-stat-value" id="statUnused">â€”</div>
+                        <div class="d-stat-trend"><span>Never used â€” 0 bytes, 0 uptime</span></div>
                     </div>
 
                     <div class="d-stat">
@@ -244,7 +244,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statExpired">—</div>
+                        <div class="d-stat-value" id="statExpired">â€”</div>
                         <div class="d-stat-trend down"><span>Past their limit</span></div>
                     </div>
 
@@ -255,7 +255,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value d-stat-value--data" id="statData">—</div>
+                        <div class="d-stat-value d-stat-value--data" id="statData">â€”</div>
                         <div class="d-stat-trend"><span>Bytes-in + bytes-out right now</span></div>
                     </div>
 
@@ -270,7 +270,7 @@
                             <div class="d-panel-title">
                                 <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
                                 Vouchers by Profile
-                                <span class="d-panel-sub" id="barSubtitle">—</span>
+                                <span class="d-panel-sub" id="barSubtitle">â€”</span>
                             </div>
                         </div>
                         <div class="d-panel-body">
@@ -301,7 +301,7 @@
                         <div class="d-panel-title">
                             <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
                             Recent Vouchers
-                            <span class="d-panel-sub" id="tableSubtitle">—</span>
+                            <span class="d-panel-sub" id="tableSubtitle">â€”</span>
                         </div>
                         <div class="d-panel-actions">
                             <a class="d-btn" href="vouchers.html">
@@ -338,20 +338,20 @@
                 <!-- Tier 1: footer -->
                 <footer class="d-footer">
                     <div class="d-footer-left">
-                        <span>© <span id="footerYear">2025</span> Connect24</span>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                        <span>Â© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
                     </div>
                     <div class="d-footer-right">
                         <span class="d-footer-status">
                             <span class="d-status-dot" id="footerApiStatus"></span>
                             <span id="footerApiText">API: Connected</span>
                         </span>
-                        <span class="d-footer-sep">·</span>
+                        <span class="d-footer-sep">Â·</span>
                         <span>v1.0.0</span>
                     </div>
                 </footer>
@@ -362,20 +362,20 @@
 </div>
 
 <!-- ============================================================
-     COMMAND PALETTE (⌘K / Ctrl+K)
+     COMMAND PALETTE (âŒ˜K / Ctrl+K)
      ============================================================ -->
 <div class="d-cmdk" id="cmdk" hidden>
     <div class="d-cmdk-backdrop" data-cmdk-close></div>
     <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="d-cmdk-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <input type="text" id="cmdkInput" placeholder="Search or jump toâ€¦" autocomplete="off">
             <kbd>ESC</kbd>
         </div>
         <div class="d-cmdk-results" id="cmdkResults"></div>
         <div class="d-cmdk-foot">
-            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>â†‘</kbd><kbd>â†“</kbd> Navigate</span>
+            <span><kbd>â†µ</kbd> Open</span>
             <span><kbd>ESC</kbd> Close</span>
         </div>
     </div>
@@ -399,7 +399,7 @@
     let badgeTimer = null;
 
     /* ============================================================
-     *  PROFILE FILTER — same rule as the Profiles page.
+     *  PROFILE FILTER â€” same rule as the Profiles page.
      *  Excludes RouterOS system profiles ("default", "none", "").
      * ============================================================ */
     const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
@@ -445,11 +445,11 @@
     }
 
     /* ============================================================
-     *  STATS — ALL counts come from the SAME voucher list
+     *  STATS â€” ALL counts come from the SAME voucher list
      *
      *  Every voucher falls into exactly one of three buckets:
      *    - active   (in-use or was used; includes "almost" & "heavy")
-     *    - unused   (never used — 0 bytes AND 0 uptime)
+     *    - unused   (never used â€” 0 bytes AND 0 uptime)
      *    - expired  (disabled, exhausted, or limit consumed)
      *
      *  So: active + unused + expired === total
@@ -486,7 +486,7 @@
     function renderStats() {
         const v = computeVoucherStats(lastVouchers);
 
-        // Every card comes from the same voucher list → numbers add up.
+        // Every card comes from the same voucher list â†’ numbers add up.
         animateNumber($("statTotal"),   v.total);
         animateNumber($("statActive"),  v.active);
         animateNumber($("statUnused"),  v.unused);
@@ -495,7 +495,7 @@
         const pct = v.total > 0 ? Math.round((v.active / v.total) * 100) : 0;
         $("statActivePct").textContent = pct + "%";
 
-        // Live Data — this one IS session-based (only live sources have
+        // Live Data â€” this one IS session-based (only live sources have
         // byte counters that update in real time)
         const dataEl = $("statData");
         if (dataEl) dataEl.textContent = formatBytes(computeLiveBytes(lastSessions));
@@ -518,7 +518,7 @@
     }
 
     /* ============================================================
-     *  BAR CHART — Vouchers by Profile
+     *  BAR CHART â€” Vouchers by Profile
      * ============================================================ */
     function niceCeil(n) {
         if (n <= 5) return 5;
@@ -576,7 +576,7 @@
     }
 
     /* ============================================================
-     *  DONUT CHART — Status Breakdown
+     *  DONUT CHART â€” Status Breakdown
      *  Uses the same 3-bucket model as the stat cards.
      * ============================================================ */
     function renderDonut(vouchers) {
@@ -642,18 +642,18 @@
             }[status];
             const pillClass = (status === "heavy" || status === "almost") ? "idle" : status;
             return `<tr>
-                <td><span class="d-code">${escapeHtml(v.name || "—")}</span></td>
+                <td><span class="d-code">${escapeHtml(v.name || "â€”")}</span></td>
                 <td>${escapeHtml(v.profile || "default")}</td>
                 <td><span class="d-pill ${pillClass}">${label}</span></td>
                 <td>${escapeHtml(shortUptime(v.uptime))}</td>
                 <td>${escapeHtml(formatBytes(bytesOf(v)))}</td>
-                <td>${escapeHtml(v.comment || "—")}</td>
+                <td>${escapeHtml(v.comment || "â€”")}</td>
             </tr>`;
         }).join("");
     }
 
     /* ============================================================
-     *  LIVE SESSIONS FETCH — every 3 seconds
+     *  LIVE SESSIONS FETCH â€” every 3 seconds
      * ============================================================ */
     async function fetchLiveSessions() {
         try {
@@ -682,7 +682,7 @@
     }
 
     /* ============================================================
-     *  BADGE FETCH — vouchers + profiles
+     *  BADGE FETCH â€” vouchers + profiles
      * ============================================================ */
     async function fetchBadgeCounts() {
         // Vouchers
@@ -720,7 +720,7 @@
     }
 
     /* ============================================================
-     *  LOCAL TICK — every 2 seconds, re-render from memory
+     *  LOCAL TICK â€” every 2 seconds, re-render from memory
      * ============================================================ */
     function localTick() {
         if (lastVouchers.length === 0 && lastSessions.length === 0) return;
@@ -729,7 +729,7 @@
     }
 
     /* ============================================================
-     *  HOOKS — called by shared.js whenever voucher data loads
+     *  HOOKS â€” called by shared.js whenever voucher data loads
      * ============================================================ */
     window.onVouchersLoaded = (vouchers) => {
         lastVouchers = vouchers;
@@ -747,7 +747,7 @@
         document.documentElement.classList.remove("d-pending");
         document.documentElement.classList.add("d-ready");
 
-        // First session fetch — updates Live Data
+        // First session fetch â€” updates Live Data
         fetchLiveSessions();
 
         // Fetch badge counts immediately

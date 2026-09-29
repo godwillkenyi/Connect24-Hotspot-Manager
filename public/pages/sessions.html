@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sessions — Connect24 Hotspot Manager</title>
+<title>Sessions â€” Connect24 Hotspot Manager</title>
 <link rel="stylesheet" href="../shared.css">
 <!-- Favicons -->
 <link rel="icon" href="../favicon.ico" sizes="any">
@@ -80,8 +80,8 @@
                 <div class="d-side-plan-bar">
                     <div class="d-side-plan-fill" style="width:100%;"></div>
                 </div>
-                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
-                    Upgrade to Pro →
+                <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
+                    Upgrade to Pro â†’
                 </a>
             </div>
 
@@ -89,7 +89,7 @@
                 <div class="d-user">
                     <div class="d-user-avatar" id="userAvatar">V</div>
                     <div class="d-user-info">
-                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-name" id="userName">Loadingâ€¦</div>
                         <div class="d-user-role">Administrator</div>
                     </div>
                 </div>
@@ -124,13 +124,13 @@
                 <div class="d-topbar-actions">
                     <div class="d-live on" id="livePill">
                         <span class="d-live-dot"></span>
-                        <span id="liveText">Live · 5s</span>
+                        <span id="liveText">Live Â· 5s</span>
                     </div>
 
-                    <!-- Tier 1: ⌘K trigger -->
-                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                    <!-- Tier 1: âŒ˜K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (âŒ˜K)">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                        <kbd class="d-icon-kbd">⌘K</kbd>
+                        <kbd class="d-icon-kbd">âŒ˜K</kbd>
                     </button>
 
                     <button class="d-refresh" id="refreshBtn">
@@ -153,7 +153,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statActive">—</div>
+                        <div class="d-stat-value" id="statActive">â€”</div>
                         <div class="d-stat-trend"><span>Sessions right now</span></div>
                     </div>
 
@@ -164,7 +164,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statData">—</div>
+                        <div class="d-stat-value" id="statData">â€”</div>
                         <div class="d-stat-trend"><span>Across all sessions</span></div>
                     </div>
 
@@ -175,7 +175,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statLongest">—</div>
+                        <div class="d-stat-value" id="statLongest">â€”</div>
                         <div class="d-stat-trend"><span>Most uptime so far</span></div>
                     </div>
 
@@ -186,7 +186,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statTop" style="font-size:18px; word-break:break-all; line-height:1.2;">—</div>
+                        <div class="d-stat-value" id="statTop" style="font-size:18px; word-break:break-all; line-height:1.2;">â€”</div>
                         <div class="d-stat-trend"><span>Highest data usage</span></div>
                     </div>
                 </section>
@@ -199,7 +199,7 @@
                         <div class="d-panel-title">
                             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                             Active Sessions
-                            <span class="d-panel-sub" id="tableSubtitle">—</span>
+                            <span class="d-panel-sub" id="tableSubtitle">â€”</span>
                         </div>
                         <div class="d-panel-actions">
                             <button class="d-btn danger" id="disconnectAllBtn" style="display:none;">
@@ -212,17 +212,17 @@
                     <div class="d-filters">
                         <div class="d-search">
                             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                            <input type="text" id="searchInput" placeholder="Search by user, IP, or MAC…" autocomplete="off">
+                            <input type="text" id="searchInput" placeholder="Search by user, IP, or MACâ€¦" autocomplete="off">
                         </div>
                         <select class="d-select" id="sortSelect">
                             <option value="uptime-desc">Uptime (longest first)</option>
                             <option value="uptime-asc">Uptime (shortest first)</option>
-                            <option value="bytes-desc">Data usage (high → low)</option>
-                            <option value="bytes-asc">Data usage (low → high)</option>
-                            <option value="user-asc">User name (A–Z)</option>
-                            <option value="user-desc">User name (Z–A)</option>
+                            <option value="bytes-desc">Data usage (high â†’ low)</option>
+                            <option value="bytes-asc">Data usage (low â†’ high)</option>
+                            <option value="user-asc">User name (Aâ€“Z)</option>
+                            <option value="user-desc">User name (Zâ€“A)</option>
                         </select>
-                        <span class="d-filter-results" id="filterResults">—</span>
+                        <span class="d-filter-results" id="filterResults">â€”</span>
                     </div>
 
                     <div class="d-table-wrap">
@@ -250,20 +250,20 @@
                 <!-- Tier 1: footer -->
                 <footer class="d-footer">
                     <div class="d-footer-left">
-                        <span>© <span id="footerYear">2025</span> Connect24</span>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                        <span>Â© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
                     </div>
                     <div class="d-footer-right">
                         <span class="d-footer-status">
                             <span class="d-status-dot" id="footerApiStatus"></span>
                             <span id="footerApiText">API: Connected</span>
                         </span>
-                        <span class="d-footer-sep">·</span>
+                        <span class="d-footer-sep">Â·</span>
                         <span>v1.0.0</span>
                     </div>
                 </footer>
@@ -274,20 +274,20 @@
 </div>
 
 <!-- ============================================================
-     COMMAND PALETTE (⌘K / Ctrl+K)
+     COMMAND PALETTE (âŒ˜K / Ctrl+K)
      ============================================================ -->
 <div class="d-cmdk" id="cmdk" hidden>
     <div class="d-cmdk-backdrop" data-cmdk-close></div>
     <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="d-cmdk-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <input type="text" id="cmdkInput" placeholder="Search or jump toâ€¦" autocomplete="off">
             <kbd>ESC</kbd>
         </div>
         <div class="d-cmdk-results" id="cmdkResults"></div>
         <div class="d-cmdk-foot">
-            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>â†‘</kbd><kbd>â†“</kbd> Navigate</span>
+            <span><kbd>â†µ</kbd> Open</span>
             <span><kbd>ESC</kbd> Close</span>
         </div>
     </div>
@@ -314,7 +314,7 @@
     let badgeTimer = null;
 
     /* ============================================================
-     *  PROFILE FILTER — same rule as the Profiles page.
+     *  PROFILE FILTER â€” same rule as the Profiles page.
      *  Excludes RouterOS system profiles ("default", "none", "").
      * ============================================================ */
     const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
@@ -341,7 +341,7 @@
      *  HELPERS
      * ============================================================ */
 
-    // Parse RouterOS uptime string → seconds
+    // Parse RouterOS uptime string â†’ seconds
     function uptimeToSecondsLocal(str) {
         if (!str) return 0;
         const s = String(str).trim();
@@ -474,13 +474,13 @@
 
         let totalBytes = 0;
         let longest = 0;
-        let topUser = "—";
+        let topUser = "â€”";
         let topBytes = 0;
 
         sessions.forEach((s) => {
             const b = bytesOf(s);
             totalBytes += b;
-            if (b > topBytes) { topBytes = b; topUser = s.user || "—"; }
+            if (b > topBytes) { topBytes = b; topUser = s.user || "â€”"; }
             const up = uptimeToSecondsLocal(s.uptime);
             if (up > longest) longest = up;
         });
@@ -488,7 +488,7 @@
         $("statData").textContent = formatBytes(totalBytes);
 
         if (longest === 0) {
-            $("statLongest").textContent = "—";
+            $("statLongest").textContent = "â€”";
         } else {
             const h = Math.floor(longest / 3600);
             const m = Math.floor((longest % 3600) / 60);
@@ -498,7 +498,7 @@
                 `${longest}s`;
         }
 
-        $("statTop").textContent = count > 0 ? topUser : "—";
+        $("statTop").textContent = count > 0 ? topUser : "â€”";
     }
 
     /* ============================================================
@@ -555,7 +555,7 @@
 
         if (sessions.length === 0) {
             subtitle.textContent = "0 sessions";
-            results.textContent = "—";
+            results.textContent = "â€”";
             body.innerHTML = `<tr><td colspan="7"><div class="d-empty">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
                 <h3>No active sessions</h3>
@@ -579,12 +579,12 @@
         }
 
         body.innerHTML = list.map((s) => {
-            const user = s.user || "—";
-            const addr = s.address || "—";
-            const mac = s.mac || "—";
+            const user = s.user || "â€”";
+            const addr = s.address || "â€”";
+            const mac = s.mac || "â€”";
             const uptime = s.uptime || "0s";
             const data = formatBytes(bytesOf(s));
-            const loginBy = s["login-by"] || "—";
+            const loginBy = s["login-by"] || "â€”";
 
             return `
                 <tr>
@@ -710,7 +710,7 @@
         updateVoucherBadge();
         updateProfilesBadge();
 
-        // Then every 10 seconds — counts change slowly,
+        // Then every 10 seconds â€” counts change slowly,
         // so 10s is plenty and reduces load on the router.
         if (badgeTimer) clearInterval(badgeTimer);
         badgeTimer = setInterval(() => {

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profiles — Connect24 Hotspot Manager</title>
+<title>Profiles â€” Connect24 Hotspot Manager</title>
 <link rel="stylesheet" href="../shared.css">
 <!-- Favicons -->
 <link rel="icon" href="../favicon.ico" sizes="any">
@@ -80,8 +80,8 @@
                 <div class="d-side-plan-bar">
                     <div class="d-side-plan-fill" style="width:100%;"></div>
                 </div>
-                <a class="d-side-plan-cta" href="https://connect24.app/pricing" target="_blank" rel="noopener">
-                    Upgrade to Pro →
+                <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
+                    Upgrade to Pro â†’
                 </a>
             </div>
 
@@ -89,7 +89,7 @@
                 <div class="d-user">
                     <div class="d-user-avatar" id="userAvatar">V</div>
                     <div class="d-user-info">
-                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-name" id="userName">Loadingâ€¦</div>
                         <div class="d-user-role">Administrator</div>
                     </div>
                 </div>
@@ -124,13 +124,13 @@
                 <div class="d-topbar-actions">
                     <div class="d-live on" id="livePill">
                         <span class="d-live-dot"></span>
-                        <span id="liveText">Live · 5s</span>
+                        <span id="liveText">Live Â· 5s</span>
                     </div>
 
-                    <!-- Tier 1: ⌘K trigger -->
-                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                    <!-- Tier 1: âŒ˜K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (âŒ˜K)">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                        <kbd class="d-icon-kbd">⌘K</kbd>
+                        <kbd class="d-icon-kbd">âŒ˜K</kbd>
                     </button>
 
                     <button class="d-refresh" id="refreshBtn">
@@ -206,7 +206,7 @@
                         <div class="d-panel-title">
                             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             Existing Profiles
-                            <span class="d-panel-sub" id="profileCount">—</span>
+                            <span class="d-panel-sub" id="profileCount">â€”</span>
                         </div>
                     </div>
                     <div class="d-table-wrap">
@@ -232,20 +232,20 @@
                 <!-- Tier 1: footer -->
                 <footer class="d-footer">
                     <div class="d-footer-left">
-                        <span>© <span id="footerYear">2025</span> Connect24</span>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/terms" target="_blank" rel="noopener">Terms</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/privacy" target="_blank" rel="noopener">Privacy</a>
-                        <span class="d-footer-sep">·</span>
-                        <a href="https://connect24.app/docs" target="_blank" rel="noopener">Docs</a>
+                        <span>Â© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">Â·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
                     </div>
                     <div class="d-footer-right">
                         <span class="d-footer-status">
                             <span class="d-status-dot" id="footerApiStatus"></span>
                             <span id="footerApiText">API: Connected</span>
                         </span>
-                        <span class="d-footer-sep">·</span>
+                        <span class="d-footer-sep">Â·</span>
                         <span>v1.0.0</span>
                     </div>
                 </footer>
@@ -256,20 +256,20 @@
 </div>
 
 <!-- ============================================================
-     COMMAND PALETTE (⌘K / Ctrl+K)
+     COMMAND PALETTE (âŒ˜K / Ctrl+K)
      ============================================================ -->
 <div class="d-cmdk" id="cmdk" hidden>
     <div class="d-cmdk-backdrop" data-cmdk-close></div>
     <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="d-cmdk-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <input type="text" id="cmdkInput" placeholder="Search or jump toâ€¦" autocomplete="off">
             <kbd>ESC</kbd>
         </div>
         <div class="d-cmdk-results" id="cmdkResults"></div>
         <div class="d-cmdk-foot">
-            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
-            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>â†‘</kbd><kbd>â†“</kbd> Navigate</span>
+            <span><kbd>â†µ</kbd> Open</span>
             <span><kbd>ESC</kbd> Close</span>
         </div>
     </div>
@@ -327,7 +327,7 @@
     }
 
     /* ============================================================
-     *  BADGE FETCH — vouchers, sessions, profiles
+     *  BADGE FETCH â€” vouchers, sessions, profiles
      * ============================================================ */
     async function updateVoucherBadge() {
         const badge = $("navVouchersBadge");
@@ -450,11 +450,11 @@
 
         body.innerHTML = profiles.map((p) => `
             <tr>
-                <td><span class="d-code">${escapeHtml(p.name || "—")}</span></td>
+                <td><span class="d-code">${escapeHtml(p.name || "â€”")}</span></td>
                 <td>${escapeHtml(p["rate-limit"] || "unlimited")}</td>
                 <td>${escapeHtml(p["shared-users"] || "1")}</td>
                 <td>${escapeHtml(p["session-timeout"] || "unlimited")}</td>
-                <td>${escapeHtml(p.comment || "—")}</td>
+                <td>${escapeHtml(p.comment || "â€”")}</td>
                 <td>
                     <div class="d-actions-cell">
                         <button class="d-row-btn danger" data-delete="${escapeHtml(p.name)}" title="Delete profile">
@@ -582,7 +582,7 @@
         updateVoucherBadge();
         updateSessionsBadge();
 
-        // Then every 10 seconds — small counts, so 10s is plenty
+        // Then every 10 seconds â€” small counts, so 10s is plenty
         if (badgeTimer) clearInterval(badgeTimer);
         badgeTimer = setInterval(() => {
             updateVoucherBadge();
