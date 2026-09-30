@@ -298,52 +298,51 @@ connect24/
 
 ## Keyboard shortcuts
 
-| Shortcut | Action |
-|---|---|
-| `âŒ˜K` / `Ctrl+K` | Open command palette |
-| `g` then `d` | Go to Dashboard |
-| `g` then `v` | Go to Vouchers |
-| `g` then `s` | Go to Sessions |
-| `g` then `p` | Go to Profiles |
-| `g` then `g` | Go to Generate |
-| `g` then `,` | Go to Settings |
-| `Esc` | Close any modal |
-| `â†‘` `â†“` | Navigate command palette |
-| `Enter` | Open selected item |
+Shortcut         Action
+_____________________________________.
+⌘K/Ctrl+K  |  Open command palette
+g then d   |  Go to Dashboard
+g then v   |  Go to Vouchers
+g then s   |  Go to Sessions
+g then p   |  Go to Profiles
+g then g   |  Go to Generate
+g then ,   |  Go to Settings
+Esc        |  Close any modal
+
+↑ ↓ Navigate command palette
+Enter Open selected item
 
 ---
 
 ## Security
 
-Connect24 is built with a **least-privilege** model:
+Connect24 is built with a least-privilege model:
 
-- Router credentials stored in `.env` (never committed, never in the browser)
-- API user has only `read,write,api,rest-api` â€” no admin access
+- Router credentials stored in .env (never committed, never in the browser)
+- API user has only read,write,api,rest-api — no admin access
 - Session-based auth with signed cookies
-- `SameSite=Lax` cookies block cross-site POSTs
+- SameSite=Lax cookies block cross-site POSTs
 - No telemetry, no analytics, no third-party calls
+- Full threat model and hardening guide in docs/security.md.
 
-Full threat model and hardening guide in
-[docs/security.md](docs/security.md).
-
-**Found a security issue?** Please **do not** open a public GitHub
-issue. Email **testapps065@gmail.com** instead. See
-[SECURITY.md](SECURITY.md) for details.
+Found a security issue? Please do not open a public GitHub issue. Email testapps065@gmail.com instead. See SECURITY.md for details.
 
 ---
 
 ## Roadmap
 
-- [x] **v1.0.0** â€” Initial release
-  - Full voucher lifecycle management
-  - Live session monitoring
-  - Profile CRUD
-  - Dark mode, âŒ˜K, PWA
-- [ ] **v1.1.0** â€” Edit vouchers, CSRF tokens, MFA
-- [ ] **v1.2.0** â€” Reseller accounts, billing integration
-- [ ] **v2.0.0** â€” Multi-tenant, white-label
+☑ v1.0.0 — Initial release
+Full voucher lifecycle management
 
-See [CHANGELOG.md](CHANGELOG.md) for the full history.
+- Live session monitoring
+- Profile CRUD
+- Dark mode, ⌘K, PWA
+
+□ v1.1.0 — Edit vouchers, CSRF tokens, MFA
+□ v1.2.0 — Reseller accounts, billing integration
+□ v2.0.0 — Multi-tenant, white-label
+See CHANGELOG.md for the full history.
+
 
 ---
 
@@ -384,35 +383,32 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 
 ## Author
 
-**Godwill Kenyi** â€” creator and maintainer
+Godwill Kenyi — creator and maintainer
 
-- ðŸ™ GitHub: [@godwillkenyi](https://github.com/godwillkenyi)
-- ðŸ“§ Email: testapps065@gmail.com
-- ðŸ“ Location: South Sudan
+🐙 GitHub: @godwillkenyi
+📧 Email: testapps065@gmail.com
+📍 Location: South Sudan
 
 ## Support
 
-- ðŸ“– **Documentation:** [docs/](docs/)
-- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues)
-- ðŸ’¬ **Questions & ideas:** [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions)
-- ðŸ“§ **Direct email:** testapps065@gmail.com
-- ðŸ”’ **Security disclosure:** testapps065@gmail.com (do **not** use the issue tracker for security issues)
-- ðŸ’¼ **Commercial licensing:** testapps065@gmail.com
+📖 Documentation: docs/
+🐛 Bug reports: GitHub Issues
+💬 Questions & ideas: GitHub Discussions
+📧 Direct email: testapps065@gmail.com
+🔒 Security disclosure: testapps065@gmail.com (do not use the issue tracker for security issues)
+💼 Commercial licensing: testapps065@gmail.com
 
 ---
 
 ## Acknowledgements
-
+  
 - Inspired by the daily work of hotspot operators everywhere
 - Not affiliated with or endorsed by MikroTik SIA
-- Built with plain HTML, CSS, and JavaScript â€” no framework, by design
+- Built with plain HTML, CSS, and JavaScript — no framework, by design
 
----
+<div align="center"> <sub>Built with ❤️ by <a href="https://github.com/godwillkenyi">Godwill Kenyi</a> for the MikroTik community</sub>
 
-<div align="center">
-  <sub>Built with â¤ï¸ by <a href="https://github.com/godwillkenyi">Godwill Kenyi</a> for the MikroTik community</sub>
 
-  <br><br>
+<a href="#top">↑ Back to top</a>
 
-  <a href="#top">â†‘ Back to top</a>
-</div>
+</div> ```
