@@ -1,0 +1,26 @@
+/* HARD OVERRIDES — placed at the end of the <style> block */
+html body .d-pill.active {
+    background: #fde8d0 !important;
+    color: #b45309 !important;
+    border-color: #f0c08a !important;
+}
+html body .d-pill.expired {
+    background: #f5dada !important;
+    color: #800020 !important;
+    border-color: #d9a8a8 !important;
+}
+html body .d-pill.almost {
+    background: #e4e4e4 !important;
+    color: #2b2b2b !important;
+    border-color: #c4c4c4 !important;
+}
+html body .d-pill.idle {
+    background: #e4e4e4 !important;
+    color: #2b2b2b !important;
+    border-color: #c4c4c4 !important;
+}
+html body .d-pill.unused {
+    background: #e8e0d0 !important;
+    color: #7a5c2e !important;
+    border-color: #cdbfa3 !important;
+}

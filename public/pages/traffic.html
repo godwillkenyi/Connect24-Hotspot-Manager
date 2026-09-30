@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traffic — Connect24 Hotspot Manager</title>
+<link rel="stylesheet" href="../shared.css">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../favicon-192.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Connect24">
+
+<style>
+    html.d-pending body { visibility: hidden; opacity: 0; background: #f7f7f5; }
+    html.d-ready   body { visibility: visible; opacity: 1; transition: opacity 0.18s ease-out; }
+
+    /* ============================================================
+     *  TRAFFIC PAGE — SELF-CONTAINED STYLES
+     * ============================================================ */
+
+    /* Top Domains */
+    .t-domain-row {
+        display: grid;
+        grid-template-columns: 1fr 90px 110px 2fr;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line, #e6e6e0);
+    }
+    .t-domain-row:last-child { border-bottom: none; }
+
+    .t-domain-name {
+        font-family: 'SF Mono', Consolas, monospace;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink, #111);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .t-domain-name small {
+        display: block;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--ink-3, #6b6b6b);
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .t-domain-hits {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink, #111);
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .t-domain-cat {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .t-domain-bar {
+        height: 8px;
+        background: var(--cream-2, #ebebe5);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+    }
+    .t-domain-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #b45309, #d97706);
+        border-radius: 4px;
+        transition: width 0.35s ease-out;
+    }
+
+    /* Category tags */
+    .t-cat {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+    .t-cat-streaming   { background: #fde8d0; color: #b45309; }
+    .t-cat-social      { background: #e0e7ff; color: #3730a3; }
+    .t-cat-ads         { background: #f5dada; color: #800020; }
+    .t-cat-updates     { background: #d1fae5; color: #065f46; }
+    .t-cat-messaging   { background: #dbeafe; color: #1e40af; }
+    .t-cat-cloud       { background: #e4e4e4; color: #2b2b2b; }
+    .t-cat-shopping    { background: #fce7f3; color: #9f1239; }
+    .t-cat-news        { background: #fef3c7; color: #92400e; }
+    .t-cat-other       { background: #f1f1ee; color: #6b6b6b; }
+
+    .t-empty {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--ink-3, #6b6b6b);
+    }
+    .t-empty svg {
+        width: 40px;
+        height: 40px;
+        fill: var(--line-strong, #c4c4c4);
+        margin-bottom: 12px;
+    }
+    .t-empty h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-2, #333);
+        margin: 0 0 6px;
+    }
+    .t-empty p {
+        font-size: 12.5px;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Anomaly Flags */
+    .t-anomaly-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .t-anomaly {
+        display: flex;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 10px;
+        background: var(--cream-2, #ebebe5);
+        border-left: 4px solid #b45309;
+    }
+    .t-anomaly.sev-high   { border-left-color: #800020; background: #fdf3f3; }
+    .t-anomaly.sev-medium { border-left-color: #b45309; background: #fdf5ed; }
+    .t-anomaly.sev-low    { border-left-color: #a0703a; background: #fbf8f2; }
+
+    .t-anomaly-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.05);
+        flex-shrink: 0;
+    }
+    .t-anomaly.sev-high   .t-anomaly-icon { background: rgba(128,0,32,0.10); }
+    .t-anomaly.sev-medium .t-anomaly-icon { background: rgba(180,83,9,0.10); }
+    .t-anomaly.sev-low    .t-anomaly-icon { background: rgba(160,112,58,0.10); }
+    .t-anomaly-icon svg { width: 18px; height: 18px; }
+    .t-anomaly.sev-high   .t-anomaly-icon svg { fill: #800020; }
+    .t-anomaly.sev-medium .t-anomaly-icon svg { fill: #b45309; }
+    .t-anomaly.sev-low    .t-anomaly-icon svg { fill: #a0703a; }
+
+    .t-anomaly-body { flex: 1; min-width: 0; }
+
+    .t-anomaly-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--ink, #111);
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .t-anomaly-flags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+    .t-flag {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .t-flag.multi-mac       { background: #f5dada; color: #800020; }
+    .t-flag.multi-ip        { background: #fde8d0; color: #b45309; }
+    .t-flag.rapid-reconnect { background: #e4e4e4; color: #2b2b2b; }
+    .t-flag.data-spike      { background: #f5dada; color: #800020; }
+
+    .t-anomaly-meta {
+        font-size: 12px;
+        color: var(--ink-3, #6b6b6b);
+        line-height: 1.5;
+    }
+    .t-anomaly-meta strong {
+        color: var(--ink-2, #333);
+        font-weight: 600;
+    }
+
+    /* ============================================================
+     *  TALKERS + BEHAVIOR TABLES
+     * ============================================================ */
+    .t-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+    .t-table thead th {
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-3, #6b6b6b);
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line, #e6e6e0);
+    }
+    .t-table thead th.right { text-align: right; }
+    .t-table tbody td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line, #e6e6e0);
+        color: var(--ink, #111);
+        vertical-align: middle;
+    }
+    .t-table tbody tr:last-child td { border-bottom: none; }
+    .t-table tbody tr:hover { background: rgba(0,0,0,0.015); }
+
+    .t-table .t-code {
+        font-family: 'SF Mono', Consolas, monospace;
+        font-size: 12.5px;
+        font-weight: 600;
+    }
+
+    .t-table .t-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+    }
+
+    .t-table .t-rank {
+        width: 36px;
+        font-weight: 700;
+        color: var(--ink-3, #6b6b6b);
+        font-variant-numeric: tabular-nums;
+    }
+    .t-table .t-rank.gold   { color: #b45309; }
+    .t-table .t-rank.silver { color: #6b6b6b; }
+    .t-table .t-rank.bronze { color: #92400e; }
+
+    .t-flag-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-right: 4px;
+    }
+    .t-flag-pill.heavy-download { background: #fde8d0; color: #b45309; }
+    .t-flag-pill.torrent-like   { background: #f5dada; color: #800020; }
+    .t-flag-pill.shared-device  { background: #e4e4e4; color: #2b2b2b; }
+
+    .t-severity-bar {
+        display: inline-block;
+        width: 6px;
+        height: 20px;
+        border-radius: 3px;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+    .t-severity-bar.high   { background: #800020; }
+    .t-severity-bar.medium { background: #b45309; }
+    .t-severity-bar.low    { background: #a0703a; }
+
+    /* Blocklist Manager */
+    .t-block-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+    }
+
+    .t-block-card {
+        border: 1.5px solid var(--line, #e6e6e0);
+        border-radius: 12px;
+        padding: 18px;
+        background: var(--cream, #fafaf7);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .t-block-card:hover {
+        border-color: var(--line-strong, #c4c4c4);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    }
+
+    .t-block-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .t-block-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .t-block-icon svg { width: 20px; height: 20px; }
+    .t-block-icon.adult   { background: rgba(128,0,32,0.10); }
+    .t-block-icon.adult svg   { fill: #800020; }
+    .t-block-icon.malware { background: rgba(163,46,44,0.10); }
+    .t-block-icon.malware svg { fill: #a32e2c; }
+    .t-block-icon.social  { background: rgba(180,83,9,0.10); }
+    .t-block-icon.social svg  { fill: #b45309; }
+
+    .t-block-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--ink, #111);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .t-block-sub {
+        font-size: 11.5px;
+        color: var(--ink-3, #6b6b6b);
+        margin-top: 2px;
+    }
+
+    /* Status dot: applied → blinking green; cleared → solid red */
+    .t-status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        vertical-align: middle;
+    }
+    .t-status-dot.on {
+        background: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34,197,94,0.20);
+        animation: t-pulse 1.4s ease-in-out infinite;
+    }
+    .t-status-dot.off {
+        background: #dc2626;
+        box-shadow: 0 0 0 3px rgba(220,38,38,0.15);
+    }
+
+    @keyframes t-pulse {
+        0%   { opacity: 1;   box-shadow: 0 0 0 3px rgba(34,197,94,0.20); }
+        50%  { opacity: 0.45; box-shadow: 0 0 0 6px rgba(34,197,94,0.05); }
+        100% { opacity: 1;   box-shadow: 0 0 0 3px rgba(34,197,94,0.20); }
+    }
+
+    .t-block-stats {
+        font-size: 13px;
+        color: var(--ink-2, #333);
+        font-variant-numeric: tabular-nums;
+        padding: 10px 0;
+        border-top: 1px solid var(--line, #e6e6e0);
+        border-bottom: 1px solid var(--line, #e6e6e0);
+        line-height: 1.6;
+    }
+    .t-block-stats strong {
+        color: var(--ink, #111);
+        font-weight: 700;
+    }
+    .t-block-stats .t-block-live {
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+    .t-block-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: auto;
+    }
+    .t-block-actions .d-btn {
+        flex: 1;
+        justify-content: center;
+        font-size: 12.5px;
+        padding: 8px 12px;
+    }
+
+    /* Inline spinner for Apply/Clear buttons */
+    @keyframes t-spin { to { transform: rotate(360deg); } }
+    .t-spin {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(255,255,255,0.35);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: t-spin 0.7s linear infinite;
+        vertical-align: middle;
+        margin-right: 4px;
+    }
+
+    @media (max-width: 720px) {
+        .t-domain-row {
+            grid-template-columns: 1fr 60px;
+            grid-template-areas:
+                "name hits"
+                "cat  cat"
+                "bar  bar";
+            row-gap: 8px;
+        }
+        .t-domain-name { grid-area: name; }
+        .t-domain-hits { grid-area: hits; }
+        .t-domain-cat  { grid-area: cat; }
+        .t-domain-bar  { grid-area: bar; }
+    }
+</style>
+<script>
+    document.documentElement.classList.add("d-pending");
+</script>
+</head>
+<body>
+
+<div class="d">
+    <div class="d-overlay" id="overlay"></div>
+
+    <div class="d-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="d-side" id="sidebar">
+            <div class="d-brand">
+                <div class="d-brand-mark">24</div>
+                <div class="d-brand-text">
+                    <span class="d-brand-name">Connect24</span>
+                    <span class="d-brand-sub">Hotspot Manager</span>
+                </div>
+            </div>
+
+            <nav class="d-nav">
+                <span class="d-nav-label">Overview</span>
+
+                <a class="d-nav-link" href="dashboard.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+
+                <a class="d-nav-link" href="vouchers.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+                    Vouchers
+                    <span class="d-nav-badge" id="navVouchersBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="sessions.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    Sessions
+                    <span class="d-nav-badge" id="navSessionsBadge">0</span>
+                </a>
+
+                <a class="d-nav-link active" href="traffic.html" aria-current="page">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Traffic
+                </a>
+
+                <span class="d-nav-label">Configuration</span>
+
+                <a class="d-nav-link" href="profiles.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    Profiles
+                    <span class="d-nav-badge" id="navProfilesBadge">0</span>
+                </a>
+
+                <a class="d-nav-link" href="settings.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.4a.5.5 0 0 0-.6-.2l-2.5 1c-.5-.4-1.1-.7-1.7-.9l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6c-.6.2-1.2.5-1.7.9l-2.5-1a.5.5 0 0 0-.6.2l-2 3.4a.5.5 0 0 0 .1.6L3 11a7.9 7.9 0 0 0-.1 1c0 .3 0 .7.1 1l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.4c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7.9l.4 2.6c0 .2.2.4.5.4h4c.2 0 .4-.2.5-.4l.4-2.6c.6-.2 1.2-.5 1.7-.9l2.5 1c.2.1.5 0 .6-.2l2-3.4a.5.5 0 0 0-.1-.6L19.4 13zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="d-side-plan">
+                <div class="d-side-plan-head">
+                    <span class="d-side-plan-badge">FREE</span>
+                    <span class="d-side-plan-routers">1 of 1 router</span>
+                </div>
+                <div class="d-side-plan-bar">
+                    <div class="d-side-plan-fill" style="width:100%;"></div>
+                </div>
+                <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
+                    Upgrade to Pro →
+                </a>
+            </div>
+
+            <div class="d-side-foot">
+                <div class="d-user">
+                    <div class="d-user-avatar" id="userAvatar">V</div>
+                    <div class="d-user-info">
+                        <div class="d-user-name" id="userName">Loading…</div>
+                        <div class="d-user-role">Administrator</div>
+                    </div>
+                </div>
+                <a class="d-logout" href="../logout.html">
+                    <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                    Log out
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="d-main">
+            <header class="d-topbar">
+                <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                    <button class="d-menu-btn" id="menuBtn" aria-label="Open menu">
+                        <svg viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+                    </button>
+                    <div class="d-topbar-title">
+                        <div class="d-topbar-eyebrow">
+                            <span class="d-topbar-eyebrow-dot"></span>
+                            Connect24 Hotspot Manager
+                            <span class="d-topbar-version">v1.0.0</span>
+                        </div>
+                        <h1>Traffic</h1>
+                        <p>Domain-level insight and abuse detection</p>
+                    </div>
+                </div>
+
+                <div class="d-topbar-actions">
+                    <div class="d-live on" id="livePill">
+                        <span class="d-live-dot"></span>
+                        <span id="liveText">Live · 15s</span>
+                    </div>
+
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
+                    </button>
+
+                    <button class="d-refresh" id="refreshBtn">
+                        <svg class="d-refresh-icon" viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="d-page">
+
+                <!-- TOP DOMAINS -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+                            Top Domains
+                            <span class="d-panel-sub" id="topDomainsSub">Loading…</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <select class="d-select" id="domainLimit" style="height:34px; font-size:12.5px;">
+                                <option value="10">Top 10</option>
+                                <option value="25" selected>Top 25</option>
+                                <option value="50">Top 50</option>
+                                <option value="100">Top 100</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div id="topDomainsBody">
+                            <div class="t-empty">
+                                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2z"/></svg>
+                                <h3>Loading domain data…</h3>
+                                <p>Reading DNS cache and log entries from the router.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ANOMALY FLAGS -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                            Anomaly Flags
+                            <span class="d-panel-sub" id="anomaliesSub">Scanning…</span>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div id="anomaliesBody" class="t-anomaly-list">
+                            <div class="t-empty">
+                                <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                <h3>Scanning sessions…</h3>
+                                <p>Checking active connections for suspicious patterns.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TOP TALKERS — Option A -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            Top Talkers
+                            <span class="d-panel-sub" id="talkersSub">Loading…</span>
+                        </div>
+                    </div>
+                    <div class="d-table-wrap">
+                        <table class="t-table">
+                            <thead>
+                                <tr>
+                                    <th class="t-rank">#</th>
+                                    <th>Voucher</th>
+                                    <th class="right">Data used</th>
+                                    <th class="right">Sessions</th>
+                                    <th class="right">Uptime</th>
+                                    <th class="right">Rate</th>
+                                    <th class="right">IPs</th>
+                                </tr>
+                            </thead>
+                            <tbody id="talkersBody">
+                                <tr><td colspan="7"><div class="t-empty">
+                                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3z"/></svg>
+                                    <h3>Loading talkers…</h3>
+                                    <p>Ranking active sessions by bandwidth.</p>
+                                </div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- BEHAVIOR FLAGS — Option D -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                            Behavior Flags
+                            <span class="d-panel-sub" id="behaviorSub">Scanning…</span>
+                        </div>
+                    </div>
+                    <div class="d-table-wrap">
+                        <table class="t-table">
+                            <thead>
+                                <tr>
+                                    <th>Voucher</th>
+                                    <th>Flags</th>
+                                    <th class="right">Data used</th>
+                                    <th class="right">Sessions</th>
+                                    <th class="right">IPs</th>
+                                    <th class="right">Uptime</th>
+                                </tr>
+                            </thead>
+                            <tbody id="behaviorBody">
+                                <tr><td colspan="6"><div class="t-empty">
+                                    <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <h3>Scanning behavior…</h3>
+                                    <p>Checking for abuse patterns.</p>
+                                </div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- BLOCKLIST MANAGER -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/></svg>
+                            Blocklist Manager
+                            <span class="d-panel-sub">Push blocklists to the router as DNS static entries</span>
+                        </div>
+                    </div>
+                    <div class="d-panel-body">
+                        <div class="t-block-grid" id="blockGrid">
+                            <div class="t-empty" style="grid-column: 1/-1;">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                <h3>Loading blocklist status…</h3>
+                                <p>Checking local cache and router state.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="d-footer">
+                    <div class="d-footer-left">
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
+                        <span class="d-footer-sep">·</span>
+                        <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
+                    </div>
+                    <div class="d-footer-right">
+                        <span class="d-footer-status">
+                            <span class="d-status-dot" id="footerApiStatus"></span>
+                            <span id="footerApiText">API: Connected</span>
+                        </span>
+                        <span class="d-footer-sep">·</span>
+                        <span>v1.0.0</span>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- COMMAND PALETTE -->
+<div class="d-cmdk" id="cmdk" hidden>
+    <div class="d-cmdk-backdrop" data-cmdk-close></div>
+    <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="d-cmdk-input-wrap">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
+            <kbd>ESC</kbd>
+        </div>
+        <div class="d-cmdk-results" id="cmdkResults"></div>
+        <div class="d-cmdk-foot">
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
+            <span><kbd>ESC</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script src="../shared.js?v=1.0.1"></script>
+<script>
+    const {
+        escapeHtml, formatBytes, toast, $, qsa
+    } = window.appApi;
+
+    window.__autoRefreshUsesCustom = true;
+
+    let domainLimit = 25;
+    let refreshTimer = null;
+    let badgeTimer = null;
+    let busy = false;
+
+    /* ============================================================
+     *  BADGES
+     * ============================================================ */
+    async function refreshBadges() {
+        try {
+            const [vRes, sRes, pRes] = await Promise.all([
+                fetch("../api.php?action=vouchers", { credentials: "same-origin", cache: "no-store" }),
+                fetch("../api.php?action=sessions", { credentials: "same-origin", cache: "no-store" }),
+                fetch("../api.php?action=profile-details", { credentials: "same-origin", cache: "no-store" })
+            ]);
+
+            if (vRes.ok) {
+                const d = await vRes.json();
+                if (d && d.success) {
+                    const el = $("navVouchersBadge");
+                    if (el) el.textContent = (d.vouchers || []).length;
+                }
+            }
+            if (sRes.ok) {
+                const d = await sRes.json();
+                if (d && d.success) {
+                    const el = $("navSessionsBadge");
+                    if (el) el.textContent = (d.sessions || []).length;
+                }
+            }
+            if (pRes.ok) {
+                const d = await pRes.json();
+                if (d && d.success) {
+                    const HIDDEN = new Set(["default", "none", ""]);
+                    const seen = new Set();
+                    for (const p of (d.profiles || [])) {
+                        const name = String(typeof p === "string" ? p : (p.name || "")).trim().toLowerCase();
+                        if (HIDDEN.has(name)) continue;
+                        seen.add(name);
+                    }
+                    const el = $("navProfilesBadge");
+                    if (el) el.textContent = seen.size;
+                }
+            }
+        } catch (_) {}
+    }
+
+    /* ============================================================
+     *  TOP DOMAINS
+     * ============================================================ */
+    async function loadTopDomains() {
+        const body = $("topDomainsBody");
+        const sub  = $("topDomainsSub");
+
+        try {
+            const res = await fetch(
+                `../api.php?action=top-domains&limit=${domainLimit}`,
+                { credentials: "same-origin", cache: "no-store" }
+            );
+
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            const domains = Array.isArray(data.domains) ? data.domains : [];
+            const sampled = data.sampled || 0;
+
+            if (domains.length === 0) {
+                body.innerHTML = `
+                    <div class="t-empty">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2z"/></svg>
+                        <h3>No domain data yet</h3>
+                        <p>Enable DNS logging on the router to populate this panel.<br>
+                           See the setup notes in <strong>Settings</strong>.</p>
+                    </div>`;
+                sub.textContent = "0 domains · 0 sampled";
+                return;
+            }
+
+            const maxHits = Math.max(...domains.map(d => d.hits || 0), 1);
+
+            body.innerHTML = domains.map(d => {
+                const pct = Math.max(2, Math.round((d.hits / maxHits) * 100));
+                const subs = (d.subdomains || []).slice(0, 3).join(", ");
+                const subsHtml = subs ? `<small>${escapeHtml(subs)}</small>` : "";
+                const catRaw = d.category || "Other";
+                const catSlug = catRaw.toLowerCase()
+                    .replace(/\s*&\s*/g, "")
+                    .replace(/\s+/g, "");
+                return `
+                    <div class="t-domain-row">
+                        <div class="t-domain-name">
+                            ${escapeHtml(d.domain)}
+                            ${subsHtml}
+                        </div>
+                        <div class="t-domain-hits">${d.hits.toLocaleString()}</div>
+                        <div class="t-domain-cat">
+                            <span class="t-cat t-cat-${catSlug}">${escapeHtml(catRaw)}</span>
+                        </div>
+                        <div class="t-domain-bar">
+                            <div class="t-domain-bar-fill" style="width:${pct}%"></div>
+                        </div>
+                    </div>`;
+            }).join("");
+
+            sub.textContent = `${domains.length} domains · ${sampled.toLocaleString()} records sampled · ${data.source || "?"}`;
+        } catch (err) {
+            body.innerHTML = `
+                <div class="t-empty">
+                    <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                    <h3>Could not load domains</h3>
+                    <p>${escapeHtml(err.message || "Unknown error")}</p>
+                </div>`;
+            sub.textContent = "Error";
+        }
+    }
+
+    /* ============================================================
+     *  ANOMALIES
+     * ============================================================ */
+    function severityFor(flags) {
+        if (flags.includes("data-spike") || flags.includes("multi-mac")) return "high";
+        if (flags.includes("multi-ip") || flags.includes("rapid-reconnect")) return "medium";
+        return "low";
+    }
+
+    function flagLabel(flag) {
+        return {
+            "multi-mac":       "Multiple MACs",
+            "multi-ip":        "Multiple IPs",
+            "rapid-reconnect": "Rapid Reconnect",
+            "data-spike":      "Data Spike",
+        }[flag] || flag;
+    }
+
+    async function loadAnomalies() {
+        const body = $("anomaliesBody");
+        const sub  = $("anomaliesSub");
+
+        try {
+            const res = await fetch("../api.php?action=anomalies", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            const anomalies = Array.isArray(data.anomalies) ? data.anomalies : [];
+            const scanned = data.scanned || 0;
+
+            if (anomalies.length === 0) {
+                body.innerHTML = `
+                    <div class="t-empty">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <h3>All clear</h3>
+                        <p>No suspicious patterns detected in ${scanned} active session${scanned === 1 ? "" : "s"}.</p>
+                    </div>`;
+                sub.textContent = `0 flagged · ${scanned} session${scanned === 1 ? "" : "s"} scanned`;
+                return;
+            }
+
+            body.innerHTML = anomalies.map(a => {
+                const sev = severityFor(a.flags || []);
+                const icon = sev === "high"
+                    ? "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+                    : "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z";
+
+                const flagsHtml = (a.flags || []).map(f =>
+                    `<span class="t-flag ${escapeHtml(f)}">${escapeHtml(flagLabel(f))}</span>`
+                ).join("");
+
+                const macs = (a.macs || []).length;
+                const ips  = (a.ips  || []).length;
+                const bytes = formatBytes(a.bytes || 0);
+
+                return `
+                    <div class="t-anomaly sev-${sev}">
+                        <div class="t-anomaly-icon">
+                            <svg viewBox="0 0 24 24"><path d="${icon}"/></svg>
+                        </div>
+                        <div class="t-anomaly-body">
+                            <div class="t-anomaly-title">${escapeHtml(a.user || "unknown")}</div>
+                            <div class="t-anomaly-flags">${flagsHtml}</div>
+                            <div class="t-anomaly-meta">
+                                <strong>${macs}</strong> MAC${macs === 1 ? "" : "s"} ·
+                                <strong>${ips}</strong> IP${ips === 1 ? "" : "s"} ·
+                                <strong>${a.sessions || 0}</strong> session${a.sessions === 1 ? "" : "s"} ·
+                                <strong>${bytes}</strong> transferred
+                            </div>
+                        </div>
+                    </div>`;
+            }).join("");
+
+            sub.textContent = `${anomalies.length} flagged · ${scanned} session${scanned === 1 ? "" : "s"} scanned`;
+        } catch (err) {
+            body.innerHTML = `
+                <div class="t-empty">
+                    <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                    <h3>Could not scan sessions</h3>
+                    <p>${escapeHtml(err.message || "Unknown error")}</p>
+                </div>`;
+            sub.textContent = "Error";
+        }
+    }
+
+    /* ============================================================
+     *  TOP TALKERS — Option A
+     * ============================================================ */
+    async function loadTopTalkers() {
+        const body = $("talkersBody");
+        const sub  = $("talkersSub");
+        try {
+            const res = await fetch("../api.php?action=top-talkers&limit=25", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) { window.location.replace("../index.html"); return; }
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+
+            const list = Array.isArray(data.talkers) ? data.talkers : [];
+            if (list.length === 0) {
+                body.innerHTML = `<tr><td colspan="7"><div class="t-empty">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <h3>No active sessions</h3>
+                    <p>Nobody is connected right now.</p>
+                </div></td></tr>`;
+                sub.textContent = "0 talkers";
+                return;
+            }
+
+            body.innerHTML = list.map((t, i) => {
+                const rankCls = i === 0 ? "gold" : i === 1 ? "silver" : i === 2 ? "bronze" : "";
+                const rateLabel = formatBytes(t.rate_bps || 0) + "/s";
+                return `
+                    <tr>
+                        <td class="t-rank ${rankCls}">${i + 1}</td>
+                        <td><span class="t-code">${escapeHtml(t.user || "—")}</span></td>
+                        <td class="t-num">${escapeHtml(formatBytes(t.bytes || 0))}</td>
+                        <td class="t-num">${t.sessions || 0}</td>
+                        <td class="t-num">${escapeHtml(t.uptime_human || "0s")}</td>
+                        <td class="t-num">${escapeHtml(rateLabel)}</td>
+                        <td class="t-num">${(t.ips || []).length}</td>
+                    </tr>`;
+            }).join("");
+
+            sub.textContent = `${list.length} talker${list.length === 1 ? "" : "s"} · ${data.scanned || 0} session${(data.scanned || 0) === 1 ? "" : "s"}`;
+        } catch (err) {
+            body.innerHTML = `<tr><td colspan="7"><div class="t-empty">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <h3>Could not rank talkers</h3>
+                <p>${escapeHtml(err.message || "Unknown error")}</p>
+            </div></td></tr>`;
+            sub.textContent = "Error";
+        }
+    }
+
+    /* ============================================================
+     *  BEHAVIOR FLAGS — Option D
+     * ============================================================ */
+    async function loadBehaviorFlags() {
+        const body = $("behaviorBody");
+        const sub  = $("behaviorSub");
+        try {
+            const res = await fetch("../api.php?action=behavior-flags", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) { window.location.replace("../index.html"); return; }
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+
+            const list = Array.isArray(data.flagged) ? data.flagged : [];
+            if (list.length === 0) {
+                body.innerHTML = `<tr><td colspan="6"><div class="t-empty">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    <h3>No flags raised</h3>
+                    <p>All ${data.total || 0} active voucher${(data.total || 0) === 1 ? "" : "s"} look clean.</p>
+                </div></td></tr>`;
+                sub.textContent = `0 flagged · ${data.total || 0} scanned`;
+                return;
+            }
+
+            function behaviorSeverity(flags) {
+                if (flags.includes("torrent-like")) return "high";
+                if (flags.includes("heavy-download")) return "medium";
+                return "low";
+            }
+            function behaviorLabel(f) {
+                return {
+                    "heavy-download": "Heavy Download",
+                    "torrent-like":   "Torrent-Like",
+                    "shared-device":  "Shared Device",
+                }[f] || f;
+            }
+
+            body.innerHTML = list.map(f => {
+                const flags = f.flags || [];
+                const sev = behaviorSeverity(flags);
+                const pills = flags.map(fl =>
+                    `<span class="t-flag-pill ${escapeHtml(fl)}">${escapeHtml(behaviorLabel(fl))}</span>`
+                ).join("");
+                return `
+                    <tr>
+                        <td>
+                            <span class="t-severity-bar ${sev}"></span>
+                            <span class="t-code">${escapeHtml(f.user || "—")}</span>
+                        </td>
+                        <td>${pills}</td>
+                        <td class="t-num">${escapeHtml(formatBytes(f.bytes || 0))}</td>
+                        <td class="t-num">${f.sessions || 0}</td>
+                        <td class="t-num">${f.ip_count || 0}</td>
+                        <td class="t-num">${escapeHtml(f.uptime_human || "0s")}</td>
+                    </tr>`;
+            }).join("");
+
+            sub.textContent = `${list.length} flagged · ${data.total || 0} scanned`;
+        } catch (err) {
+            body.innerHTML = `<tr><td colspan="6"><div class="t-empty">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <h3>Could not scan behavior</h3>
+                <p>${escapeHtml(err.message || "Unknown error")}</p>
+            </div></td></tr>`;
+            sub.textContent = "Error";
+        }
+    }
+
+    /* ============================================================
+     *  BLOCKLIST MANAGER
+     * ============================================================ */
+    const CATEGORY_META = {
+        adult:   { title: "Adult Content", icon: "M12 2 4 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" },
+        malware: { title: "Malware & Scams", icon: "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" },
+        social:  { title: "Social Media",   icon: "M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" },
+    };
+
+    async function loadBlocklistStatus() {
+        const grid = $("blockGrid");
+        try {
+            const res = await fetch("../api.php?action=blocklist-status", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+            renderBlocklist(data.categories || []);
+        } catch (err) {
+            grid.innerHTML = `
+                <div class="t-empty" style="grid-column:1/-1;">
+                    <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                    <h3>Could not load blocklists</h3>
+                    <p>${escapeHtml(err.message || "Unknown error")}</p>
+                </div>`;
+        }
+    }
+
+    function renderBlocklist(categories) {
+        const grid = $("blockGrid");
+        if (!categories || categories.length === 0) {
+            grid.innerHTML = `
+                <div class="t-empty" style="grid-column:1/-1;">
+                    <h3>No blocklists available</h3>
+                </div>`;
+            return;
+        }
+
+        grid.innerHTML = categories.map(c => {
+            const meta = CATEGORY_META[c.category] || { title: c.category, icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" };
+            const cached = c.cached ? "Cached locally" : "Not yet downloaded";
+            const applied = !!c.applied;
+            const liveCount = c.appliedCount || 0;
+
+            const dotClass = applied ? "on" : "off";
+            const dotTitle = applied
+                ? `Applied — ${liveCount} rule${liveCount === 1 ? "" : "s"} live on router`
+                : "Not applied";
+
+            return `
+                <div class="t-block-card">
+                    <div class="t-block-head">
+                        <div class="t-block-icon ${escapeHtml(c.category)}">
+                            <svg viewBox="0 0 24 24"><path d="${meta.icon}"/></svg>
+                        </div>
+                        <div style="flex:1; min-width:0;">
+                            <div class="t-block-title">
+                                <span>${escapeHtml(meta.title)}</span>
+                                <span class="t-status-dot ${dotClass}" title="${escapeHtml(dotTitle)}"></span>
+                            </div>
+                            <div class="t-block-sub">${escapeHtml(cached)}</div>
+                        </div>
+                    </div>
+                    <div class="t-block-stats">
+                        <strong>${(c.entries || 0).toLocaleString()}</strong> entries in list
+                        ${applied
+                            ? `<br><span class="t-block-live">${liveCount.toLocaleString()} rule${liveCount === 1 ? "" : "s"} live on router</span>`
+                            : ""}
+                    </div>
+                    <div class="t-block-actions">
+                        <button class="d-btn primary" data-action="apply" data-cat="${escapeHtml(c.category)}">
+                            <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                            Apply
+                        </button>
+                        <button class="d-btn danger" data-action="clear" data-cat="${escapeHtml(c.category)}">
+                            <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>`;
+        }).join("");
+
+        grid.querySelectorAll("[data-action]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const cat = btn.dataset.cat;
+                const act = btn.dataset.action;
+                if (act === "apply") applyBlocklist(cat, btn);
+                else if (act === "clear") clearBlocklist(cat, btn);
+            });
+        });
+    }
+
+    async function applyBlocklist(category, btn) {
+        if (busy) return;
+        if (!confirm(`Apply the "${category}" blocklist to the router?\n\nThis will add up to 500 DNS static entries. Existing C24-BLOCK entries for this category will be replaced.`)) return;
+
+        busy = true;
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="t-spin"></span> Applying…`;
+
+        try {
+            const res = await fetch("../api.php?action=apply-blocklist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({ category })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+
+            toast("ok", "Blocklist applied",
+                `${data.applied} entries added · ${data.removed || 0} old entries removed.`, 5000);
+
+            await loadBlocklistStatus();
+        } catch (err) {
+            toast("error", "Apply failed", err.message || "Unknown error", 6000);
+        } finally {
+            busy = false;
+            if (document.body.contains(btn)) {
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        }
+    }
+
+    async function clearBlocklist(category, btn) {
+        if (busy) return;
+        if (!confirm(`Remove all C24-BLOCK "${category}" entries from the router?\n\nUsers will regain access to those sites.`)) return;
+
+        busy = true;
+        const original = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `Clearing…`;
+
+        try {
+            const res = await fetch("../api.php?action=clear-blocklist", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({ category })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
+
+            toast("ok", "Blocklist cleared",
+                `${data.removed} entries removed from the router.`, 4000);
+
+            await loadBlocklistStatus();
+        } catch (err) {
+            toast("error", "Clear failed", err.message || "Unknown error", 6000);
+        } finally {
+            busy = false;
+            if (document.body.contains(btn)) {
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        }
+    }
+
+    /* ============================================================
+     *  MASTER REFRESH
+     * ============================================================ */
+    async function refreshAll(opts = {}) {
+        const { manual = false } = opts;
+        const btn = $("refreshBtn");
+        if (manual && btn) {
+            btn.classList.add("loading");
+            btn.disabled = true;
+        }
+
+        await Promise.all([
+            loadTopDomains(),
+            loadAnomalies(),
+            loadTopTalkers(),
+            loadBehaviorFlags(),
+            loadBlocklistStatus(),
+            refreshBadges()
+        ]);
+
+        if (manual && btn) {
+            btn.classList.remove("loading");
+            btn.disabled = false;
+            toast("ok", "Refreshed", "Traffic data reloaded.", 2000);
+        }
+    }
+
+    /* ============================================================
+     *  BOOT
+     * ============================================================ */
+    window.onAppReady = () => {
+        document.documentElement.classList.remove("d-pending");
+        document.documentElement.classList.add("d-ready");
+
+        $("domainLimit").addEventListener("change", (e) => {
+            domainLimit = parseInt(e.target.value, 10) || 25;
+            loadTopDomains();
+        });
+
+        $("refreshBtn").addEventListener("click", () => refreshAll({ manual: true }));
+
+        refreshAll();
+
+        // Live refresh every 15s — the four data panels
+        if (refreshTimer) clearInterval(refreshTimer);
+        refreshTimer = setInterval(() => {
+            if (document.hidden || busy) return;
+            loadTopDomains();
+            loadAnomalies();
+            loadTopTalkers();
+            loadBehaviorFlags();
+        }, 15000);
+
+        // Slower blocklist status — every 30s
+        setInterval(() => {
+            if (document.hidden || busy) return;
+            loadBlocklistStatus();
+        }, 30000);
+
+        // Badge refresh every 30s
+        if (badgeTimer) clearInterval(badgeTimer);
+        badgeTimer = setInterval(() => {
+            if (document.hidden) return;
+            refreshBadges();
+        }, 30000);
+
+        // Reload everything when the tab comes back
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                loadTopDomains();
+                loadAnomalies();
+                loadTopTalkers();
+                loadBehaviorFlags();
+                loadBlocklistStatus();
+                refreshBadges();
+            }
+        });
+    };
+
+    window.onRefreshRequested = async (opts = {}) => {
+        await refreshAll({ manual: opts.manual === true });
+    };
+
+    window.onVouchersLoaded = () => { /* sidebar badges handled above */ };
+</script>
+</body>
+</html>

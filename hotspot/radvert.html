@@ -1,0 +1,193 @@
+<html>
+<head>
+<meta http-equiv="refresh" content="2; url=$(link-orig)">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<title>Advertisement • Connect 24</title>
+
+
+<!-- Favicons -->
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e5c9c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<style>
+    @import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700,800,900");
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+        font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: #0a0a0a;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #fff;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(70px);
+        opacity: 0.55;
+        pointer-events: none;
+        z-index: 0;
+    }
+    .orb-1 {
+        width: 420px; height: 420px;
+        background: linear-gradient(135deg, #00c88a, #00ffaa);
+        top: -160px; left: -140px;
+        animation: float1 14s ease-in-out infinite;
+    }
+    .orb-2 {
+        width: 380px; height: 380px;
+        background: linear-gradient(135deg, #00d4ff, #00ffaa);
+        bottom: -140px; right: -120px;
+        animation: float2 16s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%      { transform: translate(40px, 50px) scale(1.1); }
+    }
+    @keyframes float2 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%      { transform: translate(-50px, -40px) scale(1.08); }
+    }
+
+    .app {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 380px;
+        background: linear-gradient(160deg,
+            rgba(18, 24, 32, 0.92) 0%,
+            rgba(10, 14, 20, 0.95) 100%);
+        border: 1px solid rgba(0, 255, 170, 0.35);
+        border-radius: 22px;
+        padding: 46px 32px 38px;
+        text-align: center;
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow:
+            0 20px 80px rgba(0, 0, 0, 0.7),
+            0 0 60px rgba(0, 255, 170, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+    }
+
+    .app::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #00ffaa, #00d4ff, #00ffaa);
+        background-size: 200% 100%;
+        animation: shimmer 3s linear infinite;
+        box-shadow: 0 0 20px rgba(0, 255, 170, 0.6);
+    }
+
+    @keyframes shimmer {
+        0%   { background-position: 0% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(50px) scale(0.96); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 24px;
+        border-radius: 50%;
+        border: 3px solid rgba(0, 255, 170, 0.15);
+        border-top-color: #00ffaa;
+        animation: spin 1s linear infinite;
+        box-shadow: 0 0 30px rgba(0, 255, 170, 0.2);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    h1 {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        background: linear-gradient(135deg, #00ffaa 0%, #00d4ff 60%, #00ffaa 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 2px 14px rgba(0, 255, 170, 0.5));
+    }
+
+    .info {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.7;
+        letter-spacing: 0.5px;
+    }
+
+    .info a {
+        color: #00ffaa;
+        font-weight: 800;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 255, 170, 0.4);
+        transition: all 0.2s;
+    }
+
+    .info a:hover {
+        border-bottom-color: #00ffaa;
+        text-shadow: 0 0 12px rgba(0, 255, 170, 0.6);
+    }
+</style>
+<script>
+    var popup = '';
+    function openOrig() {
+        if (window.focus) popup.focus();
+        location.href = unescape('$(link-orig-esc)');
+    }
+    function openAd() {
+        location.href = unescape('$(link-redirect-esc)');
+    }
+    function openAdvert() {
+        if (window.name != 'hotspot_advert') {
+            popup = open('$(link-redirect)', 'hotspot_advert', '');
+            setTimeout("openOrig()", 1000);
+            return;
+        }
+        setTimeout("openAd()", 1000);
+    }
+</script>
+</head>
+<body onLoad="openAdvert()">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="app">
+        <div class="spinner"></div>
+        <h1>Advertisement</h1>
+        <p class="info">
+            If nothing happens, open the
+            <a href="$(link-redirect)" target="hotspot_advert">advertisement</a> manually.
+        </p>
+    </div>
+</body>
+</html>

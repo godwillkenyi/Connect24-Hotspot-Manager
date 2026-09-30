@@ -8,17 +8,17 @@
 
 A self-hosted admin panel for MikroTik hotspot operators. Generate voucher
 batches, track live sessions, manage user profiles, and purge expired
-vouchers â€” all from one clean, keyboard-first dashboard.
+vouchers — all from one clean, keyboard-first dashboard.
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Commercial-orange.svg)](LICENSE)
 [![PHP](https://img.shields.io/badge/php-%3E%3D8.0-777BB4.svg)](https://www.php.net/)
 [![RouterOS](https://img.shields.io/badge/RouterOS-%3E%3D6.48-2E7D32.svg)](https://mikrotik.com/)
 [![Status](https://img.shields.io/badge/status-stable-success.svg)]()
-[![Lint](https://github.com/Goken-byte/connect24-hotspot-manager/actions/workflows/lint.yml/badge.svg)](https://github.com/Goken-byte/connect24-hotspot-manager/actions/workflows/lint.yml)
+[![Lint](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/actions/workflows/lint.yml/badge.svg)](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/actions/workflows/lint.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Features](#features) Â· [Screenshots](#screenshots) Â· [Quick start](#quick-start) Â· [Docs](docs/) Â· [Demo](#demo-mode) Â· [License](#license)
+[Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Docs](docs/) · [Demo](#demo-mode) · [License](#license)
 
 </div>
 
@@ -27,16 +27,16 @@ vouchers â€” all from one clean, keyboard-first dashboard.
 ## What is Connect24?
 
 Connect24 is a **zero-dependency** admin panel for MikroTik hotspot
-operators. It talks directly to the RouterOS API â€” no database, no
+operators. It talks directly to the RouterOS API — no database, no
 build step, no npm. Point PHP at the `public/` folder and you're running.
 
 It replaces the daily pain of Winbox for hotspot management:
 
-- **Voucher generation** â€” one click, any quantity, any profile
-- **Live dashboard** â€” real-time stats, charts, session bytes
-- **Session control** â€” see who's online, kick individuals or everyone
-- **Profile management** â€” rate limits, timeouts, shared users
-- **Print & export** â€” printable cards and CSV in one click
+- **Voucher generation** — one click, any quantity, any profile
+- **Live dashboard** — real-time stats, charts, session bytes
+- **Session control** — see who's online, kick individuals or everyone
+- **Profile management** — rate limits, timeouts, shared users
+- **Print & export** — printable cards and CSV in one click
 
 Built for hotspot operators who want a modern interface without
 sacrificing the reliability of RouterOS underneath.
@@ -45,27 +45,27 @@ sacrificing the reliability of RouterOS underneath.
 
 ## Screenshots
 
-### Dashboard â€” real-time overview
+### Dashboard — real-time overview
 
 ![Dashboard](docs/screenshots/dashboard.png)
 
-### Vouchers â€” manage, filter, export
+### Vouchers — manage, filter, export
 
 ![Vouchers](docs/screenshots/vouchers.png)
 
-### Generate â€” batch creation with live preview
+### Generate — batch creation with live preview
 
 ![Generate](docs/screenshots/generate.png)
 
-### Sessions â€” live user monitoring
+### Sessions — live user monitoring
 
 ![Sessions](docs/screenshots/sessions.png)
 
-### Profiles â€” hotspot configuration
+### Profiles — hotspot configuration
 
 ![Profiles](docs/screenshots/profiles.png)
 
-### Settings â€” system info and danger zone
+### Settings — system info and danger zone
 
 ![Settings](docs/screenshots/settings.png)
 
@@ -73,53 +73,53 @@ sacrificing the reliability of RouterOS underneath.
 
 ## Features
 
-### ðŸŽŸï¸ Voucher management
+### 🎟️ Voucher management
 
-- Generate batches of 1â€“100 vouchers in a single click
+- Generate batches of 1–100 vouchers in a single click
 - Custom prefix, profile, uptime, price tag, and server
 - Print as branded cards (3-up layout, print-ready)
 - Export any selection to CSV
 - Bulk delete, bulk print, bulk export
 - Copy individual codes with one click
-- Six filtered views: All Â· Active Â· Unused Â· Expired Â· Almost Full Â· Heavy Users
+- Six filtered views: All · Active · Unused · Expired · Almost Full · Heavy Users
 - Live search across code, profile, and price
 - Sortable by code, uptime, or data usage
 
-### ðŸ“Š Live dashboard
+### 📊 Live dashboard
 
 - Animated stat cards (total / active / unused / expired)
 - Real-time bandwidth tracking (bytes-in + bytes-out)
-- Bar chart â€” vouchers by profile
-- Donut chart â€” status breakdown
+- Bar chart — vouchers by profile
+- Donut chart — status breakdown
 - Recent vouchers table
-- Auto-refreshes every 2â€“3 seconds
+- Auto-refreshes every 2–3 seconds
 
-### ðŸ‘¥ Session monitoring
+### 👥 Session monitoring
 
 - Live list of every connected user
 - IP address, MAC, uptime, and data usage per session
 - Per-session disconnect with confirmation
 - Disconnect-all for firmware updates or firewall changes
 - Search by user, IP, or MAC
-- 6-way sort (uptime, bytes, user â€” both directions)
+- 6-way sort (uptime, bytes, user — both directions)
 - Live stat cards (active count, total data, longest session, top user)
 
-### âš™ï¸ Profile management
+### ⚙️ Profile management
 
 - Create profiles with rate limit, shared users, and session timeout
 - System profiles (`default`, `none`) automatically hidden
 - Delete profiles with confirmation
 - Dropdown integration on the Generate page
 
-### ðŸŽ¨ Design
+### 🎨 Design
 
-- **Zero dependencies** â€” pure vanilla JS + PHP, no framework
-- **Dark mode** â€” automatic OS detection + manual toggle
-- **Keyboard-first** â€” âŒ˜K command palette, `g`-shortcuts, full tab nav
-- **Responsive** â€” mobile sidebar, breakpoint-aware charts
-- **Accessible** â€” `:focus-visible` rings, `aria-label` on every icon button
-- **PWA-ready** â€” installable as a standalone app
-- **Branded error pages** â€” 404 and 500 look intentional, not broken
+- **Zero dependencies** — pure vanilla JS + PHP, no framework
+- **Dark mode** — automatic OS detection + manual toggle
+- **Keyboard-first** — ⌘K command palette, `g`-shortcuts, full tab nav
+- **Responsive** — mobile sidebar, breakpoint-aware charts
+- **Accessible** — `:focus-visible` rings, `aria-label` on every icon button
+- **PWA-ready** — installable as a standalone app
+- **Branded error pages** — 404 and 500 look intentional, not broken
 
 ---
 
@@ -128,16 +128,15 @@ sacrificing the reliability of RouterOS underneath.
 ### 1. Get the code
 
 ```bash
-git clone https://github.com/Goken-byte/connect24-hotspot-manager.git
+git clone https://github.com/godwillkenyi/Connect24-Hotspot-Manager.git
 cd connect24
 ```
 
 ### 2. Configure
 
-```bash
+```bash 
 cp .env.example .env
 ```
-
 Edit `.env` and set your router credentials:
 
 ```env
@@ -249,50 +248,50 @@ All configuration lives in `.env`:
 
 ```
 connect24/
-â”œâ”€â”€ README.md
-â”œâ”€â”€ LICENSE
-â”œâ”€â”€ CHANGELOG.md
-â”œâ”€â”€ CONTRIBUTING.md
-â”œâ”€â”€ SECURITY.md
-â”œâ”€â”€ .env.example
-â”œâ”€â”€ .gitignore
-â”‚
-â”œâ”€â”€ .github/
-â”‚   â”œâ”€â”€ ISSUE_TEMPLATE/
-â”‚   â”œâ”€â”€ PULL_REQUEST_TEMPLATE.md
-â”‚   â”œâ”€â”€ FUNDING.yml
-â”‚   â””â”€â”€ workflows/lint.yml
-â”‚
-â”œâ”€â”€ docs/
-â”‚   â”œâ”€â”€ README.md               (docs index)
-â”‚   â”œâ”€â”€ install.md              (setup walkthrough)
-â”‚   â”œâ”€â”€ router-setup.md         (MikroTik API guide)
-â”‚   â”œâ”€â”€ faq.md                  (50+ Q&A)
-â”‚   â”œâ”€â”€ security.md             (threat model)
-â”‚   â””â”€â”€ screenshots/            (6 PNGs)
-â”‚
-â””â”€â”€ public/
-    â”œâ”€â”€ index.html              (login)
-    â”œâ”€â”€ logout.html
-    â”œâ”€â”€ 404.html
-    â”œâ”€â”€ 500.html
-    â”œâ”€â”€ manifest.json           (PWA)
-    â”œâ”€â”€ robots.txt
-    â”œâ”€â”€ favicon.ico
-    â”œâ”€â”€ favicon-32.png
-    â”œâ”€â”€ favicon-192.png
-    â”œâ”€â”€ favicon-512.png
-    â”œâ”€â”€ apple-touch-icon.png
-    â”œâ”€â”€ shared.css              (design tokens + components)
-    â”œâ”€â”€ shared.js               (appApi + hooks + Tiers 1â€“3)
-    â”œâ”€â”€ api.php                 (RouterOS REST proxy)
-    â””â”€â”€ pages/
-        â”œâ”€â”€ dashboard.html
-        â”œâ”€â”€ vouchers.html
-        â”œâ”€â”€ generate.html
-        â”œâ”€â”€ sessions.html
-        â”œâ”€â”€ profiles.html
-        â””â”€â”€ settings.html
+├── README.md
+├── LICENSE
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── .env.example
+├── .gitignore
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── FUNDING.yml
+│   └── workflows/lint.yml
+│
+├── docs/
+│   ├── README.md               (docs index)
+│   ├── install.md              (setup walkthrough)
+│   ├── router-setup.md         (MikroTik API guide)
+│   ├── faq.md                  (50+ Q&A)
+│   ├── security.md             (threat model)
+│   └── screenshots/            (6 PNGs)
+│
+└── public/
+    ├── index.html              (login)
+    ├── logout.html
+    ├── 404.html
+    ├── 500.html
+    ├── manifest.json           (PWA)
+    ├── robots.txt
+    ├── favicon.ico
+    ├── favicon-32.png
+    ├── favicon-192.png
+    ├── favicon-512.png
+    ├── apple-touch-icon.png
+    ├── shared.css              (design tokens + components)
+    ├── shared.js               (appApi + hooks + Tiers 1–3)
+    ├── api.php                 (RouterOS REST proxy)
+    └── pages/
+        ├── dashboard.html
+        ├── vouchers.html
+        ├── generate.html
+        ├── sessions.html
+        ├── profiles.html
+        └── settings.html
 ```
 
 ---
@@ -387,15 +386,15 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 
 **Godwill Kenyi** â€” creator and maintainer
 
-- ðŸ™ GitHub: [@Goken-byte](https://github.com/Goken-byte)
+- ðŸ™ GitHub: [@godwillkenyi](https://github.com/godwillkenyi)
 - ðŸ“§ Email: testapps065@gmail.com
 - ðŸ“ Location: South Sudan
 
 ## Support
 
 - ðŸ“– **Documentation:** [docs/](docs/)
-- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/Goken-byte/connect24-hotspot-manager/issues)
-- ðŸ’¬ **Questions & ideas:** [GitHub Discussions](https://github.com/Goken-byte/connect24-hotspot-manager/discussions)
+- ðŸ› **Bug reports:** [GitHub Issues](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/issues)
+- ðŸ’¬ **Questions & ideas:** [GitHub Discussions](https://github.com/godwillkenyi/Connect24-Hotspot-Manager/discussions)
 - ðŸ“§ **Direct email:** testapps065@gmail.com
 - ðŸ”’ **Security disclosure:** testapps065@gmail.com (do **not** use the issue tracker for security issues)
 - ðŸ’¼ **Commercial licensing:** testapps065@gmail.com
@@ -411,7 +410,7 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 ---
 
 <div align="center">
-  <sub>Built with â¤ï¸ by <a href="https://github.com/Goken-byte">Godwill Kenyi</a> for the MikroTik community</sub>
+  <sub>Built with â¤ï¸ by <a href="https://github.com/godwillkenyi">Godwill Kenyi</a> for the MikroTik community</sub>
 
   <br><br>
 

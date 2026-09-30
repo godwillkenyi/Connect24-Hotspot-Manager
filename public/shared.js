@@ -3,6 +3,7 @@
  *  shared.js — v1.0.0
  *
  *  Global runtime shared by every page:
+ *    - CSRF token cache + fetch wrapper
  *    - Session guard (redirects to index.html if not signed in)
  *    - appApi helpers (format, classify, escape, fetch, etc.)
  *    - Layout wiring (menu button, overlay, sidebar collapse)
@@ -26,10 +27,43 @@
     const APP_NAME      = "Connect24";
 
     /* ============================================================
+     *  CSRF — global token cache + fetch wrapper
+     *
+     *  The server returns a token from ?action=session and expects
+     *  it back as X-CSRF-Token on every POST. We cache it here and
+     *  auto-attach it via a fetch wrapper so no caller has to know
+     *  about it.
+     * ============================================================ */
+    let __csrfToken = "";
+
+    function setCsrfToken(t) { __csrfToken = String(t || ""); }
+    function getCsrfToken()  { return __csrfToken; }
+
+    // Replace window.fetch with one that auto-attaches the CSRF
+    // header on every non-GET/HEAD request to our own API.
+    const __origFetch = window.fetch.bind(window);
+    window.fetch = function (input, init) {
+        init = init || {};
+        const url = typeof input === "string"
+            ? input
+            : (input && input.url) || "";
+        const method = String(init.method || "GET").toUpperCase();
+
+        const isOurApi = url.indexOf("api.php") !== -1;
+
+        if (isOurApi && method !== "GET" && method !== "HEAD" && __csrfToken) {
+            init.headers = Object.assign({}, init.headers || {}, {
+                "X-CSRF-Token": __csrfToken
+            });
+        }
+        return __origFetch(input, init);
+    };
+
+    /* ============================================================
      *  DOM HELPERS
      * ============================================================ */
-    const $  = (id) => document.getElementById(id);
-    const $$ = (sel) => document.querySelectorAll(sel);
+    const $   = (id) => document.getElementById(id);
+    const $$  = (sel) => document.querySelectorAll(sel);
     const qsa = (sel) => Array.from(document.querySelectorAll(sel));
 
     const escapeHtml = (s) =>
@@ -504,6 +538,9 @@
 
     /* ============================================================
      *  SESSION GUARD
+     *
+     *  Also captures the CSRF token returned by ?action=session
+     *  and stashes it for the fetch wrapper to use.
      * ============================================================ */
     async function checkSession() {
         try {
@@ -523,6 +560,11 @@
             if (data && data.success === false && data.authenticated === false) {
                 window.location.replace(LOGIN_PATH);
                 return false;
+            }
+
+            // Store CSRF token FIRST so any subsequent fetch carries it
+            if (data && data.csrf) {
+                setCsrfToken(data.csrf);
             }
 
             if (data && data.user) {
@@ -560,8 +602,8 @@
 
         // FIRST LOAD
         // Default pages: fetch vouchers. Custom pages (sessions, profiles,
-        // settings): hand off to their onRefreshRequested hook so the
-        // table loads immediately instead of waiting for a manual click.
+        // settings, traffic): hand off to their onRefreshRequested hook so
+        // the table loads immediately instead of waiting for a manual click.
         if (!window.__autoRefreshUsesCustom) {
             loadVouchers({ silent: true });
         } else if (typeof window.onRefreshRequested === "function") {
@@ -594,6 +636,9 @@
     window.appApi = {
         $, $$, qsa,
         escapeHtml,
+
+        getCsrfToken,
+        setCsrfToken,
 
         formatBytes,
         shortUptime,
@@ -721,6 +766,7 @@
             { label: "Vouchers",          hint: "Manage",         href: "vouchers.html" },
             { label: "Generate vouchers", hint: "Create batch",   href: "generate.html" },
             { label: "Sessions",          hint: "Active users",   href: "sessions.html" },
+            { label: "Traffic",           hint: "Insight",        href: "traffic.html" },
             { label: "Profiles",          hint: "Hotspot config", href: "profiles.html" },
             { label: "Settings",          hint: "System",         href: "settings.html" },
         ];
@@ -814,6 +860,7 @@
             d: "dashboard.html",
             v: "vouchers.html",
             s: "sessions.html",
+            t: "traffic.html",
             p: "profiles.html",
             g: "generate.html",
             ",": "settings.html"
@@ -948,7 +995,7 @@
                     title: "Pro tip — press ⌘K",
                     text: "The command palette jumps anywhere instantly. Try " +
                           "<kbd style='font:inherit;font-size:11px;padding:1px 5px;border:1px solid var(--line);border-radius:4px;background:var(--cream-2)'>g</kbd> then " +
-                          "<kbd style='font:inherit;font-size:11px;padding:1px 5px;border:1px solid var(--line);border-radius:4px;background:var(--cream-2)'>s</kbd> to open Sessions.",
+                          "<kbd style='font:inherit;font-size:11px;padding:1px 5px;border:1px solid var(--line);border-radius:4px;background:var(--cream-2)'>t</kbd> to open Traffic.",
                     icon: "M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5z",
                 },
             ];
@@ -1085,6 +1132,8 @@
                 : String(e.reason || "");
             // Ignore 401 redirects triggered on purpose
             if (reason.indexOf("401") !== -1) return;
+            // Ignore CSRF failures — they're handled by the UI
+            if (reason.indexOf("403") !== -1) return;
             show(reason);
         });
     })();

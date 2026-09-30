@@ -6,7 +6,9 @@
 !.env.example
 
 # Local router config — CONTAINS YOUR PASSWORD
+.cache/
 config.json
+vendor/
 config.php
 config.local.php
 config.*.php

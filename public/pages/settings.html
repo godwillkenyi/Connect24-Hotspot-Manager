@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Settings â€” Connect24 Hotspot Manager</title>
+<title>Settings — Connect24 Hotspot Manager</title>
 <link rel="stylesheet" href="../shared.css">
 <!-- Favicons -->
 <link rel="icon" href="../favicon.ico" sizes="any">
@@ -27,14 +27,17 @@
     html.d-pending body { visibility: hidden; opacity: 0; background: #f7f7f5; }
     html.d-ready   body { visibility: visible; opacity: 1; transition: opacity 0.18s ease-out; }
 
-    /* Settings-specific tweaks */
+    /* ============================================================
+     *  SETTINGS PAGE — SELF-CONTAINED STYLES
+     * ============================================================ */
+
     .s-status-dot {
         display: inline-block;
         width: 8px; height: 8px;
         border-radius: 50%;
         margin-right: 6px;
         vertical-align: middle;
-        background: var(--line-strong);
+        background: var(--line-strong, #c4c4c4);
         transition: background 0.2s ease;
     }
     .s-status-dot.on  { background: #3d6d4f; box-shadow: 0 0 0 3px rgba(61,109,79,0.18); }
@@ -51,7 +54,7 @@
         justify-content: space-between;
         gap: 16px;
         padding: 12px 0;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid var(--line, #e6e6e0);
     }
     .s-info-row:last-child { border-bottom: none; }
     .s-info-label {
@@ -59,11 +62,11 @@
         font-weight: 600;
         letter-spacing: 0.03em;
         text-transform: uppercase;
-        color: var(--ink-3);
+        color: var(--ink-3, #6b6b6b);
     }
     .s-info-value {
         font-size: 13.5px;
-        color: var(--ink);
+        color: var(--ink, #111);
         text-align: right;
         word-break: break-all;
     }
@@ -79,14 +82,97 @@
         gap: 8px;
     }
     .s-kv .d-pill {
-        background: var(--cream-2);
-        color: var(--ink-2);
-        border: 1px solid var(--line);
+        background: var(--cream-2, #ebebe5);
+        color: var(--ink-2, #333);
+        border: 1px solid var(--line, #e6e6e0);
+    }
+
+    /* ============================================================
+     *  AUDIT LOG TABLE
+     * ============================================================ */
+    .s-audit-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+    }
+    .s-audit-table thead th {
+        text-align: left;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-3, #6b6b6b);
+        padding: 10px 10px;
+        border-bottom: 1px solid var(--line, #e6e6e0);
+        white-space: nowrap;
+    }
+    .s-audit-table tbody td {
+        padding: 10px 10px;
+        border-bottom: 1px solid var(--line, #e6e6e0);
+        color: var(--ink, #111);
+        vertical-align: top;
+    }
+    .s-audit-table tbody tr:last-child td { border-bottom: none; }
+    .s-audit-table tbody tr:hover { background: rgba(0,0,0,0.015); }
+
+    .s-audit-time {
+        font-family: 'SF Mono', Consolas, monospace;
+        font-size: 11.5px;
+        color: var(--ink-2, #333);
+        white-space: nowrap;
+    }
+    .s-audit-target {
+        font-family: 'SF Mono', Consolas, monospace;
+        font-size: 11.5px;
+        color: var(--ink-2, #333);
+    }
+    .s-audit-detail {
+        font-size: 12px;
+        color: var(--ink-2, #333);
+        line-height: 1.45;
+        word-break: break-word;
+    }
+    .s-audit-ip {
+        font-family: 'SF Mono', Consolas, monospace;
+        font-size: 11.5px;
+        color: var(--ink-3, #6b6b6b);
+        white-space: nowrap;
+    }
+
+    /* Action pills — colors reflect semantic meaning */
+    .s-action {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+    .s-action.ok       { background: #d1fae5; color: #065f46; }
+    .s-action.warn     { background: #fde8d0; color: #b45309; }
+    .s-action.danger   { background: #f5dada; color: #800020; }
+    .s-action.neutral  { background: #e4e4e4; color: #2b2b2b; }
+
+    .s-audit-empty {
+        padding: 32px 16px;
+        text-align: center;
+        color: var(--ink-3, #6b6b6b);
+        font-size: 13px;
+    }
+    .s-audit-error {
+        padding: 32px 16px;
+        text-align: center;
+        color: #a32e2c;
+        font-size: 13px;
     }
 
     @media (max-width: 640px) {
         .s-info-row { padding: 10px 0; }
         .s-info-value { font-size: 12.5px; }
+        .s-audit-table thead th:nth-child(5),
+        .s-audit-table tbody td:nth-child(5) { display: none; }
     }
 </style>
 <script>
@@ -132,6 +218,11 @@
                     <span class="d-nav-badge" id="navSessionsBadge">0</span>
                 </a>
 
+                <a class="d-nav-link" href="traffic.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Traffic
+                </a>
+
                 <span class="d-nav-label">Configuration</span>
 
                 <a class="d-nav-link" href="profiles.html">
@@ -156,7 +247,7 @@
                     <div class="d-side-plan-fill" style="width:100%;"></div>
                 </div>
                 <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
-                    Upgrade to Pro â†’
+                    Upgrade to Pro →
                 </a>
             </div>
 
@@ -164,7 +255,7 @@
                 <div class="d-user">
                     <div class="d-user-avatar" id="userAvatar">V</div>
                     <div class="d-user-info">
-                        <div class="d-user-name" id="userName">Loadingâ€¦</div>
+                        <div class="d-user-name" id="userName">Loading…</div>
                         <div class="d-user-role">Administrator</div>
                     </div>
                 </div>
@@ -199,13 +290,13 @@
                 <div class="d-topbar-actions">
                     <div class="d-live on" id="livePill">
                         <span class="d-live-dot"></span>
-                        <span id="liveText">Live Â· 10s</span>
+                        <span id="liveText">Live · 10s</span>
                     </div>
 
-                    <!-- Tier 1: âŒ˜K trigger -->
-                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (âŒ˜K)">
+                    <!-- Tier 1: ⌘K trigger -->
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                        <kbd class="d-icon-kbd">âŒ˜K</kbd>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
                     </button>
 
                     <button class="d-refresh" id="refreshBtn">
@@ -225,7 +316,7 @@
                         <div class="d-panel-title">
                             <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 0 0-6 0zm-4-4 2 2a7.074 7.074 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
                             Connection Status
-                            <span class="d-panel-sub" id="connSubtitle">Checkingâ€¦</span>
+                            <span class="d-panel-sub" id="connSubtitle">Checking…</span>
                         </div>
                         <div class="d-panel-actions">
                             <button class="d-btn" id="testConnBtn">
@@ -240,28 +331,28 @@
                                 <span class="s-info-label">Router status</span>
                                 <span class="s-info-value" id="connStatus">
                                     <span class="s-status-dot" id="connDot"></span>
-                                    <span id="connStatusText">Checkingâ€¦</span>
+                                    <span id="connStatusText">Checking…</span>
                                 </span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">API endpoint</span>
-                                <span class="s-info-value" id="connEndpoint">â€”</span>
+                                <span class="s-info-value" id="connEndpoint">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Identity</span>
-                                <span class="s-info-value" id="connIdentity">â€”</span>
+                                <span class="s-info-value" id="connIdentity">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">RouterOS version</span>
-                                <span class="s-info-value" id="connVersion">â€”</span>
+                                <span class="s-info-value" id="connVersion">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Uptime</span>
-                                <span class="s-info-value" id="connUptime">â€”</span>
+                                <span class="s-info-value" id="connUptime">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Last check</span>
-                                <span class="s-info-value" id="connLastCheck">â€”</span>
+                                <span class="s-info-value" id="connLastCheck">—</span>
                             </div>
                         </div>
                     </div>
@@ -352,25 +443,67 @@
                         <div class="s-info-list">
                             <div class="s-info-row">
                                 <span class="s-info-label">Total vouchers</span>
-                                <span class="s-info-value" id="sysVouchers">â€”</span>
+                                <span class="s-info-value" id="sysVouchers">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Hotspot profiles</span>
-                                <span class="s-info-value" id="sysProfiles">â€”</span>
+                                <span class="s-info-value" id="sysProfiles">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Active sessions</span>
-                                <span class="s-info-value" id="sysSessions">â€”</span>
+                                <span class="s-info-value" id="sysSessions">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Hotspot servers</span>
-                                <span class="s-info-value" id="sysServers">â€”</span>
+                                <span class="s-info-value" id="sysServers">—</span>
                             </div>
                             <div class="s-info-row">
                                 <span class="s-info-label">Dashboard version</span>
-                                <span class="s-info-value">Connect24 Â· v1.0.0</span>
+                                <span class="s-info-value">Connect24 · v1.0.0</span>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <!-- ============================================================
+                     AUDIT LOG
+                     ============================================================ -->
+                <section class="d-panel">
+                    <div class="d-panel-head">
+                        <div class="d-panel-title">
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 18H6V4h7v5h5v11zM8 15h8v2H8zm0-4h8v2H8z"/></svg>
+                            Audit Log
+                            <span class="d-panel-sub" id="auditSub">Loading…</span>
+                        </div>
+                        <div class="d-panel-actions">
+                            <select class="d-select" id="auditLimit" style="height:34px; font-size:12.5px;">
+                                <option value="25">Last 25</option>
+                                <option value="100" selected>Last 100</option>
+                                <option value="250">Last 250</option>
+                                <option value="500">Last 500</option>
+                            </select>
+                            <button class="d-btn" id="auditRefreshBtn">
+                                <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="d-table-wrap">
+                        <table class="s-audit-table" id="auditTable">
+                            <thead>
+                                <tr>
+                                    <th style="width:150px;">Time</th>
+                                    <th style="width:110px;">User</th>
+                                    <th style="width:160px;">Action</th>
+                                    <th style="width:170px;">Target</th>
+                                    <th>Detail</th>
+                                    <th style="width:130px;">IP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditBody">
+                                <tr><td colspan="6" class="s-audit-empty">Loading audit log…</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 
@@ -382,7 +515,7 @@
                         <div class="d-panel-title">
                             <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
                             Danger Zone
-                            <span class="d-panel-sub">Irreversible actions â€” use with care</span>
+                            <span class="d-panel-sub">Irreversible actions — use with care</span>
                         </div>
                     </div>
                     <div class="d-panel-body">
@@ -430,12 +563,12 @@
                 <!-- Tier 1: footer -->
                 <footer class="d-footer">
                     <div class="d-footer-left">
-                        <span>Â© <span id="footerYear">2025</span> Connect24</span>
-                        <span class="d-footer-sep">Â·</span>
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
                     </div>
                     <div class="d-footer-right">
@@ -443,7 +576,7 @@
                             <span class="d-status-dot" id="footerApiStatus"></span>
                             <span id="footerApiText">API: Connected</span>
                         </span>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <span>v1.0.0</span>
                     </div>
                 </footer>
@@ -454,40 +587,49 @@
 </div>
 
 <!-- ============================================================
-     COMMAND PALETTE (âŒ˜K / Ctrl+K)
+     COMMAND PALETTE (⌘K / Ctrl+K)
      ============================================================ -->
 <div class="d-cmdk" id="cmdk" hidden>
     <div class="d-cmdk-backdrop" data-cmdk-close></div>
     <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="d-cmdk-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-            <input type="text" id="cmdkInput" placeholder="Search or jump toâ€¦" autocomplete="off">
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
             <kbd>ESC</kbd>
         </div>
         <div class="d-cmdk-results" id="cmdkResults"></div>
         <div class="d-cmdk-foot">
-            <span><kbd>â†‘</kbd><kbd>â†“</kbd> Navigate</span>
-            <span><kbd>â†µ</kbd> Open</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
             <span><kbd>ESC</kbd> Close</span>
         </div>
     </div>
 </div>
 
-<script src="../shared.js"></script>
+<script src="../shared.js?v=1.0.1"></script>
 <script>
     const {
         classify, formatBytes, escapeHtml, toast, $, qsa
     } = window.appApi;
 
     /* ============================================================
+     *  Tell shared.js this page handles its own polling
+     * ============================================================ */
+    window.__autoRefreshUsesCustom = true;
+
+    /* ============================================================
      *  STATE
      * ============================================================ */
     let badgeTimer = null;
     let statusTimer = null;
+    let auditTimer = null;
+
     let cachedVouchers = [];
     let cachedSessions = [];
     let cachedProfiles = [];
     let cachedServers = [];
+
+    let auditLimit = 100;
 
     const DEFAULTS_KEY = "c24.settings.defaults";
     const DEFAULT_DEFAULTS = {
@@ -500,8 +642,7 @@
     };
 
     /* ============================================================
-     *  PROFILE FILTER â€” same rule as the Profiles page.
-     *  Excludes RouterOS system profiles ("default", "none", "").
+     *  PROFILE FILTER — same rule as the Profiles page.
      * ============================================================ */
     const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
 
@@ -549,8 +690,6 @@
     function updateProfilesBadge() {
         const badge = $("navProfilesBadge");
         if (!badge) return;
-        // Filtered count â€” same rule as the Profiles page, Dashboard,
-        // Vouchers page, and Sessions page.
         badge.textContent = countUserProfiles(cachedProfiles);
     }
 
@@ -658,7 +797,7 @@
     }
 
     function formatRouterUptime(str) {
-        if (!str) return "â€”";
+        if (!str) return "—";
         const s = String(str);
         const match = s.match(/^(\d+)([wdhms])$/);
         if (!match) return s;
@@ -679,17 +818,17 @@
         if (info) {
             setConnState(true, "Connected");
             $("connIdentity").textContent  = info.identity || info.name || "RouterOS";
-            $("connVersion").textContent   = info.version || info["ros-version"] || "â€”";
+            $("connVersion").textContent   = info.version || info["ros-version"] || "—";
             $("connUptime").textContent    = formatRouterUptime(info.uptime || info["router-uptime"]);
         } else {
             const ok = cachedVouchers.length > 0 || cachedProfiles.length > 0 || cachedServers.length > 0;
             if (ok) {
                 setConnState(true, "Connected");
-                $("connIdentity").textContent = $("connIdentity").textContent === "â€”"
+                $("connIdentity").textContent = $("connIdentity").textContent === "—"
                     ? "RouterOS"
                     : $("connIdentity").textContent;
-                if ($("connVersion").textContent === "â€”") $("connVersion").textContent = "â€”";
-                if ($("connUptime").textContent === "â€”")  $("connUptime").textContent  = "â€”";
+                if ($("connVersion").textContent === "—") $("connVersion").textContent = "—";
+                if ($("connUptime").textContent === "—")  $("connUptime").textContent  = "—";
             } else {
                 setConnState(false, "Not reachable");
             }
@@ -703,15 +842,13 @@
      * ============================================================ */
     function updateSystemInfo() {
         $("sysVouchers").textContent = cachedVouchers.length;
-        // Use the filtered profile count here too, so the number
-        // matches the sidebar badge and the Profiles page.
         $("sysProfiles").textContent = countUserProfiles(cachedProfiles);
         $("sysSessions").textContent = cachedSessions.length;
         $("sysServers").textContent  = cachedServers.length;
     }
 
     /* ============================================================
-     *  DEFAULTS â€” persist in localStorage
+     *  DEFAULTS — persist in localStorage
      * ============================================================ */
     function loadDefaults() {
         try {
@@ -738,10 +875,6 @@
         $("defPrice").value   = d.price;
         $("defRefresh").value = d.refresh;
 
-        // Populate the profile dropdown with the FILTERED list only â€”
-        // system profiles like "default" and "none" are excluded here
-        // to match the Profiles page. Fall back to "default" so there
-        // is always a valid selection.
         const sel = $("defProfile");
         const names = normalizeUserProfiles(cachedProfiles).map((p) => p.name);
 
@@ -802,12 +935,12 @@
         return !!(data && data.success);
     }
 
-    async function disconnectSessionRemote(id) {
+    async function disconnectSessionRemote(id, user) {
         const res = await fetch("../api.php?action=disconnect-session", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "same-origin",
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ id, user })
         });
         const data = await res.json();
         return !!(data && data.success);
@@ -841,6 +974,7 @@
         btn.disabled = false;
         await fetchVouchers();
         updateSystemInfo();
+        loadAuditLog();
     });
 
     $("purgeExpiredBtn").addEventListener("click", async () => {
@@ -871,6 +1005,7 @@
         btn.disabled = false;
         await fetchVouchers();
         updateSystemInfo();
+        loadAuditLog();
     });
 
     $("kickAllBtn").addEventListener("click", async () => {
@@ -888,7 +1023,7 @@
         for (const s of list) {
             if (!s.id) { fail++; continue; }
             try {
-                const success = await disconnectSessionRemote(s.id);
+                const success = await disconnectSessionRemote(s.id, s.user);
                 if (success) ok++; else fail++;
             } catch (_) { fail++; }
         }
@@ -902,7 +1037,69 @@
         btn.disabled = false;
         await fetchSessions();
         updateSystemInfo();
+        loadAuditLog();
     });
+
+    /* ============================================================
+     *  AUDIT LOG
+     * ============================================================ */
+    function actionClass(action) {
+        const a = String(action || "").toLowerCase();
+        if (a.startsWith("login-failed")) return "danger";
+        if (a.startsWith("login"))        return "ok";
+        if (a.startsWith("logout"))       return "neutral";
+        if (a.startsWith("delete"))       return "danger";
+        if (a.startsWith("apply") || a.startsWith("clear")) return "warn";
+        if (a.startsWith("create"))       return "ok";
+        if (a.startsWith("save") || a.startsWith("test"))   return "neutral";
+        return "neutral";
+    }
+
+    async function loadAuditLog() {
+        const body = $("auditBody");
+        const sub  = $("auditSub");
+        if (!body) return;
+
+        try {
+            const res = await fetch(`../api.php?action=audit-log&limit=${auditLimit}`, {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+
+            if (res.status === 401) {
+                window.location.replace("../index.html");
+                return;
+            }
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            const entries = Array.isArray(data.entries) ? data.entries : [];
+            if (entries.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="s-audit-empty">No audit entries yet.</td></tr>`;
+                sub.textContent = "0 entries";
+                return;
+            }
+
+            body.innerHTML = entries.map(e => `
+                <tr>
+                    <td><span class="s-audit-time">${escapeHtml(e.time || "")}</span></td>
+                    <td>${escapeHtml(e.user || "")}</td>
+                    <td><span class="s-action ${actionClass(e.action)}">${escapeHtml(e.action || "")}</span></td>
+                    <td><span class="s-audit-target">${escapeHtml(e.target || "—")}</span></td>
+                    <td><div class="s-audit-detail">${escapeHtml(e.detail || "")}</div></td>
+                    <td><span class="s-audit-ip">${escapeHtml(e.ip || "")}</span></td>
+                </tr>
+            `).join("");
+
+            sub.textContent = `${entries.length} entr${entries.length === 1 ? "y" : "ies"} · newest first`;
+        } catch (err) {
+            body.innerHTML = `<tr><td colspan="6" class="s-audit-error">${escapeHtml(err.message || "Failed to load audit log")}</td></tr>`;
+            sub.textContent = "Error";
+        }
+    }
 
     /* ============================================================
      *  REFRESH BUTTON
@@ -921,6 +1118,7 @@
         applyDefaultsToForm();
         updateSystemInfo();
         await refreshConnectionStatus();
+        await loadAuditLog();
 
         btn.classList.remove("loading");
         btn.disabled = false;
@@ -945,6 +1143,19 @@
     });
 
     /* ============================================================
+     *  AUDIT CONTROLS
+     * ============================================================ */
+    $("auditLimit").addEventListener("change", (e) => {
+        auditLimit = parseInt(e.target.value, 10) || 100;
+        loadAuditLog();
+    });
+
+    $("auditRefreshBtn").addEventListener("click", () => {
+        loadAuditLog();
+        toast("info", "Audit log refreshed", `Showing last ${auditLimit} entries.`, 1800);
+    });
+
+    /* ============================================================
      *  BOOT
      * ============================================================ */
     window.onAppReady = async () => {
@@ -962,31 +1173,47 @@
         applyDefaultsToForm();
         updateSystemInfo();
         await refreshConnectionStatus();
+        await loadAuditLog();
 
-        // Periodic badge + status refresh
+        // Periodic badge + status refresh (every 10s)
         if (badgeTimer) clearInterval(badgeTimer);
         badgeTimer = setInterval(async () => {
             await Promise.all([fetchVouchers(), fetchSessions(), fetchProfiles()]);
             updateSystemInfo();
         }, 10000);
 
+        // Router status every 30s
         if (statusTimer) clearInterval(statusTimer);
         statusTimer = setInterval(refreshConnectionStatus, 30000);
+
+        // Audit log every 30s (slower — the file rarely changes)
+        if (auditTimer) clearInterval(auditTimer);
+        auditTimer = setInterval(loadAuditLog, 30000);
 
         // Pause when tab hidden
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) {
                 if (badgeTimer)  { clearInterval(badgeTimer);  badgeTimer  = null; }
                 if (statusTimer) { clearInterval(statusTimer); statusTimer = null; }
+                if (auditTimer)  { clearInterval(auditTimer);  auditTimer  = null; }
             } else {
                 if (!badgeTimer) badgeTimer = setInterval(async () => {
                     await Promise.all([fetchVouchers(), fetchSessions(), fetchProfiles()]);
                     updateSystemInfo();
                 }, 10000);
                 if (!statusTimer) statusTimer = setInterval(refreshConnectionStatus, 30000);
+                if (!auditTimer)  auditTimer  = setInterval(loadAuditLog, 30000);
                 refreshConnectionStatus();
+                loadAuditLog();
             }
         });
+    };
+
+    window.onRefreshRequested = async (opts = {}) => {
+        const { manual = false } = opts;
+        if (manual) {
+            $("refreshBtn").click();
+        }
     };
 
     window.onVouchersLoaded = () => { /* badges handled by our own fetchers */ };

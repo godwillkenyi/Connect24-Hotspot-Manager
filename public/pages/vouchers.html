@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vouchers â€” Connect24 Hotspot Manager</title>
+<title>Vouchers — Connect24 Hotspot Manager</title>
 <link rel="stylesheet" href="../shared.css">
 <!-- Favicons -->
 <link rel="icon" href="../favicon.ico" sizes="any">
@@ -54,6 +54,11 @@
                     <span class="d-nav-badge" id="navSessionsBadge">0</span>
                 </a>
 
+                <a class="d-nav-link" href="traffic.html">
+                    <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Traffic
+                </a>
+
                 <span class="d-nav-label">Configuration</span>
                 <a class="d-nav-link" href="profiles.html">
                     <svg class="d-nav-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -76,7 +81,7 @@
                     <div class="d-side-plan-fill" style="width:100%;"></div>
                 </div>
                 <a class="d-side-plan-cta" href="https://github.com/Goken-byte/connect24-hotspot-manager#license" target="_blank" rel="noopener">
-                    Upgrade to Pro â†’
+                    Upgrade to Pro →
                 </a>
             </div>
 
@@ -84,7 +89,7 @@
                 <div class="d-user">
                     <div class="d-user-avatar" id="userAvatar">V</div>
                     <div class="d-user-info">
-                        <div class="d-user-name" id="userName">Loadingâ€¦</div>
+                        <div class="d-user-name" id="userName">Loading…</div>
                         <div class="d-user-role">Administrator</div>
                     </div>
                 </div>
@@ -118,12 +123,12 @@
                 <div class="d-topbar-actions">
                     <div class="d-live on" id="livePill">
                         <span class="d-live-dot"></span>
-                        <span id="liveText">Live Â· 5s</span>
+                        <span id="liveText">Live · 5s</span>
                     </div>
 
-                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (âŒ˜K)">
+                    <button class="d-icon-btn d-cmdk-trigger" id="cmdkTrigger" title="Command palette (⌘K)">
                         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                        <kbd class="d-icon-kbd">âŒ˜K</kbd>
+                        <kbd class="d-icon-kbd">⌘K</kbd>
                     </button>
 
                     <a class="d-refresh" href="generate.html" style="background:var(--blue-4); color:#fff; border-color:var(--blue-4); text-decoration:none;">
@@ -151,7 +156,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statAll">â€”</div>
+                        <div class="d-stat-value" id="statAll">—</div>
                         <div class="d-stat-trend"><span>Every voucher on the router</span></div>
                     </div>
 
@@ -162,8 +167,8 @@
                                 <svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statActive">â€”</div>
-                        <div class="d-stat-trend up"><strong id="statActivePct">â€”</strong><span>of total</span></div>
+                        <div class="d-stat-value" id="statActive">—</div>
+                        <div class="d-stat-trend up"><strong id="statActivePct">—</strong><span>of total</span></div>
                     </div>
 
                     <div class="d-stat d-stat-clickable" data-tab="expired">
@@ -173,7 +178,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statExpired">â€”</div>
+                        <div class="d-stat-value" id="statExpired">—</div>
                         <div class="d-stat-trend down"><span>Past their limit</span></div>
                     </div>
 
@@ -184,8 +189,8 @@
                                 <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
                             </div>
                         </div>
-                        <div class="d-stat-value" id="statAlmost">â€”</div>
-                        <div class="d-stat-trend"><span>â‰¥ 80% of uptime limit</span></div>
+                        <div class="d-stat-value" id="statAlmost">—</div>
+                        <div class="d-stat-trend"><span>≥ 80% of uptime limit</span></div>
                     </div>
                 </section>
 
@@ -230,20 +235,20 @@
                     <div class="d-filters">
                         <div class="d-search">
                             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-                            <input type="text" id="searchInput" placeholder="Search by code, price or profileâ€¦" autocomplete="off">
+                            <input type="text" id="searchInput" placeholder="Search by code, price or profile…" autocomplete="off">
                         </div>
                         <select class="d-select" id="profileFilter">
                             <option value="">All profiles</option>
                         </select>
                         <select class="d-select" id="sortSelect">
-                            <option value="name-asc">Code (Aâ€“Z)</option>
-                            <option value="name-desc">Code (Zâ€“A)</option>
-                            <option value="uptime-desc">Uptime (high â†’ low)</option>
-                            <option value="uptime-asc">Uptime (low â†’ high)</option>
-                            <option value="bytes-desc">Data usage (high â†’ low)</option>
-                            <option value="bytes-asc">Data usage (low â†’ high)</option>
+                            <option value="name-asc">Code (A–Z)</option>
+                            <option value="name-desc">Code (Z–A)</option>
+                            <option value="uptime-desc">Uptime (high → low)</option>
+                            <option value="uptime-asc">Uptime (low → high)</option>
+                            <option value="bytes-desc">Data usage (high → low)</option>
+                            <option value="bytes-asc">Data usage (low → high)</option>
                         </select>
-                        <span class="d-filter-results" id="filterResults">â€”</span>
+                        <span class="d-filter-results" id="filterResults">—</span>
                     </div>
 
                     <!-- Bulk bar -->
@@ -315,12 +320,12 @@
                 <!-- Tier 1: footer -->
                 <footer class="d-footer">
                     <div class="d-footer-left">
-                        <span>Â© <span id="footerYear">2025</span> Connect24</span>
-                        <span class="d-footer-sep">Â·</span>
+                        <span>© <span id="footerYear">2025</span> Connect24</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/LICENSE" target="_blank" rel="noopener">Terms</a>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/blob/main/SECURITY.md" target="_blank" rel="noopener">Privacy</a>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <a href="https://github.com/Goken-byte/connect24-hotspot-manager/tree/main/docs" target="_blank" rel="noopener">Docs</a>
                     </div>
                     <div class="d-footer-right">
@@ -328,7 +333,7 @@
                             <span class="d-status-dot" id="footerApiStatus"></span>
                             <span id="footerApiText">API: Connected</span>
                         </span>
-                        <span class="d-footer-sep">Â·</span>
+                        <span class="d-footer-sep">·</span>
                         <span>v1.0.0</span>
                     </div>
                 </footer>
@@ -339,26 +344,26 @@
 </div>
 
 <!-- ============================================================
-     COMMAND PALETTE (âŒ˜K / Ctrl+K)
+     COMMAND PALETTE (⌘K / Ctrl+K)
      ============================================================ -->
 <div class="d-cmdk" id="cmdk" hidden>
     <div class="d-cmdk-backdrop" data-cmdk-close></div>
     <div class="d-cmdk-panel" role="dialog" aria-modal="true" aria-label="Command palette">
         <div class="d-cmdk-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
-            <input type="text" id="cmdkInput" placeholder="Search or jump toâ€¦" autocomplete="off">
+            <input type="text" id="cmdkInput" placeholder="Search or jump to…" autocomplete="off">
             <kbd>ESC</kbd>
         </div>
         <div class="d-cmdk-results" id="cmdkResults"></div>
         <div class="d-cmdk-foot">
-            <span><kbd>â†‘</kbd><kbd>â†“</kbd> Navigate</span>
-            <span><kbd>â†µ</kbd> Open</span>
+            <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span><kbd>↵</kbd> Open</span>
             <span><kbd>ESC</kbd> Close</span>
         </div>
     </div>
 </div>
 
-<script src="../shared.js"></script>
+<script src="../shared.js?v=1.0.1"></script>
 <script>
     const {
         escapeHtml, classify, formatBytes, shortUptime, bytesOf,
@@ -382,7 +387,7 @@
     const ALMOST_FULL_PCT = 80;       // 80% of uptime limit
 
     /* ============================================================
-     *  PROFILE FILTER â€” same rule as the Profiles page.
+     *  PROFILE FILTER — same rule as the Profiles page.
      *  Excludes RouterOS system profiles ("default", "none", "").
      * ============================================================ */
     const HIDDEN_PROFILE_NAMES = new Set(["default", "none", ""]);
@@ -633,7 +638,7 @@
         }
 
         body.innerHTML = list.map((v) => {
-            const code = v.name || "â€”";
+            const code = v.name || "—";
             const profile = v.profile || "default";
             const status = extendedStatus(v);
             const label = statusLabel(status);
@@ -641,7 +646,7 @@
             const uptime = shortUptime(v.uptime);
             const mb = usageMB(v);
             const dataLabel = formatBytes(bytesOf(v));
-            const price = v.comment || "â€”";
+            const price = v.comment || "—";
             const isSel = selected.has(code);
             const dataWarning = mb >= HEAVY_MB_THRESHOLD ? ` <span class="d-usage-warn">heavy</span>` : "";
 
@@ -742,7 +747,7 @@
                 const usedSec = uptimeToSeconds(v.uptime);
                 const limitSec = uptimeLimitToSeconds(v["limit-uptime"] || "");
                 const pct = limitSec > 0 ? Math.min(100, (usedSec / limitSec) * 100) : 0;
-                return { name: v.name || "â€”", mb, pct };
+                return { name: v.name || "—", mb, pct };
             })
             .filter((r) => chartMetric === "mb" ? r.mb > 0 : r.pct > 0)
             .sort((a, b) => (chartMetric === "mb" ? b.mb - a.mb : b.pct - a.pct))
@@ -797,7 +802,7 @@
                 : (r.pct >= ALMOST_FULL_PCT ? "#a0703a" : "#1e5c9c");
 
             svg += `<rect class="d-usage-bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3" fill="${color}">
-                        <title>${escapeHtml(r.name)} â€” ${chartMetric === "mb" ? r.mb.toFixed(1) + " MB" : r.pct.toFixed(0) + "%"}</title>
+                        <title>${escapeHtml(r.name)} — ${chartMetric === "mb" ? r.mb.toFixed(1) + " MB" : r.pct.toFixed(0) + "%"}</title>
                     </rect>`;
 
             const cx = x + barW / 2;
