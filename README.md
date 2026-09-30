@@ -1,4 +1,4 @@
-﻿<div align="center">
+﻿﻿<div align="center">
 
 <img src="public/favicon-192.png" alt="Connect24" width="96" height="96">
 
