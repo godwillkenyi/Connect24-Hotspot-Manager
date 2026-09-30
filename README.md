@@ -337,9 +337,13 @@ Full voucher lifecycle management
 - Profile CRUD
 - Dark mode, ⌘K, PWA
 
-□ v1.1.0 — Edit vouchers, CSRF tokens, MFA
-□ v1.2.0 — Reseller accounts, billing integration
-□ v2.0.0 — Multi-tenant, white-label
+| Version | Feature |
+|---|---|
+| **V1.1.0** | Edit vouchers, CSRF tokens, MFA | 
+| **V1.2.0** | Reseller accounts, billing integration |
+| **V2.0.0** | Multi-tenant, white-label | 
+---
+ 
 See CHANGELOG.md for the full history.
 
 
