@@ -194,19 +194,17 @@ Don't have a router handy? Preview the entire app with sample data:
 http://localhost:8080/pages/dashboard.html?demo=1
 ```
 
-Everything works â€” stats, charts, voucher generation, session list,
-profiles â€” but nothing touches a real router. A blue banner appears at
+Everything works — stats, charts, voucher generation, session list,
+profiles — but nothing touches a real router. A blue banner appears at
 the top to remind you.
 
-This is the fastest way to:
+- This is the fastest way to:
+- Take screenshots for the README
+- Show the app to a client or colleague
+- Learn the interface before going live
+- Develop against the UI without a router on your desk
 
-- **Take screenshots** for the README
-- **Show the app** to a client or colleague
-- **Learn the interface** before going live
-- **Develop against the UI** without a router on your desk
-
-Every API call is intercepted and served from `api.php`'s demo branch.
-
+Every API call is intercepted and served from **api.php**'s demo branch.
 ---
 
 ## Requirements
@@ -298,19 +296,20 @@ connect24/
 
 ## Keyboard shortcuts
 
-Shortcut         Action
-_____________________________________.
-⌘K/Ctrl+K  |  Open command palette
-g then d   |  Go to Dashboard
-g then v   |  Go to Vouchers
-g then s   |  Go to Sessions
-g then p   |  Go to Profiles
-g then g   |  Go to Generate
-g then ,   |  Go to Settings
-Esc        |  Close any modal
+| Shortcut | Action |
+|---|---|---|
+| **⌘K/Ctrl+K** | Open command palette | 
+| **g then d** | Go to Dashboard |
+| **g then v** | Go to Vouchers |
+| **g then s** | Go to Sessions |
+| **g then p** | Go to Profiles |
+| **g then g** | Go to Generate |
+| **g then ,** | Go to Settings |
+| **Esc** | Close any modal |
+  
 
-↑ ↓ Navigate command palette
-Enter Open selected item
+- ↑ ↓ Navigate command palette
+- Enter Open selected item
 
 ---
 
@@ -325,7 +324,7 @@ Connect24 is built with a least-privilege model:
 - No telemetry, no analytics, no third-party calls
 - Full threat model and hardening guide in docs/security.md.
 
-Found a security issue? Please do not open a public GitHub issue. Email testapps065@gmail.com instead. See SECURITY.md for details.
+Found a security issue? Please do not open a public GitHub issue. Email testapps065@gmail.com instead. See [SECURITY.md](SECURITY.md) for details.
 
 ---
 
@@ -385,18 +384,18 @@ requires a paid Pro license. See [LICENSE](LICENSE) for the full terms.
 
 Godwill Kenyi — creator and maintainer
 
-🐙 GitHub: @godwillkenyi
-📧 Email: testapps065@gmail.com
-📍 Location: South Sudan
+- 🐙 GitHub: @godwillkenyi
+- 📧 Email: testapps065@gmail.com
+- 📍 Location: South Sudan
 
 ## Support
 
-📖 Documentation: docs/
-🐛 Bug reports: GitHub Issues
-💬 Questions & ideas: GitHub Discussions
-📧 Direct email: testapps065@gmail.com
-🔒 Security disclosure: testapps065@gmail.com (do not use the issue tracker for security issues)
-💼 Commercial licensing: testapps065@gmail.com
+- 📖 Documentation: docs/
+- 🐛 Bug reports: GitHub Issues
+- 💬 Questions & ideas: GitHub Discussions
+- 📧 Direct email: testapps065@gmail.com
+- 🔒 Security disclosure: testapps065@gmail.com (do not use the issue tracker for security issues)
+- 💼 Commercial licensing: testapps065@gmail.com
 
 ---
 
