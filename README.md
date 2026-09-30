@@ -297,7 +297,7 @@ connect24/
 ## Keyboard shortcuts
 
 | Shortcut | Action |
-|---|---|---|
+|---|---|
 | **⌘K/Ctrl+K** | Open command palette | 
 | **g then d** | Go to Dashboard |
 | **g then v** | Go to Vouchers |
@@ -306,7 +306,7 @@ connect24/
 | **g then g** | Go to Generate |
 | **g then ,** | Go to Settings |
 | **Esc** | Close any modal |
-  
+---
 
 - ↑ ↓ Navigate command palette
 - Enter Open selected item
